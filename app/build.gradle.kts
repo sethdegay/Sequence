@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.protobuf)
+    alias(libs.plugins.room)
 }
 
 android {
@@ -49,6 +50,11 @@ android {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
+    }
+
+    room {
+        schemaDirectory("${project.projectDir}/schemas")
+        generateKotlin = true
     }
 }
 
@@ -114,6 +120,12 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
 
     implementation(libs.androidx.navigation3.lifecycle.viewmodel)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.room.testing)
 
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
