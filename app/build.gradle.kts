@@ -49,6 +49,10 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
+            optIn.addAll(
+                "kotlinx.serialization.ExperimentalSerializationApi",
+                "kotlin.time.ExperimentalTime",
+            )
         }
     }
 

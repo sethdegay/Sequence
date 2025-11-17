@@ -1,0 +1,30 @@
+package dev.sethdegay.routines.core.database
+
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import dev.sethdegay.routines.core.database.dao.RoutineDao
+import dev.sethdegay.routines.core.database.model.IntervalEntity
+import dev.sethdegay.routines.core.database.model.RoutineEntity
+import dev.sethdegay.routines.core.database.util.DurationConverter
+import dev.sethdegay.routines.core.database.util.InstantConverter
+import dev.sethdegay.routines.core.database.util.RoutineProtobufConverter
+
+@Database(
+    entities = [
+        IntervalEntity::class,
+        RoutineEntity::class,
+    ],
+    version = 1,
+    exportSchema = true,
+)
+@TypeConverters(
+    value = [
+        DurationConverter::class,
+        InstantConverter::class,
+        RoutineProtobufConverter::class,
+    ],
+)
+internal abstract class RoutinesDatabase : RoomDatabase() {
+    abstract fun routineDao(): RoutineDao
+}
