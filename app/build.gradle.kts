@@ -79,7 +79,7 @@ protobuf {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.protobuf)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
