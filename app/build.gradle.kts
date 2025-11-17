@@ -78,6 +78,7 @@ protobuf {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.core)
 
     testImplementation(libs.junit)
