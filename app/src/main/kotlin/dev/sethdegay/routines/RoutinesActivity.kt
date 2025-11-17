@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sethdegay.routines.core.di.RoutinesBackStackManager
@@ -30,9 +32,13 @@ class RoutinesActivity : ComponentActivity() {
                 NavDisplay(
                     backStack = backStackManager.backStack,
                     onBack = backStackManager::navigateUp,
+                    entryDecorators = listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator(),
+                    ),
                     entryProvider = entryProvider {
                         entryProviderScopes.forEach { builder -> this.builder() }
-                    }
+                    },
                 )
             }
         }

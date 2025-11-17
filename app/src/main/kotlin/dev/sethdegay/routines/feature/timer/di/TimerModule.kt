@@ -1,5 +1,6 @@
 package dev.sethdegay.routines.feature.timer.di
 
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,6 +10,7 @@ import dev.sethdegay.routines.core.di.RoutinesBackStackManager
 import dev.sethdegay.routines.core.navigation.NavKeyInstaller
 import dev.sethdegay.routines.core.navigation.TimerRoute
 import dev.sethdegay.routines.feature.timer.TimerScreen
+import dev.sethdegay.routines.feature.timer.TimerViewModel
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
@@ -19,7 +21,9 @@ object TimerModule {
     fun providesNavKeyInstaller(backStackManager: RoutinesBackStackManager): NavKeyInstaller = {
         entry<TimerRoute> { key ->
             TimerScreen(
-                id = key.id,
+                viewModel = hiltViewModel<TimerViewModel, TimerViewModel.Factory>(
+                    creationCallback = { factory -> factory.create(key.id) }
+                ),
                 navigateUp = backStackManager::navigateUp,
             )
         }
