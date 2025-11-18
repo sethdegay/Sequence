@@ -50,6 +50,7 @@ android {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
             optIn.addAll(
+                "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
                 "kotlinx.serialization.ExperimentalSerializationApi",
                 "kotlin.time.ExperimentalTime",
             )

@@ -3,7 +3,6 @@ package dev.sethdegay.routines
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
@@ -14,7 +13,6 @@ import dev.sethdegay.routines.core.di.RoutinesBackStackManager
 import dev.sethdegay.routines.core.navigation.NavKeyInstaller
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @AndroidEntryPoint
 class RoutinesActivity : ComponentActivity() {
 
