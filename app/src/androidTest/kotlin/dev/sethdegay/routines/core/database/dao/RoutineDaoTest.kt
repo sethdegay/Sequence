@@ -1,0 +1,105 @@
+package dev.sethdegay.routines.core.database.dao
+
+import android.content.Context
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import dev.sethdegay.routines.core.database.RoutinesDatabase
+import dev.sethdegay.routines.core.database.model.IntervalEntity
+import dev.sethdegay.routines.core.database.model.RoutineEntity
+import dev.sethdegay.routines.core.model.RoutineType
+import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+
+@RunWith(AndroidJUnit4::class)
+class RoutineDaoTest {
+
+    private lateinit var database: RoutinesDatabase
+    private lateinit var dao: RoutineDao
+
+    @Before
+    fun setup() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        database = Room.inMemoryDatabaseBuilder(context, RoutinesDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        dao = database.routineDao()
+    }
+
+    @After
+    fun teardown() {
+        database.close()
+    }
+
+    @Test
+    fun getRoutines_returnsSuccessfully() = runTest {
+        val r1Instant = Clock.System.now()
+        val r1Entity = RoutineEntity(
+            title = "R1",
+            routineType = RoutineType.WORKOUT(
+                warmUpDuration = 5.minutes,
+                restDuration = 30.seconds,
+                coolDownDuration = 60.seconds
+            ),
+            dateCreated = r1Instant,
+            dateModified = r1Instant,
+        )
+        val r1Id = dao.insertRoutine(r1Entity)
+        val r1Intervals = listOf(
+            IntervalEntity(
+                title = "I1",
+                duration = 1.minutes,
+                routineId = r1Id,
+            ),
+            IntervalEntity(
+                title = "I2",
+                duration = 2.minutes,
+                routineId = r1Id,
+            ),
+            IntervalEntity(
+                title = "I3",
+                duration = 3.minutes,
+                routineId = r1Id,
+            ),
+        )
+        r1Intervals.forEach { dao.insertInterval(it) }
+
+        val r2Instant = Clock.System.now()
+        val r2Entity = RoutineEntity(
+            title = "R2",
+            routineType = RoutineType.GENERIC,
+            dateCreated = r2Instant,
+            dateModified = r2Instant,
+        )
+        val r2Id = dao.insertRoutine(r2Entity)
+
+        val routines = dao.getRoutines()
+
+        assertEquals(2, routines.size)
+        assertNotNull(routines.filter { it.routineEntity.id == r1Id }.getOrNull(0))
+        assertEquals(
+            RoutineType.WORKOUT(
+                warmUpDuration = 5.minutes,
+                restDuration = 30.seconds,
+                coolDownDuration = 60.seconds
+            ),
+            routines.filter { it.routineEntity.id == r1Id }[0].routineEntity.routineType,
+        )
+        assertEquals(3, routines.filter { it.routineEntity.id == r1Id }[0].intervalEntities.size)
+
+        assertNotNull(routines.filter { it.routineEntity.id == r2Id }.getOrNull(0))
+        assertEquals(
+            RoutineType.GENERIC,
+            routines.filter { it.routineEntity.id == r2Id }[0].routineEntity.routineType,
+        )
+        assertEquals(0, routines.filter { it.routineEntity.id == r2Id }[0].intervalEntities.size)
+    }
+}
