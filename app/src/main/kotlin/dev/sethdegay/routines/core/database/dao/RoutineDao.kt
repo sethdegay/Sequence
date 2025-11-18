@@ -30,20 +30,20 @@ interface RoutineDao {
         }
 
     @Insert
-    fun insertRoutine(routineEntity: RoutineEntity): Long
+    suspend fun insertRoutine(routineEntity: RoutineEntity): Long
 
     @Insert
-    fun insertInterval(intervalEntity: IntervalEntity)
+    suspend fun insertInterval(intervalEntity: IntervalEntity)
 
     @Update
-    fun updateRoutine(routineEntity: RoutineEntity)
+    suspend fun updateRoutine(routineEntity: RoutineEntity)
 
     @Update
-    fun updateInterval(intervalEntity: IntervalEntity)
+    suspend fun updateInterval(intervalEntity: IntervalEntity)
 
     @Delete
-    fun delete(routineEntity: RoutineEntity, intervalEntities: List<IntervalEntity>)
+    suspend fun delete(routineEntity: RoutineEntity, intervalEntities: List<IntervalEntity>)
 
     @Delete
-    fun delete(intervalEntity: IntervalEntity)
+    suspend fun delete(intervalEntity: IntervalEntity)
 }
