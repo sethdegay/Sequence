@@ -8,7 +8,7 @@ import dev.sethdegay.routines.core.database.model.IntervalEntity
 import dev.sethdegay.routines.core.database.model.RoutineEntity
 import dev.sethdegay.routines.core.database.util.DurationConverter
 import dev.sethdegay.routines.core.database.util.InstantConverter
-import dev.sethdegay.routines.core.database.util.RoutineProtobufConverter
+import dev.sethdegay.routines.core.database.util.RoutineTypeConverter
 
 @Database(
     entities = [
@@ -22,7 +22,7 @@ import dev.sethdegay.routines.core.database.util.RoutineProtobufConverter
     value = [
         DurationConverter::class,
         InstantConverter::class,
-        RoutineProtobufConverter::class,
+        RoutineTypeConverter::class,
     ],
 )
 internal abstract class RoutinesDatabase : RoomDatabase() {

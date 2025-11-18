@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b9bcfaa503dba44b7a758b25fd28a83b",
+    "identityHash": "d60ed893f310a66d78b5e16572932bd2",
     "entities": [
       {
         "tableName": "interval",
@@ -47,7 +47,7 @@
       },
       {
         "tableName": "routine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `description` TEXT, `routine_type_data` BLOB, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `description` TEXT, `routine_type` BLOB NOT NULL, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -66,9 +66,10 @@
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "routineTypeData",
-            "columnName": "routine_type_data",
-            "affinity": "BLOB"
+            "fieldPath": "routineType",
+            "columnName": "routine_type",
+            "affinity": "BLOB",
+            "notNull": true
           },
           {
             "fieldPath": "dateCreated",
@@ -93,7 +94,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b9bcfaa503dba44b7a758b25fd28a83b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd60ed893f310a66d78b5e16572932bd2')"
     ]
   }
 }
