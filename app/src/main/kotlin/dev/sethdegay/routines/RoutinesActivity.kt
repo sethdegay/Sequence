@@ -4,19 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material3.MaterialExpressiveTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
+import dev.sethdegay.routines.core.designsystem.theme.RoutinesTheme
 import dev.sethdegay.routines.core.di.RoutinesBackStackManager
 import dev.sethdegay.routines.core.navigation.NavKeyInstaller
 import javax.inject.Inject
@@ -41,21 +36,9 @@ class RoutinesActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { viewModel.uiState.value.showSplashScreen() }
 
         setContent {
-            MaterialExpressiveTheme(
-                colorScheme = when {
-                    themeConfig.dynamicColor -> {
-                        with(LocalContext.current) {
-                            if (themeConfig.darkTheme) {
-                                dynamicDarkColorScheme(this)
-                            } else {
-                                dynamicLightColorScheme(this)
-                            }
-                        }
-                    }
-
-                    themeConfig.darkTheme -> darkColorScheme()
-                    else -> lightColorScheme()
-                },
+            RoutinesTheme(
+                darkTheme = themeConfig.darkTheme,
+                dynamicColor = themeConfig.dynamicColor,
             ) {
                 NavDisplay(
                     backStack = backStackManager.backStack,
