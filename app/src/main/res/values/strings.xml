@@ -2,6 +2,15 @@
     <string name="app_name">Routines</string>
     <string name="navigate_up_content_description">Navigate up</string>
 
-    <!-- Settings feature -->
+    <!-- =====================
+           Settings screen
+         ====================== -->
     <string name="settings_top_app_bar_title">Settings</string>
+
+    <!-- User interface settings -->
+    <string name="settings_theme_title">Theme</string>
+    <string name="settings_theme_description">Tailor the app\'s appearance by selecting your preferred theme.</string>
+    <string name="settings_system_theme_title">System</string>
+    <string name="settings_dark_theme_title">Dark</string>
+    <string name="settings_light_theme_title">Light</string>
 </resources>

@@ -1,11 +1,10 @@
 package dev.sethdegay.routines.feature.settings
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,11 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import dev.sethdegay.routines.R.string
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.routines.core.model.ThemeConfig
+import dev.sethdegay.routines.core.ui.ThemePreference
 
 @Composable
 fun SettingsScreen(
@@ -71,17 +72,13 @@ private fun SettingsScreen(
         contentPadding = scaffoldPadding,
     ) {
         item {
-            Text(text = uiState.toString())
-        }
-        item {
-            Row {
-                Button(onClick = { setThemeConfig(ThemeConfig.FOLLOW_SYSTEM) }) { Text("Auto") }
-                Button(onClick = { setThemeConfig(ThemeConfig.LIGHT) }) { Text("Light") }
-                Button(onClick = { setThemeConfig(ThemeConfig.DARK) }) { Text("Dark") }
+            Card(modifier = Modifier.padding(horizontal = 16.dp)) {
+                ThemePreference(
+                    onCheckedRequest = { uiState.themeConfig == it },
+                    onThemeConfigChanged = setThemeConfig,
+                    contentPadding = PaddingValues(16.dp),
+                )
             }
-        }
-        item {
-            Button(onClick = { setDynamicColor(!uiState.useDynamicColor) }) { Text("Toggle Dynamic Color") }
         }
     }
 }
