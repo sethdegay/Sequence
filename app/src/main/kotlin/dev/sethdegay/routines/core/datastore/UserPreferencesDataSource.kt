@@ -36,4 +36,12 @@ class UserPreferencesDataSource @Inject constructor(
             }
         }
     }
+
+    suspend fun setDynamicColor(dynamicColor: Boolean) {
+        _userPreferences.updateData {
+            it.copy {
+                this.dynamicColor = dynamicColor
+            }
+        }
+    }
 }
