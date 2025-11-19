@@ -1,8 +1,10 @@
 package dev.sethdegay.routines.feature.settings
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.LargeTopAppBar
@@ -21,6 +23,7 @@ import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.routines.core.model.ThemeConfig
+import dev.sethdegay.routines.core.ui.DynamicColorPreference
 import dev.sethdegay.routines.core.ui.ThemePreference
 
 @Composable
@@ -77,6 +80,17 @@ private fun SettingsScreen(
                     onCheckedRequest = { uiState.themeConfig == it },
                     onThemeConfigChanged = setThemeConfig,
                     contentPadding = PaddingValues(16.dp),
+                )
+            }
+        }
+        item {
+            Spacer(Modifier.size(16.dp))
+        }
+        item {
+            Card(modifier = Modifier.padding(horizontal = 16.dp)) {
+                DynamicColorPreference(
+                    checked = uiState.useDynamicColor,
+                    onCheckedChange = setDynamicColor,
                 )
             }
         }
