@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Routines</string>
+    <string name="navigate_up_content_description">Navigate up</string>
+
+    <!-- Settings feature -->
+    <string name="settings_top_app_bar_title">Settings</string>
 </resources>
