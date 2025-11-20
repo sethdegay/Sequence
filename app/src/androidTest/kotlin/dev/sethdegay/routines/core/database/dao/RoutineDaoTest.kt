@@ -41,6 +41,47 @@ class RoutineDaoTest {
 
     @Test
     fun getRoutines_returnsSuccessfully() = runTest {
+        insertRoutines()
+        val routines = dao.getRoutines()
+
+        assertEquals(2, routines.size)
+        assertNotNull(routines.filter { it.routineEntity.id == 1L }.getOrNull(0))
+        assertEquals(
+            RoutineType.WORKOUT(
+                warmUpDuration = 5.minutes,
+                restDuration = 30.seconds,
+                coolDownDuration = 60.seconds
+            ),
+            routines.filter { it.routineEntity.id == 1L }[0].routineEntity.routineType,
+        )
+        assertEquals(3, routines.filter { it.routineEntity.id == 1L }[0].intervalEntities.size)
+
+        assertNotNull(routines.filter { it.routineEntity.id == 2L }.getOrNull(0))
+        assertEquals(
+            RoutineType.GENERIC,
+            routines.filter { it.routineEntity.id == 2L }[0].routineEntity.routineType,
+        )
+        assertEquals(0, routines.filter { it.routineEntity.id == 2L }[0].intervalEntities.size)
+    }
+
+    @Test
+    fun deleteRoutines_deletesRelatedIntervals() = runTest {
+        insertRoutines()
+        var routines = dao.getRoutines()
+
+        assertEquals(2, routines.size)
+
+        val r1Entity = routines[0]
+        assertEquals(3, r1Entity.intervalEntities.size)
+        dao.delete(r1Entity.routineEntity)
+
+        routines = dao.getRoutines()
+        assertEquals(1, routines.size)
+        val r1Intervals = dao._getRoutineIntervals(r1Entity.routineEntity.id!!)
+        assertEquals(0, r1Intervals.size)
+    }
+
+    private suspend fun insertRoutines() {
         val r1Instant = Clock.System.now()
         val r1Entity = RoutineEntity(
             title = "R1",
@@ -79,27 +120,6 @@ class RoutineDaoTest {
             dateCreated = r2Instant,
             dateModified = r2Instant,
         )
-        val r2Id = dao.insertRoutine(r2Entity)
-
-        val routines = dao.getRoutines()
-
-        assertEquals(2, routines.size)
-        assertNotNull(routines.filter { it.routineEntity.id == r1Id }.getOrNull(0))
-        assertEquals(
-            RoutineType.WORKOUT(
-                warmUpDuration = 5.minutes,
-                restDuration = 30.seconds,
-                coolDownDuration = 60.seconds
-            ),
-            routines.filter { it.routineEntity.id == r1Id }[0].routineEntity.routineType,
-        )
-        assertEquals(3, routines.filter { it.routineEntity.id == r1Id }[0].intervalEntities.size)
-
-        assertNotNull(routines.filter { it.routineEntity.id == r2Id }.getOrNull(0))
-        assertEquals(
-            RoutineType.GENERIC,
-            routines.filter { it.routineEntity.id == r2Id }[0].routineEntity.routineType,
-        )
-        assertEquals(0, routines.filter { it.routineEntity.id == r2Id }[0].intervalEntities.size)
+        dao.insertRoutine(r2Entity)
     }
 }

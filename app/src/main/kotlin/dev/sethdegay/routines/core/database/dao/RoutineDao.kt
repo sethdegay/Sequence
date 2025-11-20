@@ -42,8 +42,5 @@ interface RoutineDao {
     suspend fun updateInterval(intervalEntity: IntervalEntity)
 
     @Delete
-    suspend fun delete(routineEntity: RoutineEntity, intervalEntities: List<IntervalEntity>)
-
-    @Delete
-    suspend fun delete(intervalEntity: IntervalEntity)
+    suspend fun delete(routineEntity: RoutineEntity)
 }

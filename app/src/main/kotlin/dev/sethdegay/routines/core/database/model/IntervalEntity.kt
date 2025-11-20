@@ -2,20 +2,21 @@ package dev.sethdegay.routines.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import dev.sethdegay.routines.core.model.Interval
 import kotlin.time.Duration
 
 @Entity(
     tableName = "interval",
-//    foreignKeys = [
-//        ForeignKey(
-//            entity = RoutineEntity::class,
-//            parentColumns = ["id"],
-//            childColumns = ["routineId"],
-//            onDelete = ForeignKey.CASCADE,
-//        ),
-//    ],
+    foreignKeys = [
+        ForeignKey(
+            entity = RoutineEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["routine_id"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class IntervalEntity(
     @PrimaryKey(autoGenerate = true)
