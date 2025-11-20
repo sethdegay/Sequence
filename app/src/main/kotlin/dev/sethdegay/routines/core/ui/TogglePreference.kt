@@ -54,11 +54,13 @@ fun <T> TogglePreference(
 
 @Composable
 fun ThemePreference(
+    modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
     onCheckedRequest: (ThemeConfig) -> Boolean,
     onThemeConfigChanged: (ThemeConfig) -> Unit,
 ) {
     TogglePreference(
+        modifier = modifier,
         title = stringResource(string.settings_theme_title),
         description = stringResource(string.settings_theme_description),
         options = remember {

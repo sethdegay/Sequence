@@ -1,7 +1,7 @@
 package dev.sethdegay.routines.core.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -21,20 +21,20 @@ fun BooleanPreference(
     onCheckedChange: (Boolean) -> Unit,
     icon: @Composable (() -> Unit)? = null,
 ) {
-    ListItem(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) },
-        headlineContent = { Text(title) },
-        supportingContent = description?.let { { Text(it) } },
-        leadingContent = icon,
-        trailingContent = { Switch(checked = checked, onCheckedChange = onCheckedChange) },
-        colors = ListItemDefaults.colors(
-            containerColor = CardDefaults.cardColors().containerColor,
-            headlineColor = CardDefaults.cardColors().contentColor,
-            supportingColor = CardDefaults.cardColors().contentColor,
-        ),
-    )
+    Column(modifier = Modifier.clickable { onCheckedChange(!checked) }) {
+        ListItem(
+            modifier = modifier,
+            headlineContent = { Text(title) },
+            supportingContent = description?.let { { Text(it) } },
+            leadingContent = icon,
+            trailingContent = { Switch(checked = checked, onCheckedChange = onCheckedChange) },
+            colors = ListItemDefaults.colors(
+                containerColor = CardDefaults.cardColors().containerColor,
+                headlineColor = CardDefaults.cardColors().contentColor,
+                supportingColor = CardDefaults.cardColors().contentColor,
+            ),
+        )
+    }
 }
 
 @Composable
