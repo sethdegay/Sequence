@@ -32,7 +32,7 @@ data class IntervalEntity(
     val order: Int = 0,
 
     @ColumnInfo(name = "routine_id")
-    val routineId: Long,
+    val routineId: Long? = null,
 )
 
 fun IntervalEntity.asExternalModel(): Interval = Interval(

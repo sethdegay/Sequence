@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "35f8c90ce18b76efa0179789b4709bca",
+    "identityHash": "7cfd8377ffe552470578dc34a5a2513c",
     "entities": [
       {
         "tableName": "interval",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `duration` INTEGER NOT NULL, `list_order` INTEGER NOT NULL, `routine_id` INTEGER NOT NULL, FOREIGN KEY(`routine_id`) REFERENCES `routine`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `duration` INTEGER NOT NULL, `list_order` INTEGER NOT NULL, `routine_id` INTEGER, FOREIGN KEY(`routine_id`) REFERENCES `routine`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -34,8 +34,7 @@
           {
             "fieldPath": "routineId",
             "columnName": "routine_id",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -107,7 +106,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '35f8c90ce18b76efa0179789b4709bca')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7cfd8377ffe552470578dc34a5a2513c')"
     ]
   }
 }

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import dev.sethdegay.routines.core.database.model.IntervalEntity
 import dev.sethdegay.routines.core.database.model.RoutineEntity
 import dev.sethdegay.routines.core.database.model.RoutineWithIntervals
@@ -30,16 +31,35 @@ interface RoutineDao {
         }
 
     @Insert
-    suspend fun insertRoutine(routineEntity: RoutineEntity): Long
-
-    @Insert
-    suspend fun insertInterval(intervalEntity: IntervalEntity)
+    suspend fun _insertRoutine(routineEntity: RoutineEntity): Long
 
     @Update
-    suspend fun updateRoutine(routineEntity: RoutineEntity)
+    suspend fun _updateRoutine(routineEntity: RoutineEntity)
 
-    @Update
-    suspend fun updateInterval(intervalEntity: IntervalEntity)
+    @Upsert
+    suspend fun _upsertInterval(intervalEntity: IntervalEntity)
+
+    @Transaction
+    suspend fun upsertRoutineWithIntervals(
+        routineEntity: RoutineEntity,
+        intervalEntities: List<IntervalEntity>? = null,
+    ) {
+        val routineId = if (routineEntity.id == null) {
+            _insertRoutine(routineEntity)
+        } else {
+            _updateRoutine(routineEntity)
+            routineEntity.id
+        }
+
+        intervalEntities?.forEach { intervalEntity ->
+            val intervalEntityWithRoutineId = if (intervalEntity.routineId == null) {
+                intervalEntity.copy(routineId = routineId)
+            } else {
+                intervalEntity
+            }
+            _upsertInterval(intervalEntityWithRoutineId)
+        }
+    }
 
     @Delete
     suspend fun delete(routineEntity: RoutineEntity)

@@ -93,25 +93,21 @@ class RoutineDaoTest {
             dateCreated = r1Instant,
             dateModified = r1Instant,
         )
-        val r1Id = dao.insertRoutine(r1Entity)
         val r1Intervals = listOf(
             IntervalEntity(
                 title = "I1",
                 duration = 1.minutes,
-                routineId = r1Id,
             ),
             IntervalEntity(
                 title = "I2",
                 duration = 2.minutes,
-                routineId = r1Id,
             ),
             IntervalEntity(
                 title = "I3",
                 duration = 3.minutes,
-                routineId = r1Id,
             ),
         )
-        r1Intervals.forEach { dao.insertInterval(it) }
+        dao.upsertRoutineWithIntervals(r1Entity, r1Intervals)
 
         val r2Instant = Clock.System.now()
         val r2Entity = RoutineEntity(
@@ -120,6 +116,6 @@ class RoutineDaoTest {
             dateCreated = r2Instant,
             dateModified = r2Instant,
         )
-        dao.insertRoutine(r2Entity)
+        dao.upsertRoutineWithIntervals(r2Entity)
     }
 }
