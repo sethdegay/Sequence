@@ -79,7 +79,6 @@ private fun SettingsScreen(
                 ThemePreference(
                     onCheckedRequest = { uiState.themeConfig == it },
                     onThemeConfigChanged = setThemeConfig,
-                    contentPadding = PaddingValues(16.dp),
                 )
             }
         }
