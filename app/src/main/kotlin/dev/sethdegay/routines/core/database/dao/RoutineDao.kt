@@ -10,25 +10,27 @@ import androidx.room.Upsert
 import dev.sethdegay.routines.core.database.model.IntervalEntity
 import dev.sethdegay.routines.core.database.model.RoutineEntity
 import dev.sethdegay.routines.core.database.model.RoutineWithIntervals
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Suppress("FunctionName")
 @Dao
 interface RoutineDao {
 
     @Query("SELECT * FROM routine")
-    suspend fun _getRoutines(): List<RoutineEntity>
+    fun _getRoutines(): Flow<List<RoutineEntity>>
 
     @Query("SELECT * FROM interval WHERE routine_id = :id ORDER BY list_order ASC")
     suspend fun _getRoutineIntervals(id: Long): List<IntervalEntity>
 
-    @Transaction
-    suspend fun getRoutines(): List<RoutineWithIntervals> =
-        _getRoutines().map {
+    fun getRoutines(): Flow<List<RoutineWithIntervals>> = _getRoutines().map { routineEntities ->
+        routineEntities.map { routineEntity ->
             RoutineWithIntervals(
-                routineEntity = it,
-                intervalEntities = _getRoutineIntervals(it.id!!),
+                routineEntity = routineEntity,
+                intervalEntities = _getRoutineIntervals(routineEntity.id!!),
             )
         }
+    }
 
     @Insert
     suspend fun _insertRoutine(routineEntity: RoutineEntity): Long

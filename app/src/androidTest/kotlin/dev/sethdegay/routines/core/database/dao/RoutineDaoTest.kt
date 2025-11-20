@@ -8,6 +8,7 @@ import dev.sethdegay.routines.core.database.RoutinesDatabase
 import dev.sethdegay.routines.core.database.model.IntervalEntity
 import dev.sethdegay.routines.core.database.model.RoutineEntity
 import dev.sethdegay.routines.core.model.RoutineType
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -42,7 +43,7 @@ class RoutineDaoTest {
     @Test
     fun getRoutines_returnsSuccessfully() = runTest {
         insertRoutines()
-        val routines = dao.getRoutines()
+        val routines = dao.getRoutines().first()
 
         assertEquals(2, routines.size)
         assertNotNull(routines.filter { it.routineEntity.id == 1L }.getOrNull(0))
@@ -67,7 +68,7 @@ class RoutineDaoTest {
     @Test
     fun deleteRoutines_deletesRelatedIntervals() = runTest {
         insertRoutines()
-        var routines = dao.getRoutines()
+        var routines = dao.getRoutines().first()
 
         assertEquals(2, routines.size)
 
@@ -75,7 +76,7 @@ class RoutineDaoTest {
         assertEquals(3, r1Entity.intervalEntities.size)
         dao.delete(r1Entity.routineEntity)
 
-        routines = dao.getRoutines()
+        routines = dao.getRoutines().first()
         assertEquals(1, routines.size)
         val r1Intervals = dao._getRoutineIntervals(r1Entity.routineEntity.id!!)
         assertEquals(0, r1Intervals.size)
