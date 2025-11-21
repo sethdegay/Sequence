@@ -11,5 +11,5 @@ data class Routine(
     val routineType: RoutineType,
     val dateCreated: Instant,
     val dateModified: Instant,
-    val intervals: List<Interval>,
+    val tasks: List<Task>,
 )

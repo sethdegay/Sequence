@@ -17,9 +17,9 @@ class LocalRoutineRepository @Inject constructor(
         .map { routines -> routines.map { it.asExternalModel() } }
 
     override suspend fun saveRoutine(routine: Routine) {
-        routineDao.upsertRoutineWithIntervals(
+        routineDao.upsertRoutineWithTasks(
             routineEntity = routine.asEntity(),
-            intervalEntities = routine.intervals.map { it.asEntity(routineId = routine.id) },
+            taskEntities = routine.tasks.map { it.asEntity(routineId = routine.id) },
         )
     }
 

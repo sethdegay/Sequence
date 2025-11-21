@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import dev.sethdegay.routines.core.model.Routine
 
-data class RoutineWithIntervals(
+data class RoutineWithTasks(
     @Embedded
     val routineEntity: RoutineEntity,
 
@@ -12,8 +12,8 @@ data class RoutineWithIntervals(
         parentColumn = "id",
         entityColumn = "routine_id",
     )
-    val intervalEntities: List<IntervalEntity>,
+    val taskEntities: List<TaskEntity>,
 )
 
-fun RoutineWithIntervals.asExternalModel(): Routine =
-    routineEntity.asExternalModel(intervalEntities.map { it.asExternalModel() })
+fun RoutineWithTasks.asExternalModel(): Routine =
+    routineEntity.asExternalModel(taskEntities.map { it.asExternalModel() })

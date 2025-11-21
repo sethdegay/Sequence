@@ -3,9 +3,9 @@ package dev.sethdegay.routines.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.sethdegay.routines.core.model.Interval
 import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.RoutineType
+import dev.sethdegay.routines.core.model.Task
 import kotlin.time.Instant
 
 @Entity(tableName = "routine")
@@ -29,12 +29,12 @@ data class RoutineEntity(
     val dateModified: Instant,
 )
 
-fun RoutineEntity.asExternalModel(intervals: List<Interval>): Routine = Routine(
+fun RoutineEntity.asExternalModel(tasks: List<Task>): Routine = Routine(
     id = id,
     title = title,
     description = description,
     routineType = routineType,
     dateCreated = dateCreated,
     dateModified = dateModified,
-    intervals = intervals,
+    tasks = tasks,
 )

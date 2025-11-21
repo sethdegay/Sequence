@@ -2,7 +2,7 @@ package dev.sethdegay.routines.core.model
 
 import kotlin.time.Duration
 
-data class Interval(
+data class Task(
     val id: Long? = null,
     val title: String,
     val duration: Duration,

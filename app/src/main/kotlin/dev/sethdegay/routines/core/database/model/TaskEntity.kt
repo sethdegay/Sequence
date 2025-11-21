@@ -4,11 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import dev.sethdegay.routines.core.model.Interval
+import dev.sethdegay.routines.core.model.Task
 import kotlin.time.Duration
 
 @Entity(
-    tableName = "interval",
+    tableName = "task",
     foreignKeys = [
         ForeignKey(
             entity = RoutineEntity::class,
@@ -18,7 +18,7 @@ import kotlin.time.Duration
         ),
     ],
 )
-data class IntervalEntity(
+data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long? = null,
 
@@ -35,7 +35,7 @@ data class IntervalEntity(
     val routineId: Long? = null,
 )
 
-fun IntervalEntity.asExternalModel(): Interval = Interval(
+fun TaskEntity.asExternalModel(): Task = Task(
     id = id,
     title = title,
     duration = duration,

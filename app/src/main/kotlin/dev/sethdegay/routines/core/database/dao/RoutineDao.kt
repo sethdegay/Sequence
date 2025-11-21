@@ -7,9 +7,9 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
-import dev.sethdegay.routines.core.database.model.IntervalEntity
 import dev.sethdegay.routines.core.database.model.RoutineEntity
-import dev.sethdegay.routines.core.database.model.RoutineWithIntervals
+import dev.sethdegay.routines.core.database.model.RoutineWithTasks
+import dev.sethdegay.routines.core.database.model.TaskEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -17,19 +17,19 @@ import kotlinx.coroutines.flow.map
 @Dao
 interface RoutineDao {
     @Query("SELECT * FROM routine WHERE id = :id")
-    suspend fun getRoutine(id: Long): RoutineWithIntervals
+    suspend fun getRoutine(id: Long): RoutineWithTasks
 
     @Query("SELECT * FROM routine")
     fun _getRoutines(): Flow<List<RoutineEntity>>
 
-    @Query("SELECT * FROM interval WHERE routine_id = :id ORDER BY list_order ASC")
-    suspend fun _getRoutineIntervals(id: Long): List<IntervalEntity>
+    @Query("SELECT * FROM task WHERE routine_id = :id ORDER BY list_order ASC")
+    suspend fun _getRoutineTasks(id: Long): List<TaskEntity>
 
-    fun getRoutines(): Flow<List<RoutineWithIntervals>> = _getRoutines().map { routineEntities ->
+    fun getRoutines(): Flow<List<RoutineWithTasks>> = _getRoutines().map { routineEntities ->
         routineEntities.map { routineEntity ->
-            RoutineWithIntervals(
+            RoutineWithTasks(
                 routineEntity = routineEntity,
-                intervalEntities = _getRoutineIntervals(routineEntity.id!!),
+                taskEntities = _getRoutineTasks(routineEntity.id!!),
             )
         }
     }
@@ -41,12 +41,12 @@ interface RoutineDao {
     suspend fun _updateRoutine(routineEntity: RoutineEntity)
 
     @Upsert
-    suspend fun _upsertInterval(intervalEntity: IntervalEntity)
+    suspend fun _upsertTask(taskEntity: TaskEntity)
 
     @Transaction
-    suspend fun upsertRoutineWithIntervals(
+    suspend fun upsertRoutineWithTasks(
         routineEntity: RoutineEntity,
-        intervalEntities: List<IntervalEntity>? = null,
+        taskEntities: List<TaskEntity>? = null,
     ) {
         val routineId = if (routineEntity.id == null) {
             _insertRoutine(routineEntity)
@@ -55,13 +55,13 @@ interface RoutineDao {
             routineEntity.id
         }
 
-        intervalEntities?.forEach { intervalEntity ->
-            val intervalEntityWithRoutineId = if (intervalEntity.routineId == null) {
-                intervalEntity.copy(routineId = routineId)
+        taskEntities?.forEach { taskEntity ->
+            val taskEntityWithRoutineId = if (taskEntity.routineId == null) {
+                taskEntity.copy(routineId = routineId)
             } else {
-                intervalEntity
+                taskEntity
             }
-            _upsertInterval(intervalEntityWithRoutineId)
+            _upsertTask(taskEntityWithRoutineId)
         }
     }
 
