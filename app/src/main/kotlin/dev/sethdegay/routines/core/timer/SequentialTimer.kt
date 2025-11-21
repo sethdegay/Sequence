@@ -49,16 +49,31 @@ class SequentialTimer<T>(
             return
         }
 
+        if (timeLeft != null && timeLeft.inWholeMilliseconds % 1000L != 0L) {
+            _state.value =
+                SequentialTimerState.Error(IllegalArgumentException("Duration must be in whole seconds."))
+            return
+        }
+
         timerJob = scope.launch {
             try {
                 for (i in startIndex..items.lastIndex) {
                     val element = items[i]
+
+                    val duration = if (i == startIndex && timeLeft != null) {
+                        timeLeft
+                    } else {
+                        val providedDuration = durationProvider(element)
+                        if (providedDuration.inWholeMilliseconds % 1000L != 0L) {
+                            _state.value =
+                                SequentialTimerState.Error(IllegalArgumentException("Duration must be in whole seconds."))
+                            return@launch
+                        }
+                        providedDuration
+                    }
+
                     countdownFlow(
-                        duration = if (i == startIndex && timeLeft != null) {
-                            timeLeft
-                        } else {
-                            durationProvider(element)
-                        },
+                        duration = duration,
                         dispatcher = dispatcher,
                     ).collect { timeLeft ->
                         _state.value = SequentialTimerState.Running(

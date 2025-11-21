@@ -14,6 +14,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class SequentialTimerTest {
@@ -138,6 +139,40 @@ class SequentialTimerTest {
             assertEquals(7.seconds, (awaitItem() as SequentialTimerState.Running<*>).timeLeft)
 
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `start with fractional duration causes error`() = testScope.runTest {
+        val fractionalItems = listOf("A", "B")
+        val fractionalTimer = createTimer { 5.5.seconds }
+
+        val wholeTimer = createTimer { 5.seconds }
+
+        fractionalTimer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            fractionalTimer.start(fractionalItems)
+
+            val errorState = awaitItem()
+            assertTrue(errorState is SequentialTimerState.Error)
+            assertEquals(
+                "Duration must be in whole seconds.",
+                (errorState as SequentialTimerState.Error).exception.message
+            )
+            expectNoEvents()
+        }
+
+        wholeTimer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            wholeTimer.start(fractionalItems, timeLeft = 4.seconds + 500.milliseconds)
+
+            val errorState = awaitItem()
+            assertTrue(errorState is SequentialTimerState.Error)
+            assertEquals(
+                "Duration must be in whole seconds.",
+                (errorState as SequentialTimerState.Error).exception.message
+            )
+            expectNoEvents()
         }
     }
 
