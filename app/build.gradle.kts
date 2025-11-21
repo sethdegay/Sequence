@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.protobuf)
 
     testImplementation(libs.junit)
+    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
 
