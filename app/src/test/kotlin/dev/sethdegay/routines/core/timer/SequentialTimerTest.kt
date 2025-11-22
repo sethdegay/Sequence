@@ -206,6 +206,175 @@ class SequentialTimerTest {
         }
     }
 
+    @Test
+    fun `moveNext jumps to next item and resets duration`() = testScope.runTest {
+        val items = listOf("A", "B")
+        val timer = createTimer { 5.seconds }
+
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+
+            timer.start(items)
+
+            with(awaitItem() as SequentialTimerState.Running<*>) {
+                assertEquals(0, currentItemIndex)
+                assertEquals(5.seconds, timeLeft)
+            }
+
+            testScope.advanceTimeBy(1000)
+            assertEquals(4.seconds, (awaitItem() as SequentialTimerState.Running<*>).timeLeft)
+            testScope.advanceTimeBy(1000)
+            assertEquals(3.seconds, (awaitItem() as SequentialTimerState.Running<*>).timeLeft)
+
+            timer.moveNext()
+
+            with(awaitItem() as SequentialTimerState.Running<*>) {
+                assertEquals(1, currentItemIndex)
+                assertEquals("B", items[currentItemIndex])
+                assertEquals(5.seconds, timeLeft) // Duration reset
+            }
+
+            timer.stop()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `moveNext from Paused state works correctly`() = testScope.runTest {
+        val items = listOf("A", "B")
+        val timer = createTimer { 5.seconds }
+
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            timer.start(items)
+
+            awaitItem()
+
+            timer.pause()
+            assertTrue(awaitItem() is SequentialTimerState.Paused<*>)
+
+            timer.moveNext()
+
+            // Should go directly to Running B (no intermediate pause event since already paused)
+            with(awaitItem() as SequentialTimerState.Running<*>) {
+                assertEquals(1, currentItemIndex)
+                assertEquals("B", items[currentItemIndex])
+                assertEquals(5.seconds, timeLeft)
+            }
+        }
+    }
+
+    @Test
+    fun `moveNext fails when at end of list`() = testScope.runTest {
+        val items = listOf("A")
+        val timer = createTimer()
+
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            timer.start(items)
+            awaitItem()
+
+            timer.moveNext()
+
+            val error = awaitItem() as SequentialTimerState.Error
+            assertEquals(
+                "Cannot move to next element. Current index is at the end.",
+                error.exception.message
+            )
+        }
+    }
+
+    @Test
+    fun `moveNext from invalid state errors`() = testScope.runTest {
+        val timer = createTimer()
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            timer.moveNext()
+            val error = awaitItem() as SequentialTimerState.Error
+            assertEquals("Cannot move element from state: Idle", error.exception.message)
+        }
+    }
+
+    @Test
+    fun `movePrevious jumps to previous item and resets duration`() = testScope.runTest {
+        val items = listOf("A", "B")
+        val timer = createTimer { 5.seconds }
+
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+
+            timer.start(items, startIndex = 1)
+
+            with(awaitItem() as SequentialTimerState.Running<*>) {
+                assertEquals(1, currentItemIndex)
+                assertEquals("B", items[currentItemIndex])
+            }
+
+            timer.movePrevious()
+
+            with(awaitItem() as SequentialTimerState.Running<*>) {
+                assertEquals(0, currentItemIndex)
+                assertEquals("A", items[currentItemIndex])
+                assertEquals(5.seconds, timeLeft)
+            }
+        }
+    }
+
+    @Test
+    fun `movePrevious from Paused state works correctly`() = testScope.runTest {
+        val items = listOf("A", "B")
+        val timer = createTimer { 5.seconds }
+
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            timer.start(items, startIndex = 1)
+
+            awaitItem()
+
+            timer.pause()
+            assertTrue(awaitItem() is SequentialTimerState.Paused<*>)
+
+            timer.movePrevious()
+
+            with(awaitItem() as SequentialTimerState.Running<*>) {
+                assertEquals(0, currentItemIndex)
+                assertEquals("A", items[currentItemIndex])
+                assertEquals(5.seconds, timeLeft)
+            }
+        }
+    }
+
+    @Test
+    fun `movePrevious fails when at start of list`() = testScope.runTest {
+        val items = listOf("A", "B")
+        val timer = createTimer()
+
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            timer.start(items, startIndex = 0)
+            awaitItem()
+
+            timer.movePrevious()
+
+            val error = awaitItem() as SequentialTimerState.Error
+            assertEquals(
+                "Cannot move to previous element. Current index is at the start.",
+                error.exception.message
+            )
+        }
+    }
+
+    @Test
+    fun `movePrevious from invalid state errors`() = testScope.runTest {
+        val timer = createTimer()
+        timer.state.test {
+            assertEquals(SequentialTimerState.Idle, awaitItem())
+            timer.movePrevious()
+            val error = awaitItem() as SequentialTimerState.Error
+            assertEquals("Cannot move element from state: Idle", error.exception.message)
+        }
+    }
+
     private fun createTimer(
         durationProvider: (String) -> Duration = { 1.seconds },
     ): SequentialTimer<String> {

@@ -118,8 +118,52 @@ class SequentialTimer<T>(
         }
     }
 
+    fun moveNext() {
+        val (items, currentIndex) = getCurrentStateData() ?: return
+
+        if (currentIndex + 1 > items.lastIndex) {
+            _state.value =
+                SequentialTimerState.Error(IllegalStateException("Cannot move to next element. Current index is at the end."))
+            return
+        }
+
+        start(items = items, startIndex = currentIndex + 1, timeLeft = null)
+    }
+
+    fun movePrevious() {
+        val (items, currentIndex) = getCurrentStateData() ?: return
+
+        if (currentIndex - 1 < 0) {
+            _state.value =
+                SequentialTimerState.Error(IllegalStateException("Cannot move to previous element. Current index is at the start."))
+            return
+        }
+
+        start(items = items, startIndex = currentIndex - 1, timeLeft = null)
+    }
+
     fun stop() {
         timerJob?.cancel()
         _state.value = SequentialTimerState.Idle
+    }
+
+    private fun getCurrentStateData(): Pair<List<T>, Int>? {
+        return when (val currentState = _state.value) {
+            is SequentialTimerState.Paused<*> -> {
+                @Suppress("UNCHECKED_CAST")
+                currentState.items as List<T> to currentState.currentItemIndex
+            }
+
+            is SequentialTimerState.Running<*> -> {
+                @Suppress("UNCHECKED_CAST")
+                currentState.items as List<T> to currentState.currentItemIndex
+            }
+
+            else -> {
+                _state.value =
+                    SequentialTimerState.Error(IllegalStateException("Cannot move element from state: $currentState"))
+                null
+            }
+        }
     }
 }
