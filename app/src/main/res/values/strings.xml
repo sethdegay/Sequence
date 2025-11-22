@@ -4,7 +4,7 @@
 
     <!-- =====================
            Settings screen
-         ====================== -->
+         ===================== -->
     <string name="settings_top_app_bar_title">Settings</string>
 
     <!-- User interface settings -->
@@ -15,4 +15,11 @@
     <string name="settings_light_theme_title">Light</string>
     <string name="settings_dynamic_color_title">Dynamic color</string>
     <string name="settings_dynamic_color_description">Apply your system color palette to personalize the app\'s appearance.</string>
+
+    <!-- =====================
+           Timer screen
+         ===================== -->
+    <!-- Timer controller -->
+    <string name="timer_pause_button_text">Pause</string>
+    <string name="timer_start_button_text">Start</string>
 </resources>
