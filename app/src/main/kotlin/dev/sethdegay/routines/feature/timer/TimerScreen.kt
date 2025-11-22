@@ -1,21 +1,111 @@
 package dev.sethdegay.routines.feature.timer
 
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import dev.sethdegay.routines.feature.TestScreen
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import dev.sethdegay.routines.R.string
+import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
+import dev.sethdegay.routines.core.designsystem.component.ProgressIndicator
+import dev.sethdegay.routines.core.designsystem.component.TimerControls
+import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
+import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 
 @Composable
 fun TimerScreen(
     viewModel: TimerViewModel,
     navigateUp: () -> Unit,
 ) {
-    val id by viewModel.idFlow.collectAsState()
-    TestScreen("Timer screen | ID: $id") {
-        Button(onClick = navigateUp) {
-            Text("Navigate up")
+    val uiState by viewModel.uiState.collectAsState()
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val isTopAppBarExpanded by remember {
+        derivedStateOf { scrollBehavior.state.collapsedFraction == 0f }
+    }
+
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    Text(text = "")
+                },
+                navigationIcon = RoutinesIcons.NavigateUp.asComposableIconButton(
+                    onClick = navigateUp,
+                    contentDescription = stringResource(string.navigate_up_content_description),
+                ),
+                scrollBehavior = scrollBehavior,
+            )
+        }
+    ) { padding ->
+        if (uiState.showLoadingScreen()) {
+            LoadingScreen(modifier = Modifier.padding(padding))
+        } else {
+            when (uiState) {
+                is TimerUiState.Success -> TimerScreen(
+                    scaffoldPadding = padding,
+                    uiState = uiState as TimerUiState.Success,
+                    expandProgressIndicator = isTopAppBarExpanded,
+                )
+
+                else -> Text(text = uiState.toString())
+            }
+        }
+    }
+}
+
+@Composable
+private fun TimerScreen(
+    scaffoldPadding: PaddingValues,
+    uiState: TimerUiState.Success,
+    expandProgressIndicator: Boolean,
+) {
+    Box(
+        modifier = Modifier
+            .consumeWindowInsets(scaffoldPadding)
+            .padding(scaffoldPadding)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        ProgressIndicator(
+            progress = uiState.progress,
+            expanded = expandProgressIndicator,
+            amplitudeLevel = uiState.amplitudeLevel,
+        )
+        Column(modifier = Modifier.align(Alignment.Center)) {
+            Text(text = uiState.currentItem.first.title)
+            CountdownDisplay(duration = uiState.currentItem.second)
+        }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp),
+        ) {
+            TimerControls(
+                mode = uiState.controlsMode,
+                startText = stringResource(string.timer_start_button_text),
+                pauseText = stringResource(string.timer_pause_button_text),
+                actions = uiState.controlsActions,
+            )
         }
     }
 }
