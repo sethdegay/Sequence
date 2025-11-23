@@ -27,6 +27,8 @@ import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicator
 import dev.sethdegay.routines.core.designsystem.component.TimerControls
+import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
+import dev.sethdegay.routines.core.designsystem.component.TimerControlsMode
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 
@@ -65,9 +67,13 @@ fun TimerScreen(
                     scaffoldPadding = padding,
                     uiState = uiState as TimerUiState.Success,
                     expandProgressIndicator = isTopAppBarExpanded,
+                    actions = viewModel,
                 )
 
-                else -> Text(text = uiState.toString())
+                else -> Text(
+                    modifier = Modifier.padding(padding),
+                    text = uiState.toString(),
+                )
             }
         }
     }
@@ -78,6 +84,7 @@ private fun TimerScreen(
     scaffoldPadding: PaddingValues,
     uiState: TimerUiState.Success,
     expandProgressIndicator: Boolean,
+    actions: TimerControlsActions,
 ) {
     Box(
         modifier = Modifier
@@ -92,8 +99,8 @@ private fun TimerScreen(
             amplitudeLevel = uiState.amplitudeLevel,
         )
         Column(modifier = Modifier.align(Alignment.Center)) {
-            Text(text = uiState.currentItem.first.title)
-            CountdownDisplay(duration = uiState.currentItem.second)
+            Text(text = uiState.currentTask.title)
+            CountdownDisplay(duration = uiState.remainingTime)
         }
         Box(
             modifier = Modifier
@@ -101,10 +108,12 @@ private fun TimerScreen(
                 .padding(16.dp),
         ) {
             TimerControls(
-                mode = uiState.controlsMode,
+                mode = if (uiState.isTimerRunning) TimerControlsMode.RUNNING else TimerControlsMode.PAUSED,
                 startText = stringResource(string.timer_start_button_text),
                 pauseText = stringResource(string.timer_pause_button_text),
-                actions = uiState.controlsActions,
+                actions = actions,
+                canMovePrevious = uiState.canMovePrevious,
+                canMoveNext = uiState.canMoveNext,
             )
         }
     }

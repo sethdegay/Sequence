@@ -8,7 +8,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
-import dev.sethdegay.routines.core.designsystem.component.TimerControlsMode
 import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.timer.SequentialTimer
 import dev.sethdegay.routines.core.timer.SequentialTimerState
@@ -23,7 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 class TimerViewModel @AssistedInject constructor(
     @Assisted private val id: Long,
     private val timer: SequentialTimer<Task>,
-) : ViewModel() {
+) : ViewModel(), TimerControlsActions {
 
     @AssistedFactory
     interface Factory {
@@ -46,45 +45,50 @@ class TimerViewModel @AssistedInject constructor(
         )
     }
 
-    private fun SequentialTimerState.asTimerUiState(): TimerUiState {
-        @Suppress("UNCHECKED_CAST")
-        return when (this) {
-            SequentialTimerState.Idle -> TimerUiState.Loading
-            SequentialTimerState.Finished -> TimerUiState.Finished
-            is SequentialTimerState.Error -> TimerUiState.Loading // TODO implement error state
-            is SequentialTimerState.Running<*> -> TimerUiState.Success(
-                currentItem = Pair(
-                    first = (items as List<Task>)[currentItemIndex],
-                    second = timeLeft,
-                ),
-                controlsMode = TimerControlsMode.RUNNING,
-                controlsActions = TimerControlsActions(
-                    onMainButtonClick = { timer.pause() },
-                    onPreviousButtonClick = { timer.movePrevious() },
-                    onNextButtonClick = { timer.moveNext() },
-                    enablePreviousButton = currentItemIndex != 0,
-                    enableNextButton = currentItemIndex != items.lastIndex,
-                ),
-                progress = currentItemIndex.toFloat() / items.lastIndex,
-                amplitudeLevel = ProgressIndicatorAmplitudeLevel.MAXIMUM,
-            )
-
-            is SequentialTimerState.Paused<*> -> TimerUiState.Success(
-                currentItem = Pair(
-                    first = (items as List<Task>)[currentItemIndex],
-                    second = timeLeft,
-                ),
-                controlsMode = TimerControlsMode.PAUSED,
-                controlsActions = TimerControlsActions(
-                    onMainButtonClick = { timer.resume() },
-                    onPreviousButtonClick = { timer.movePrevious() },
-                    onNextButtonClick = { timer.moveNext() },
-                    enablePreviousButton = currentItemIndex != 0,
-                    enableNextButton = currentItemIndex != items.lastIndex,
-                ),
-                progress = currentItemIndex.toFloat() / items.lastIndex,
-                amplitudeLevel = ProgressIndicatorAmplitudeLevel.MAXIMUM,
-            )
+    override fun onToggleTimer() {
+        val currentState = timer.state.value
+        if (currentState is SequentialTimerState.Running<*>) {
+            timer.pause()
+        } else if (currentState is SequentialTimerState.Paused<*>) {
+            timer.resume()
         }
+    }
+
+    override fun onPrevious() = timer.movePrevious()
+    override fun onNext() = timer.moveNext()
+
+    private fun SequentialTimerState.asTimerUiState(): TimerUiState {
+        if (this is SequentialTimerState.Idle || this is SequentialTimerState.Error) {
+            return TimerUiState.Loading
+        }
+        if (this is SequentialTimerState.Finished) {
+            return TimerUiState.Finished
+        }
+
+        val (items, index, time) = when (this) {
+            is SequentialTimerState.Running<*> -> Triple(items, currentItemIndex, timeLeft)
+            is SequentialTimerState.Paused<*> -> Triple(items, currentItemIndex, timeLeft)
+            else -> return TimerUiState.Loading
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        val tasks = items as List<Task>
+        val currentTask = tasks[index]
+
+        val progress = if (tasks.lastIndex > 0) {
+            index.toFloat() / tasks.lastIndex
+        } else {
+            1.0f
+        }
+
+        return TimerUiState.Success(
+            currentTask = currentTask,
+            remainingTime = time,
+            isTimerRunning = this is SequentialTimerState.Running<*>,
+            canMovePrevious = index > 0,
+            canMoveNext = index < tasks.lastIndex,
+            progress = progress,
+            amplitudeLevel = ProgressIndicatorAmplitudeLevel.MAXIMUM,
+        )
     }
 }

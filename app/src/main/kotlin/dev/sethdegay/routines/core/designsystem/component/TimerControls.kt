@@ -24,13 +24,11 @@ import dev.sethdegay.routines.core.designsystem.util.asComposableIcon
 
 enum class TimerControlsMode { RUNNING, PAUSED; }
 
-data class TimerControlsActions(
-    val onMainButtonClick: () -> Unit,
-    val onPreviousButtonClick: () -> Unit,
-    val onNextButtonClick: () -> Unit,
-    val enablePreviousButton: Boolean,
-    val enableNextButton: Boolean,
-)
+interface TimerControlsActions {
+    fun onToggleTimer()
+    fun onPrevious()
+    fun onNext()
+}
 
 @Composable
 fun TimerControls(
@@ -38,6 +36,8 @@ fun TimerControls(
     startText: String,
     pauseText: String,
     actions: TimerControlsActions,
+    canMovePrevious: Boolean,
+    canMoveNext: Boolean,
 ) {
     val mediumButtonSize = ButtonDefaults.MediumContainerHeight
     val largeButtonSize = ButtonDefaults.LargeContainerHeight
@@ -49,8 +49,8 @@ fun TimerControls(
             modifier = Modifier
                 .heightIn(mediumButtonSize)
                 .weight(1f),
-            onClick = actions.onPreviousButtonClick,
-            enabled = actions.enablePreviousButton,
+            onClick = actions::onPrevious,
+            enabled = canMovePrevious,
             contentPadding = ButtonDefaults.contentPaddingFor(mediumButtonSize),
             shapes = ButtonDefaults.shapes(),
         ) {
@@ -62,7 +62,7 @@ fun TimerControls(
             modifier = Modifier
                 .heightIn(largeButtonSize)
                 .weight(2f),
-            onClick = actions.onMainButtonClick,
+            onClick = actions::onToggleTimer,
             contentPadding = ButtonDefaults.contentPaddingFor(largeButtonSize),
             shapes = ButtonDefaults.shapes(),
             colors =
@@ -91,8 +91,8 @@ fun TimerControls(
             modifier = Modifier
                 .heightIn(mediumButtonSize)
                 .weight(1f),
-            onClick = actions.onNextButtonClick,
-            enabled = actions.enableNextButton,
+            onClick = actions::onNext,
+            enabled = canMoveNext,
             contentPadding = ButtonDefaults.contentPaddingFor(mediumButtonSize),
             shapes = ButtonDefaults.shapes(),
         ) {
@@ -111,18 +111,19 @@ private fun TimerControlsPreview() {
         mode = mode,
         startText = stringResource(R.string.timer_start_button_text),
         pauseText = stringResource(R.string.timer_pause_button_text),
-        actions = TimerControlsActions(
-            onMainButtonClick = {
+        actions = object : TimerControlsActions {
+            override fun onToggleTimer() {
                 mode = if (mode == TimerControlsMode.RUNNING) {
                     TimerControlsMode.PAUSED
                 } else {
                     TimerControlsMode.RUNNING
                 }
-            },
-            onPreviousButtonClick = {},
-            onNextButtonClick = {},
-            enablePreviousButton = false,
-            enableNextButton = true,
-        ),
+            }
+
+            override fun onNext() {}
+            override fun onPrevious() {}
+        },
+        canMovePrevious = false,
+        canMoveNext = true,
     )
 }
