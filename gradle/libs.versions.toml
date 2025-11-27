@@ -23,6 +23,7 @@ kotlinx-serialization-plugin = "2.2.21"
 ksp = "2.3.0"
 protobuf = "4.33.1"
 protobuf-gradle-plugin = "0.9.5"
+reorderable = "3.0.0"
 turbine = "1.2.1"
 
 [libraries]
@@ -59,6 +60,7 @@ kotlinx-serialization-protobuf = { group = "org.jetbrains.kotlinx", name = "kotl
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 #noinspection UnusedVersionCatalogEntry
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+reorderable = { group = "sh.calvin.reorderable", name = "reorderable", version.ref = "reorderable" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 [plugins]
