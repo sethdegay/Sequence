@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Routines</string>
     <string name="navigate_up_content_description">Navigate up</string>
+    <string name="drag_handle_content_description">Drag handle</string>
 
     <!-- =====================
            Settings screen

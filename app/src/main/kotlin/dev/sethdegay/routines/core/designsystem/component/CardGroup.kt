@@ -89,6 +89,13 @@ fun CardGroupTrailingItem(content: @Composable (PaddingValues) -> Unit) {
 }
 
 @Composable
+fun CardGroupItem(content: @Composable (PaddingValues) -> Unit) {
+    Card(shape = middleItemShape()) {
+        content(contentPadding)
+    }
+}
+
+@Composable
 fun CardGroup(vararg items: @Composable (PaddingValues) -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(1.5.dp),

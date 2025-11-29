@@ -10,10 +10,12 @@ import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.PhoneAndroid
+import androidx.compose.material.icons.rounded.DragHandle
 
 object RoutinesIcons {
     val DarkModeChecked = Icons.Filled.DarkMode
     val DarkModeUnchecked = Icons.Outlined.DarkMode
+    val DragHandle = Icons.Rounded.DragHandle
     val LightModeChecked = Icons.Filled.LightMode
     val LightModeUnchecked = Icons.Outlined.LightMode
     val NavigateUp = Icons.AutoMirrored.Filled.ArrowBack
