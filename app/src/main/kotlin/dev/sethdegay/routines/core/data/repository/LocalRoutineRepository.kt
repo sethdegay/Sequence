@@ -11,7 +11,8 @@ import javax.inject.Inject
 class LocalRoutineRepository @Inject constructor(
     private val routineDao: RoutineDao,
 ) : RoutineRepository {
-    override suspend fun getRoutine(id: Long): Routine = routineDao.getRoutine(id).asExternalModel()
+    override fun getRoutine(id: Long): Flow<Routine> =
+        routineDao.getRoutine(id).map { it.asExternalModel() }
 
     override fun getRoutines(): Flow<List<Routine>> = routineDao.getRoutines()
         .map { routines -> routines.map { it.asExternalModel() } }
