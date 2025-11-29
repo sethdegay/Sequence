@@ -47,7 +47,7 @@ interface RoutineDao {
     suspend fun upsertRoutineWithTasks(
         routineEntity: RoutineEntity,
         taskEntities: List<TaskEntity>? = null,
-    ) {
+    ): Long {
         val routineId = if (routineEntity.id == null) {
             _insertRoutine(routineEntity)
         } else {
@@ -63,6 +63,8 @@ interface RoutineDao {
             }
             _upsertTask(taskEntityWithRoutineId)
         }
+
+        return routineId
     }
 
     @Delete

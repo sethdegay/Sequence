@@ -17,8 +17,8 @@ class LocalRoutineRepository @Inject constructor(
     override fun getRoutines(): Flow<List<Routine>> = routineDao.getRoutines()
         .map { routines -> routines.map { it.asExternalModel() } }
 
-    override suspend fun saveRoutine(routine: Routine) {
-        routineDao.upsertRoutineWithTasks(
+    override suspend fun saveRoutine(routine: Routine): Long {
+        return routineDao.upsertRoutineWithTasks(
             routineEntity = routine.asEntity(),
             taskEntities = routine.tasks.map { it.asEntity(routineId = routine.id) },
         )
