@@ -8,7 +8,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,7 +24,7 @@ fun <T> TogglePreference(
     modifier: Modifier = Modifier,
     title: String,
     description: String? = null,
-    options: List<ToggleButtonOption<T>>,
+    options: @Composable () -> List<ToggleButtonOption<T>>,
     onCheckedRequest: (T) -> Boolean,
 ) {
     Column(modifier = modifier) {
@@ -46,7 +45,7 @@ fun <T> TogglePreference(
                 bottom = 12.dp,
                 end = 12.dp
             ),
-            options = options,
+            options = options.invoke(),
             onCheckedRequest = onCheckedRequest,
         )
     }
@@ -63,7 +62,7 @@ fun ThemePreference(
         modifier = modifier,
         title = stringResource(string.settings_theme_title),
         description = stringResource(string.settings_theme_description),
-        options = remember {
+        options = {
             listOf(
                 ToggleButtonOption(
                     label = context.getString(string.settings_system_theme_title),

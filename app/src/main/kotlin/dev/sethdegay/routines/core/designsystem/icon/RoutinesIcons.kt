@@ -1,26 +1,19 @@
 package dev.sethdegay.routines.core.designsystem.icon
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowLeft
-import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.PhoneAndroid
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.PhoneAndroid
-import androidx.compose.material.icons.rounded.DragHandle
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import dev.sethdegay.routines.R.drawable
 
 object RoutinesIcons {
-    val DarkModeChecked = Icons.Filled.DarkMode
-    val DarkModeUnchecked = Icons.Outlined.DarkMode
-    val DragHandle = Icons.Rounded.DragHandle
-    val LightModeChecked = Icons.Filled.LightMode
-    val LightModeUnchecked = Icons.Outlined.LightMode
-    val NavigateUp = Icons.AutoMirrored.Filled.ArrowBack
-    val Next = Icons.AutoMirrored.Filled.ArrowRight
-    val Previous = Icons.AutoMirrored.Filled.ArrowLeft
-    val SystemChecked = Icons.Filled.PhoneAndroid
-    val SystemUnchecked = Icons.Outlined.PhoneAndroid
+    val DarkModeChecked @Composable get() = ImageVector.vectorResource(drawable.dark_mode_checked_24px)
+    val DarkModeUnchecked @Composable get() = ImageVector.vectorResource(drawable.dark_mode_unchecked_24px)
+    val DragHandle @Composable get() = ImageVector.vectorResource(drawable.drag_handle_24px)
+    val LightModeChecked @Composable get() = ImageVector.vectorResource(drawable.light_mode_checked_24px)
+    val LightModeUnchecked @Composable get() = ImageVector.vectorResource(drawable.light_mode_unchecked_24px)
+    val NavigateUp @Composable get() = ImageVector.vectorResource(drawable.arrow_back_24px)
+    val Next @Composable get() = ImageVector.vectorResource(drawable.skip_next_24px)
+    val Previous @Composable get() = ImageVector.vectorResource(drawable.skip_previous_24px)
+    val SystemChecked @Composable get() = ImageVector.vectorResource(drawable.mobile_3_checked_24px)
+    val SystemUnchecked @Composable get() = ImageVector.vectorResource(drawable.mobile_3_unchecked_24px)
 }
