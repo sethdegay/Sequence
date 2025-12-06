@@ -54,6 +54,7 @@ android {
                 "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
                 "kotlinx.serialization.ExperimentalSerializationApi",
                 "kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "kotlinx.coroutines.FlowPreview",
                 "kotlin.time.ExperimentalTime",
             )
         }
