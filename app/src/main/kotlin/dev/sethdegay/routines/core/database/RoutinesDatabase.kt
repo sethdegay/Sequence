@@ -25,6 +25,6 @@ import dev.sethdegay.routines.core.database.util.RoutineTypeConverter
         RoutineTypeConverter::class,
     ],
 )
-internal abstract class RoutinesDatabase : RoomDatabase() {
+abstract class RoutinesDatabase : RoomDatabase() {
     abstract fun routineDao(): RoutineDao
 }
