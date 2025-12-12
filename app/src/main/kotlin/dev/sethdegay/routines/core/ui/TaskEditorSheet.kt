@@ -45,7 +45,7 @@ private class TaskEditorState(private val initialTask: Task?) {
         }
     }
 
-    fun saveTask(): Task {
+    fun toTask(): Task {
         val newDuration = calculateDuration()
         val newTitle = titleState.text.toString()
 
@@ -58,6 +58,13 @@ private class TaskEditorState(private val initialTask: Task?) {
         )
     }
 
+    fun isEmpty(): Boolean = initialTask == null &&
+            titleState.text.isEmpty() &&
+            daysInput == "0" &&
+            hoursInput == "0" &&
+            minutesInput == "0" &&
+            secondsInput == "0"
+
     private fun calculateDuration(): Duration {
         return daysInput.toLongOrZero().days +
                 hoursInput.toLongOrZero().hours +
@@ -68,21 +75,37 @@ private class TaskEditorState(private val initialTask: Task?) {
     private fun String.toLongOrZero(): Long = this.toLongOrNull() ?: 0L
 }
 
+private fun handleOnDismissRequest(
+    state: TaskEditorState,
+    task: Task?,
+    onTaskSave: (Task) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    if (state.isEmpty()) {
+        onDismissRequest()
+        return
+    }
+    when (val updatedTask = state.toTask()) {
+        task -> onDismissRequest()
+        else -> onTaskSave(updatedTask)
+    }
+}
+
 @Composable
 fun TaskEditorSheet(
-    task: Task? = null,
+    task: Task?,
     onTaskSave: (Task) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val state = remember(task) { TaskEditorState(task) }
     ModalBottomSheet(
         onDismissRequest = {
-            val updatedTask = state.saveTask()
-            if (updatedTask != task) {
-                onTaskSave(updatedTask)
-            } else {
-                onDismissRequest()
-            }
+            handleOnDismissRequest(
+                state = state,
+                task = task,
+                onTaskSave = onTaskSave,
+                onDismissRequest = onDismissRequest,
+            )
         },
     ) {
         TaskEditorSheetContent(state)
