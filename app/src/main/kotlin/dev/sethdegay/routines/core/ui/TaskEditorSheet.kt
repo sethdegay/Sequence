@@ -72,9 +72,19 @@ private class TaskEditorState(private val initialTask: Task?) {
 fun TaskEditorSheet(
     task: Task? = null,
     onTaskSave: (Task) -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     val state = remember(task) { TaskEditorState(task) }
-    ModalBottomSheet(onDismissRequest = { onTaskSave(state.saveTask()) }) {
+    ModalBottomSheet(
+        onDismissRequest = {
+            val updatedTask = state.saveTask()
+            if (updatedTask != task) {
+                onTaskSave(updatedTask)
+            } else {
+                onDismissRequest()
+            }
+        },
+    ) {
         TaskEditorSheetContent(state)
     }
 }
@@ -178,6 +188,7 @@ private fun TaskEditorPreview1() {
     TaskEditorSheet(
         task = null,
         onTaskSave = {},
+        onDismissRequest = {},
     )
 }
 
@@ -192,5 +203,6 @@ private fun TaskEditorPreview2() {
             order = 0,
         ),
         onTaskSave = {},
+        onDismissRequest = {},
     )
 }

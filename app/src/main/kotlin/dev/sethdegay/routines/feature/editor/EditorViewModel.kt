@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
@@ -48,44 +48,71 @@ class EditorViewModel @AssistedInject constructor(
         fun create(id: Long?): EditorViewModel
     }
 
-    private val _editableRoutine = MutableStateFlow<Routine?>(null)
+    private val _editableUiState = MutableStateFlow<EditorUiState.Success?>(null)
 
-    val uiState: StateFlow<EditorUiState> = _editableRoutine
+    val uiState: StateFlow<EditorUiState> = _editableUiState
         .filterNotNull()
-        .map { EditorUiState.Success(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = EditorUiState.Loading,
         )
 
-    fun setTasks(tasks: List<Task>) {
-        _editableRoutine.value = _editableRoutine.value?.copy(tasks = tasks)
+    fun showTaskEditor(task: Task?) {
+        _editableUiState.update { it?.copy(showTaskEditorSheet = true, activeTask = task) }
+    }
+
+    fun hideTaskEditor() {
+        _editableUiState.update { it?.copy(showTaskEditorSheet = false, activeTask = null) }
+    }
+
+    fun onTasksSave(tasks: List<Task>) {
+        _editableUiState.update { it?.copy(routine = it.routine.copy(tasks = tasks)) }
+    }
+
+    fun onTaskSave(task: Task) {
+        _editableUiState.update { state ->
+            if (state == null) return@update state
+            val updatedTasks = if (state.activeTask == null) {
+                state.routine.tasks + task
+            } else {
+                state.routine.tasks.map { if (state.activeTask.id!! == task.id!!) task else it }
+            }
+            EditorUiState.Success(
+                routine = state.routine.copy(tasks = updatedTasks),
+                showTaskEditorSheet = false,
+                activeTask = null,
+            )
+        }
     }
 
     init {
         viewModelScope.launch {
-            _editableRoutine.debounce(250.milliseconds)
+            _editableUiState.debounce(250.milliseconds)
                 .filterNotNull()
                 .distinctUntilChanged()
-                .collect {
-                    val routine = it.copy(
+                .collect { state ->
+                    val routine = state.routine.copy(
                         dateModified = Clock.System.now(),
-                        tasks = it.tasks.mapIndexed { i, task ->
+                        tasks = state.routine.tasks.mapIndexed { i, task ->
                             task.copy(order = i + 1)
                         }
                     )
                     val id = routineRepository.saveRoutine(routine)
-                    _editableRoutine.value = routine.copy(id = id)
+                    _editableUiState.update { it?.copy(routine = routine.copy(id = id)) }
                 }
         }
 
         if (id != null) {
             viewModelScope.launch {
-                _editableRoutine.value = routineRepository.getRoutine(id).first()
+                _editableUiState.value = EditorUiState.Success(
+                    routine = routineRepository.getRoutine(id).first(),
+                )
             }
         } else {
-            _editableRoutine.value = emptyRoutine
+            _editableUiState.value = EditorUiState.Success(
+                routine = emptyRoutine,
+            )
         }
     }
 }

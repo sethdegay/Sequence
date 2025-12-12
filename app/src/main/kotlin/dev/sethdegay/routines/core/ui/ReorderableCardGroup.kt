@@ -49,8 +49,9 @@ fun ReorderableCardGroup(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = lazyListState,
     ) {
-        items(items = tasks, key = { it.id!! }) { task ->
-            ReorderableItem(reorderableLazyListState, key = task.id!!) {
+        // TODO use stable key
+        items(items = tasks, key = { it.id ?: it.title }) { task ->
+            ReorderableItem(reorderableLazyListState, key = task.id ?: task.title) {
                 ReorderableCardGroupItem(task, onTaskClick)
             }
         }

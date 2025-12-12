@@ -6,6 +6,7 @@ import androidx.compose.ui.res.vectorResource
 import dev.sethdegay.routines.R.drawable
 
 object RoutinesIcons {
+    val Add @Composable get() = ImageVector.vectorResource(drawable.add_24px)
     val DarkModeChecked @Composable get() = ImageVector.vectorResource(drawable.dark_mode_checked_24px)
     val DarkModeUnchecked @Composable get() = ImageVector.vectorResource(drawable.dark_mode_unchecked_24px)
     val DragHandle @Composable get() = ImageVector.vectorResource(drawable.drag_handle_24px)
