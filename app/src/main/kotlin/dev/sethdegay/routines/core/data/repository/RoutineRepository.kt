@@ -8,7 +8,7 @@ interface RoutineRepository {
 
     fun getRoutines(): Flow<List<Routine>>
 
-    suspend fun saveRoutine(routine: Routine): Long
+    suspend fun saveRoutine(routine: Routine): Routine
 
     suspend fun delete(routine: Routine)
 }

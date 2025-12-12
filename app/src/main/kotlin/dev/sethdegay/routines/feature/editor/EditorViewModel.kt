@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -67,7 +68,14 @@ class EditorViewModel @AssistedInject constructor(
     }
 
     fun onTasksSave(tasks: List<Task>) {
-        _editableUiState.update { it?.copy(routine = it.routine.copy(tasks = tasks)) }
+        _editableUiState.update {
+            it?.copy(
+                routine = it.routine.copy(
+                    tasks = tasks,
+                    dateModified = Clock.System.now(),
+                )
+            )
+        }
     }
 
     fun onTaskSave(task: Task) {
@@ -79,7 +87,10 @@ class EditorViewModel @AssistedInject constructor(
                 state.routine.tasks.map { if (state.activeTask.id!! == task.id!!) task else it }
             }
             EditorUiState.Success(
-                routine = state.routine.copy(tasks = updatedTasks),
+                routine = state.routine.copy(
+                    tasks = updatedTasks,
+                    dateModified = Clock.System.now(),
+                ),
                 showTaskEditorSheet = false,
                 activeTask = null,
             )
@@ -90,16 +101,17 @@ class EditorViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _editableUiState.debounce(250.milliseconds)
                 .filterNotNull()
+                .map { it.routine }
                 .distinctUntilChanged()
-                .collect { state ->
-                    val routine = state.routine.copy(
-                        dateModified = Clock.System.now(),
-                        tasks = state.routine.tasks.mapIndexed { i, task ->
+                .collect { routine ->
+                    val updatedRoutine = routine.copy(
+                        tasks = routine.tasks.mapIndexed { i, task ->
                             task.copy(order = i + 1)
                         }
                     )
-                    val id = routineRepository.saveRoutine(routine)
-                    _editableUiState.update { it?.copy(routine = routine.copy(id = id)) }
+                    _editableUiState.update {
+                        it?.copy(routine = routineRepository.saveRoutine(updatedRoutine))
+                    }
                 }
         }
 

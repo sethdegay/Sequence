@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import androidx.room.Upsert
 import dev.sethdegay.routines.core.database.model.RoutineEntity
 import dev.sethdegay.routines.core.database.model.RoutineWithTasks
 import dev.sethdegay.routines.core.database.model.TaskEntity
@@ -40,31 +39,37 @@ interface RoutineDao {
     @Update
     suspend fun _updateRoutine(routineEntity: RoutineEntity)
 
-    @Upsert
-    suspend fun _upsertTask(taskEntity: TaskEntity)
+    @Insert
+    suspend fun _insertTask(taskEntity: TaskEntity): Long
+
+    @Update
+    suspend fun _updateTask(taskEntity: TaskEntity)
+
+    @Transaction
+    suspend fun _upsertTask(taskEntity: TaskEntity): TaskEntity {
+        return if (taskEntity.id == null) {
+            taskEntity.copy(id = _insertTask(taskEntity))
+        } else {
+            _updateTask(taskEntity)
+            taskEntity
+        }
+    }
 
     @Transaction
     suspend fun upsertRoutineWithTasks(
         routineEntity: RoutineEntity,
         taskEntities: List<TaskEntity>? = null,
-    ): Long {
+    ): RoutineWithTasks {
         val routineId = if (routineEntity.id == null) {
             _insertRoutine(routineEntity)
         } else {
             _updateRoutine(routineEntity)
             routineEntity.id
         }
-
-        taskEntities?.forEach { taskEntity ->
-            val taskEntityWithRoutineId = if (taskEntity.routineId == null) {
-                taskEntity.copy(routineId = routineId)
-            } else {
-                taskEntity
-            }
-            _upsertTask(taskEntityWithRoutineId)
-        }
-
-        return routineId
+        return RoutineWithTasks(
+            routineEntity = routineEntity.copy(id = routineId),
+            taskEntities = taskEntities?.map { _upsertTask(it) } ?: emptyList(),
+        )
     }
 
     @Delete
