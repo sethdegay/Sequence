@@ -207,17 +207,7 @@ private fun TimeInputField(
 
 @Preview
 @Composable
-private fun TaskEditorPreview1() {
-    TaskEditorSheet(
-        task = null,
-        onTaskSave = {},
-        onDismissRequest = {},
-    )
-}
-
-@Preview
-@Composable
-private fun TaskEditorPreview2() {
+private fun TaskEditorPreview() {
     TaskEditorSheet(
         task = Task(
             id = 1,
