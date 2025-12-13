@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -32,6 +33,16 @@ class EditorViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(id: String?): EditorViewModel
+    }
+
+    private val emptyRoutine = with(Clock.System.now()) {
+        Routine(
+            title = "",
+            description = "",
+            dateCreated = this,
+            dateModified = this,
+            tasks = emptyList(),
+        )
     }
 
     private val _editableUiState = MutableStateFlow<EditorUiState.Success?>(null)
@@ -96,6 +107,7 @@ class EditorViewModel @AssistedInject constructor(
                 .filterNotNull()
                 .map { it.routine }
                 .distinctUntilChanged()
+                .filter { it != emptyRoutine }
                 .collect { routineRepository.saveRoutine(it) }
         }
 
@@ -106,17 +118,7 @@ class EditorViewModel @AssistedInject constructor(
                 )
             }
         } else {
-            _editableUiState.value = EditorUiState.Success(
-                routine = with(Clock.System.now()) {
-                    Routine(
-                        title = "",
-                        description = "",
-                        dateCreated = this,
-                        dateModified = this,
-                        tasks = emptyList(),
-                    )
-                },
-            )
+            _editableUiState.value = EditorUiState.Success(routine = emptyRoutine)
         }
     }
 }
