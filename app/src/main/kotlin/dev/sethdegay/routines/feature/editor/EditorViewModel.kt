@@ -8,7 +8,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.routines.core.data.repository.RoutineRepository
 import dev.sethdegay.routines.core.model.Routine
-import dev.sethdegay.routines.core.model.RoutineType
 import dev.sethdegay.routines.core.model.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -104,7 +103,6 @@ class EditorViewModel @AssistedInject constructor(
                     Routine(
                         title = "",
                         description = null,
-                        routineType = RoutineType.GENERIC,
                         dateCreated = this,
                         dateModified = this,
                         tasks = emptyList(),

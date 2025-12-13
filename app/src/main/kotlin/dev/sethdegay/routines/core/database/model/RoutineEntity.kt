@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dev.sethdegay.routines.core.model.Routine
-import dev.sethdegay.routines.core.model.RoutineType
 import dev.sethdegay.routines.core.model.Task
 import kotlin.time.Instant
 
@@ -20,9 +19,6 @@ data class RoutineEntity(
     @ColumnInfo(name = "description")
     val description: String? = null,
 
-    @ColumnInfo(name = "routine_type")
-    val routineType: RoutineType,
-
     @ColumnInfo(name = "date_created")
     val dateCreated: Instant,
 
@@ -34,7 +30,6 @@ fun RoutineEntity.asExternalModel(tasks: List<Task>): Routine = Routine(
     id = id,
     title = title,
     description = description,
-    routineType = routineType,
     dateCreated = dateCreated,
     dateModified = dateModified,
     tasks = tasks,

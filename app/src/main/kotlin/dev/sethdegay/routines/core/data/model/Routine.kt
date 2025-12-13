@@ -7,7 +7,6 @@ fun Routine.asEntity(): RoutineEntity = RoutineEntity(
     id = id,
     title = title,
     description = description,
-    routineType = routineType,
     dateCreated = dateCreated,
     dateModified = dateModified,
 )

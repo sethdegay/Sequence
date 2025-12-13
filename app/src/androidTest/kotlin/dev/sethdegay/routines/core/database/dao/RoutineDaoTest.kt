@@ -7,7 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.sethdegay.routines.core.database.RoutinesDatabase
 import dev.sethdegay.routines.core.database.model.RoutineEntity
 import dev.sethdegay.routines.core.database.model.TaskEntity
-import dev.sethdegay.routines.core.model.RoutineType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -18,7 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
@@ -50,21 +48,9 @@ class RoutineDaoTest {
 
         assertEquals(2, routines.size)
         assertNotNull(routines.filter { it.routineEntity.id == r1Id }.getOrNull(0))
-        assertEquals(
-            RoutineType.WORKOUT(
-                warmUpDuration = 5.minutes,
-                restDuration = 30.seconds,
-                coolDownDuration = 60.seconds
-            ),
-            routines.filter { it.routineEntity.id == r1Id }[0].routineEntity.routineType,
-        )
         assertEquals(3, routines.filter { it.routineEntity.id == r1Id }[0].taskEntities.size)
 
         assertNotNull(routines.filter { it.routineEntity.id == r2Id }.getOrNull(0))
-        assertEquals(
-            RoutineType.GENERIC,
-            routines.filter { it.routineEntity.id == r2Id }[0].routineEntity.routineType,
-        )
         assertEquals(0, routines.filter { it.routineEntity.id == r2Id }[0].taskEntities.size)
     }
 
@@ -90,11 +76,6 @@ class RoutineDaoTest {
         val r1Entity = RoutineEntity(
             id = r1Id,
             title = "R1",
-            routineType = RoutineType.WORKOUT(
-                warmUpDuration = 5.minutes,
-                restDuration = 30.seconds,
-                coolDownDuration = 60.seconds
-            ),
             dateCreated = r1Instant,
             dateModified = r1Instant,
         )
@@ -124,7 +105,6 @@ class RoutineDaoTest {
         val r2Entity = RoutineEntity(
             id = r2Id,
             title = "R2",
-            routineType = RoutineType.GENERIC,
             dateCreated = r2Instant,
             dateModified = r2Instant,
         )
