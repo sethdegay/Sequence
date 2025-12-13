@@ -102,7 +102,7 @@ class EditorViewModel @AssistedInject constructor(
                 routine = with(Clock.System.now()) {
                     Routine(
                         title = "",
-                        description = null,
+                        description = "",
                         dateCreated = this,
                         dateModified = this,
                         tasks = emptyList(),

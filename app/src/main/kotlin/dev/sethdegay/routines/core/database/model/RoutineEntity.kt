@@ -17,7 +17,7 @@ data class RoutineEntity(
     val title: String,
 
     @ColumnInfo(name = "description")
-    val description: String? = null,
+    val description: String,
 
     @ColumnInfo(name = "date_created")
     val dateCreated: Instant,
