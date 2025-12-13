@@ -8,9 +8,9 @@ import kotlin.random.Random
 
 @Composable
 fun HomeScreen(
-    navigateToEditor: (Long?) -> Unit,
+    navigateToEditor: (String?) -> Unit,
     navigateToSettings: () -> Unit,
-    navigateToTimer: (Long) -> Unit,
+    navigateToTimer: (String) -> Unit,
 ) {
     TestScreen("Home screen") {
         Button(onClick = { navigateToEditor(null) }) {
@@ -19,7 +19,7 @@ fun HomeScreen(
         Button(onClick = navigateToSettings) {
             Text("Open Settings screen")
         }
-        Button(onClick = { navigateToTimer(Random.nextLong(1, 10)) }) {
+        Button(onClick = { navigateToTimer(Random.nextLong(1, 10).toString()) }) {
             Text("Open Timer screen")
         }
     }

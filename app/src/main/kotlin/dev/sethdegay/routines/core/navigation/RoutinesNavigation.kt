@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 typealias NavKeyInstaller = EntryProviderScope<NavKey>.() -> Unit
 
 @Serializable
-data class EditorRoute(val id: Long?) : NavKey
+data class EditorRoute(val id: String?) : NavKey
 
 @Serializable
 data object HomeRoute : NavKey
@@ -16,4 +16,4 @@ data object HomeRoute : NavKey
 data object SettingsRoute : NavKey
 
 @Serializable
-data class TimerRoute(val id: Long) : NavKey
+data class TimerRoute(val id: String) : NavKey

@@ -26,27 +26,13 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel(assistedFactory = EditorViewModel.Factory::class)
 class EditorViewModel @AssistedInject constructor(
-    @Assisted private val id: Long?,
+    @Assisted private val id: String?,
     private val routineRepository: RoutineRepository,
 ) : ViewModel() {
 
-    companion object {
-        internal val emptyRoutine = with(Clock.System.now()) {
-            Routine(
-                id = null,
-                title = "",
-                description = null,
-                routineType = RoutineType.GENERIC,
-                dateCreated = this,
-                dateModified = this,
-                tasks = emptyList(),
-            )
-        }
-    }
-
     @AssistedFactory
     interface Factory {
-        fun create(id: Long?): EditorViewModel
+        fun create(id: String?): EditorViewModel
     }
 
     private val _editableUiState = MutableStateFlow<EditorUiState.Success?>(null)
@@ -84,7 +70,7 @@ class EditorViewModel @AssistedInject constructor(
             val updatedTasks = if (state.activeTask == null) {
                 state.routine.tasks + task
             } else {
-                state.routine.tasks.map { if (state.activeTask.id!! == task.id!!) task else it }
+                state.routine.tasks.map { if (state.activeTask.id == task.id) task else it }
             }
             EditorUiState.Success(
                 routine = state.routine.copy(
@@ -103,16 +89,7 @@ class EditorViewModel @AssistedInject constructor(
                 .filterNotNull()
                 .map { it.routine }
                 .distinctUntilChanged()
-                .collect { routine ->
-                    val updatedRoutine = routine.copy(
-                        tasks = routine.tasks.mapIndexed { i, task ->
-                            task.copy(order = i + 1)
-                        }
-                    )
-                    _editableUiState.update {
-                        it?.copy(routine = routineRepository.saveRoutine(updatedRoutine))
-                    }
-                }
+                .collect { routineRepository.saveRoutine(it) }
         }
 
         if (id != null) {
@@ -123,7 +100,16 @@ class EditorViewModel @AssistedInject constructor(
             }
         } else {
             _editableUiState.value = EditorUiState.Success(
-                routine = emptyRoutine,
+                routine = with(Clock.System.now()) {
+                    Routine(
+                        title = "",
+                        description = null,
+                        routineType = RoutineType.GENERIC,
+                        dateCreated = this,
+                        dateModified = this,
+                        tasks = emptyList(),
+                    )
+                },
             )
         }
     }

@@ -10,8 +10,9 @@ import kotlin.time.Instant
 
 @Entity(tableName = "routine")
 data class RoutineEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long? = null,
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    val id: String,
 
     @ColumnInfo(name = "title")
     val title: String,

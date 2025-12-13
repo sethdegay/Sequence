@@ -49,9 +49,8 @@ fun ReorderableCardGroup(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = lazyListState,
     ) {
-        // TODO use stable key
-        items(items = tasks, key = { it.id ?: it.title }) { task ->
-            ReorderableItem(reorderableLazyListState, key = task.id ?: task.title) {
+        items(items = tasks, key = { it.id }) { task ->
+            ReorderableItem(reorderableLazyListState, key = task.id) {
                 ReorderableCardGroupItem(task, onTaskClick)
             }
         }
@@ -100,9 +99,9 @@ private fun ReorderableCardGroupPreview() {
     var tasks by remember {
         mutableStateOf(
             listOf(
-                Task(1, "Task A", 30.seconds),
-                Task(2, "Task B", 20.seconds),
-                Task(3, "Task C", 10.seconds),
+                Task(id = "", title = "Task A", duration = 30.seconds),
+                Task(id = "", title = "Task B", duration = 20.seconds),
+                Task(id = "", title = "Task C", duration = 10.seconds),
             )
         )
     }

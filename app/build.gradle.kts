@@ -56,6 +56,7 @@ android {
                 "kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "kotlinx.coroutines.FlowPreview",
                 "kotlin.time.ExperimentalTime",
+                "kotlin.uuid.ExperimentalUuidApi",
             )
         }
     }

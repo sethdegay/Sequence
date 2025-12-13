@@ -20,13 +20,13 @@ import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel(assistedFactory = TimerViewModel.Factory::class)
 class TimerViewModel @AssistedInject constructor(
-    @Assisted private val id: Long,
+    @Assisted private val id: String,
     private val timer: SequentialTimer<Task>,
 ) : ViewModel(), TimerControlsActions {
 
     @AssistedFactory
     interface Factory {
-        fun create(id: Long): TimerViewModel
+        fun create(id: String): TimerViewModel
     }
 
     val uiState: StateFlow<TimerUiState> = timer.state.map { it.asTimerUiState() }.stateIn(

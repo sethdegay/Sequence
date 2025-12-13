@@ -210,7 +210,7 @@ private fun TimeInputField(
 private fun TaskEditorPreview() {
     TaskEditorSheet(
         task = Task(
-            id = 1,
+            id = "",
             title = "Task A",
             duration = 30.days + 4.hours + 58.minutes + 15.seconds,
             order = 0,

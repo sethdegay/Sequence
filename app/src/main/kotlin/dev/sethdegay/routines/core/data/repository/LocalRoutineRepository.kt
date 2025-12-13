@@ -11,16 +11,21 @@ import javax.inject.Inject
 class LocalRoutineRepository @Inject constructor(
     private val routineDao: RoutineDao,
 ) : RoutineRepository {
-    override fun getRoutine(id: Long): Flow<Routine> =
+    override fun getRoutine(id: String): Flow<Routine> =
         routineDao.getRoutine(id).map { it.asExternalModel() }
 
     override fun getRoutines(): Flow<List<Routine>> = routineDao.getRoutines()
         .map { routines -> routines.map { it.asExternalModel() } }
 
-    override suspend fun saveRoutine(routine: Routine): Routine = routineDao.upsertRoutineWithTasks(
-        routineEntity = routine.asEntity(),
-        taskEntities = routine.tasks.map { it.asEntity(routineId = routine.id) },
-    ).asExternalModel()
+    override suspend fun saveRoutine(routine: Routine) {
+        routineDao.upsertRoutineWithTasks(
+            routineEntity = routine.asEntity(),
+            taskEntities = routine.tasks.mapIndexed { i, task ->
+                task.copy(order = i + 1)
+                    .asEntity(routineId = routine.id)
+            },
+        )
+    }
 
     override suspend fun delete(routine: Routine) {
         routineDao.delete(routine.asEntity())

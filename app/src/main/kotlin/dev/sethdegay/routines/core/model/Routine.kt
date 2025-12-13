@@ -1,9 +1,10 @@
 package dev.sethdegay.routines.core.model
 
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 data class Routine(
-    val id: Long? = null,
+    val id: String = Uuid.random().toHexDashString(),
     val title: String,
     val description: String? = null,
     val routineType: RoutineType,

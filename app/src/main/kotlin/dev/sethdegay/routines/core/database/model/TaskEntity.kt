@@ -19,8 +19,9 @@ import kotlin.time.Duration
     ],
 )
 data class TaskEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long? = null,
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    val id: String,
 
     @ColumnInfo(name = "title")
     val title: String,
@@ -32,7 +33,7 @@ data class TaskEntity(
     val order: Int = 0,
 
     @ColumnInfo(name = "routine_id")
-    val routineId: Long? = null,
+    val routineId: String,
 )
 
 fun TaskEntity.asExternalModel(): Task = Task(
