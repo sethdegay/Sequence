@@ -44,6 +44,14 @@ class EditorViewModel @AssistedInject constructor(
             initialValue = EditorUiState.Loading,
         )
 
+    fun onRoutineTitleSave(title: String) {
+        _editableUiState.update { it?.copy(routine = it.routine.copy(title = title)) }
+    }
+
+    fun onRoutineDescriptionSave(description: String) {
+        _editableUiState.update { it?.copy(routine = it.routine.copy(description = description)) }
+    }
+
     fun showTaskEditor(task: Task?) {
         _editableUiState.update { it?.copy(showTaskEditorSheet = true, activeTask = task) }
     }

@@ -1,17 +1,19 @@
 package dev.sethdegay.routines.feature.editor
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import dev.sethdegay.routines.R.string
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
@@ -29,18 +31,14 @@ fun EditorScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            MediumTopAppBar(
+            TopAppBar(
                 title = {},
                 navigationIcon = RoutinesIcons.NavigateUp.asComposableIconButton(
                     onClick = navigateUp,
                     contentDescription = stringResource(string.navigate_up_content_description),
                 ),
-                scrollBehavior = scrollBehavior,
             )
         },
         floatingActionButton = {
@@ -58,6 +56,8 @@ fun EditorScreen(
                     EditorScreen(
                         scaffoldPadding = padding,
                         uiState = uiState as EditorUiState.Success,
+                        onRoutineTitleSave = viewModel::onRoutineTitleSave,
+                        onRoutineDescriptionSave = viewModel::onRoutineDescriptionSave,
                         onTaskOrderChanged = viewModel::onTasksSave,
                         onTaskClick = viewModel::showTaskEditor,
                     )
@@ -84,13 +84,37 @@ fun EditorScreen(
 private fun EditorScreen(
     scaffoldPadding: PaddingValues,
     uiState: EditorUiState.Success,
+    onRoutineTitleSave: (String) -> Unit,
+    onRoutineDescriptionSave: (String) -> Unit,
     onTaskOrderChanged: (List<Task>) -> Unit,
     onTaskClick: (Task) -> Unit,
 ) {
     ReorderableCardGroup(
-        modifier = Modifier.padding(scaffoldPadding),
+        modifier = Modifier
+            .consumeWindowInsets(scaffoldPadding)
+            .padding(scaffoldPadding)
+            .fillMaxWidth(),
         tasks = uiState.routine.tasks,
         onTaskOrderChanged = onTaskOrderChanged,
         onTaskClick = onTaskClick,
-    )
+    ) {
+        Column {
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = uiState.routine.title,
+                onValueChange = onRoutineTitleSave,
+                label = { Text("Title") },
+                singleLine = true,
+            )
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = uiState.routine.description,
+                onValueChange = onRoutineDescriptionSave,
+                label = { Text("Description") },
+                singleLine = false,
+                minLines = 3,
+                maxLines = 10,
+            )
+        }
+    }
 }

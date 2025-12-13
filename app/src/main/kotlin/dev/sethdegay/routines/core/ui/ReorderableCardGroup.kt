@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -38,10 +39,12 @@ fun ReorderableCardGroup(
     tasks: List<Task>,
     onTaskOrderChanged: (List<Task>) -> Unit,
     onTaskClick: (Task) -> Unit,
+    headerContent: @Composable LazyItemScope.() -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        onTaskOrderChanged(tasks.toMutableList().apply { add(to.index, removeAt(from.index)) })
+        onTaskOrderChanged(
+            tasks.toMutableList().apply { add(to.index - 1, removeAt(from.index - 1)) })
     }
     LazyColumn(
         modifier = modifier,
@@ -49,6 +52,7 @@ fun ReorderableCardGroup(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = lazyListState,
     ) {
+        item(content = headerContent)
         items(items = tasks, key = { it.id }) { task ->
             ReorderableItem(reorderableLazyListState, key = task.id) {
                 ReorderableCardGroupItem(task, onTaskClick)
@@ -110,5 +114,6 @@ private fun ReorderableCardGroupPreview() {
         tasks = tasks,
         onTaskOrderChanged = { tasks = it },
         onTaskClick = {},
+        headerContent = {},
     )
 }
