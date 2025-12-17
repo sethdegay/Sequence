@@ -87,7 +87,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.kotlinx.serialization.protobuf)
+    implementation(libs.kotlinx.serialization.core)
 
     implementation(libs.reorderable)
 
