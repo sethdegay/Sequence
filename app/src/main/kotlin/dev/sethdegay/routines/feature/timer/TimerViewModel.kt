@@ -68,7 +68,6 @@ class TimerViewModel @AssistedInject constructor(
         val (items, index, time) = when (this) {
             is SequentialTimerState.Running<*> -> Triple(items, currentItemIndex, timeLeft)
             is SequentialTimerState.Paused<*> -> Triple(items, currentItemIndex, timeLeft)
-            else -> return TimerUiState.Loading
         }
 
         @Suppress("UNCHECKED_CAST")
