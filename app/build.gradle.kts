@@ -52,7 +52,6 @@ android {
             optIn.addAll(
                 "androidx.compose.material3.ExperimentalMaterial3Api",
                 "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
-                "kotlinx.serialization.ExperimentalSerializationApi",
                 "kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "kotlinx.coroutines.FlowPreview",
                 "kotlin.uuid.ExperimentalUuidApi",
