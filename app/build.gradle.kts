@@ -55,7 +55,6 @@ android {
                 "kotlinx.serialization.ExperimentalSerializationApi",
                 "kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "kotlinx.coroutines.FlowPreview",
-                "kotlin.time.ExperimentalTime",
                 "kotlin.uuid.ExperimentalUuidApi",
             )
         }
