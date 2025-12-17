@@ -76,6 +76,7 @@ class RoutineDaoTest {
         val r1Entity = RoutineEntity(
             id = r1Id,
             title = "R1",
+            description = "",
             dateCreated = r1Instant,
             dateModified = r1Instant,
         )
@@ -105,6 +106,7 @@ class RoutineDaoTest {
         val r2Entity = RoutineEntity(
             id = r2Id,
             title = "R2",
+            description = "",
             dateCreated = r2Instant,
             dateModified = r2Instant,
         )
