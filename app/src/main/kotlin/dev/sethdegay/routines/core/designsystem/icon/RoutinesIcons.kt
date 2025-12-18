@@ -16,6 +16,6 @@ object RoutinesIcons {
     val Next @Composable get() = ImageVector.vectorResource(drawable.skip_next_24px)
     val Previous @Composable get() = ImageVector.vectorResource(drawable.skip_previous_24px)
     val Settings @Composable get() = ImageVector.vectorResource(drawable.settings_24px)
-    val SystemChecked @Composable get() = ImageVector.vectorResource(drawable.mobile_3_checked_24px)
-    val SystemUnchecked @Composable get() = ImageVector.vectorResource(drawable.mobile_3_unchecked_24px)
+    val SystemChecked @Composable get() = ImageVector.vectorResource(drawable.routine_checked_24px)
+    val SystemUnchecked @Composable get() = ImageVector.vectorResource(drawable.routine_unchecked_24px)
 }
