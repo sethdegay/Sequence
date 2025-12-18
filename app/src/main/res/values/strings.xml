@@ -4,6 +4,12 @@
     <string name="drag_handle_content_description">Drag handle</string>
 
     <!-- =====================
+       Home screen
+     ===================== -->
+    <string name="home_navigate_to_settings_content_description">Settings</string>
+    <string name="home_add_routine_button_text">Add a new routine</string>
+
+    <!-- =====================
            Settings screen
          ===================== -->
     <string name="settings_top_app_bar_title">Settings</string>
