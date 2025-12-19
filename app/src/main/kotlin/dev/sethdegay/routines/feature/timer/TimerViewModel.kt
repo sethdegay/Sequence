@@ -6,6 +6,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sethdegay.routines.core.data.repository.RoutineRepository
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
 import dev.sethdegay.routines.core.model.Task
@@ -15,13 +16,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlin.time.Duration.Companion.seconds
-
+import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = TimerViewModel.Factory::class)
 class TimerViewModel @AssistedInject constructor(
     @Assisted private val id: String,
     private val timer: SequentialTimer<Task>,
+    private val routineRepository: RoutineRepository,
 ) : ViewModel(), TimerControlsActions {
 
     @AssistedFactory
@@ -36,13 +37,11 @@ class TimerViewModel @AssistedInject constructor(
     )
 
     init {
-        timer.start(
-            items = listOf(
-                Task(title = "A", duration = 3.seconds),
-                Task(title = "B", duration = 5.seconds),
-                Task(title = "C", duration = 2.seconds),
-            ),
-        )
+        viewModelScope.launch {
+            routineRepository.getRoutine(id).collect {
+                timer.start(items = it.tasks)
+            }
+        }
     }
 
     override fun onToggleTimer() {
