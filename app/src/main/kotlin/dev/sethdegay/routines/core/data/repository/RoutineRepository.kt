@@ -4,7 +4,7 @@ import dev.sethdegay.routines.core.model.Routine
 import kotlinx.coroutines.flow.Flow
 
 interface RoutineRepository {
-    fun getRoutine(id: String): Flow<Routine>
+    suspend fun getRoutine(id: String): Routine
 
     fun getRoutines(): Flow<List<Routine>>
 

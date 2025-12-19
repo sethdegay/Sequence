@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -113,12 +112,10 @@ class EditorViewModel @AssistedInject constructor(
 
         if (id != null) {
             viewModelScope.launch {
-                _editableUiState.value = EditorUiState.Success(
-                    routine = routineRepository.getRoutine(id).first(),
-                )
+                _editableUiState.value = EditorUiState.Success(routineRepository.getRoutine(id))
             }
         } else {
-            _editableUiState.value = EditorUiState.Success(routine = emptyRoutine)
+            _editableUiState.value = EditorUiState.Success(emptyRoutine)
         }
     }
 }

@@ -38,9 +38,7 @@ class TimerViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
-            routineRepository.getRoutine(id).collect {
-                timer.start(items = it.tasks)
-            }
+            timer.start(routineRepository.getRoutine(id).tasks)
         }
     }
 
