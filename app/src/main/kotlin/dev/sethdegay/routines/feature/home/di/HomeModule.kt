@@ -1,5 +1,6 @@
 package dev.sethdegay.routines.feature.home.di
 
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +23,7 @@ object HomeModule {
     fun provideNavKeyInstaller(backStackManager: RoutinesBackStackManager): NavKeyInstaller = {
         entry<HomeRoute> {
             HomeScreen(
+                viewModel = hiltViewModel(),
                 navigateToEditor = { id -> backStackManager.navigate(EditorRoute(id)) },
                 navigateToSettings = { backStackManager.navigate(SettingsRoute) },
                 navigateToTimer = { id -> backStackManager.navigate(TimerRoute(id)) },
