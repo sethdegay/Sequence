@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -96,16 +97,26 @@ fun CardGroupItem(content: @Composable (PaddingValues) -> Unit) {
 }
 
 @Composable
-fun CardGroup(vararg items: @Composable (PaddingValues) -> Unit) {
+fun CardGroup(content: CardGroupScope.() -> Unit) {
+    val scope = remember(content) { CardGroupScope().apply(content) }
     Column(
         verticalArrangement = Arrangement.spacedBy(1.5.dp),
     ) {
-        items.forEachIndexed { i, item ->
+        scope.items.forEachIndexed { i, item ->
             when (i) {
                 0 -> CardGroupLeadingItem(item)
-                items.lastIndex -> CardGroupTrailingItem(item)
+                scope.items.lastIndex -> CardGroupTrailingItem(item)
                 else -> CardGroupMiddleItem(item)
             }
         }
+    }
+}
+
+class CardGroupScope {
+    private val _items = mutableListOf<@Composable (PaddingValues) -> Unit>()
+    val items: List<@Composable (PaddingValues) -> Unit> = _items
+
+    fun item(content: @Composable (PaddingValues) -> Unit) {
+        _items.add(content)
     }
 }

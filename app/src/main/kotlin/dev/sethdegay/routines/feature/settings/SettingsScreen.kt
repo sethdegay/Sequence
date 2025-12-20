@@ -79,22 +79,22 @@ private fun SettingsScreen(
     ) {
         item {}
         item {
-            CardGroup(
-                { contentPadding ->
+            CardGroup {
+                item { padding ->
                     ThemePreference(
-                        modifier = Modifier.padding(contentPadding),
+                        modifier = Modifier.padding(padding),
                         onCheckedRequest = { uiState.themeConfig == it },
                         onThemeConfigChanged = setThemeConfig,
                     )
-                },
-                { contentPadding ->
+                }
+                item { padding ->
                     DynamicColorPreference(
-                        modifier = Modifier.padding(contentPadding),
+                        modifier = Modifier.padding(padding),
                         checked = uiState.useDynamicColor,
                         onCheckedChange = setDynamicColor,
                     )
-                },
-            )
+                }
+            }
         }
         item {}
     }
