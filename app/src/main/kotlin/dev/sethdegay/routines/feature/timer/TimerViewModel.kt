@@ -77,14 +77,20 @@ class TimerViewModel @AssistedInject constructor(
             1.0f
         }
 
+        val isTimerRunning = this is SequentialTimerState.Running<*>
+
         return TimerUiState.Success(
             currentTask = currentTask,
             remainingTime = time,
-            isTimerRunning = this is SequentialTimerState.Running<*>,
+            isTimerRunning = isTimerRunning,
             canMovePrevious = index > 0,
             canMoveNext = index < tasks.lastIndex,
             progress = progress,
-            amplitudeLevel = ProgressIndicatorAmplitudeLevel.MAXIMUM,
+            amplitudeLevel = if (isTimerRunning) {
+                ProgressIndicatorAmplitudeLevel.MAXIMUM
+            } else {
+                ProgressIndicatorAmplitudeLevel.FLAT
+            },
         )
     }
 }
