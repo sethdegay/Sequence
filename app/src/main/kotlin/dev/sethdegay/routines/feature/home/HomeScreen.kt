@@ -94,7 +94,7 @@ fun HomeScreen(
                                         onClick = { navigateToTimer(it.id) },
                                         shapes = ButtonDefaults.shapes()
                                     ) {
-                                        RoutinesIcons.Next.asComposableIcon().invoke()
+                                        RoutinesIcons.PlayArrow.asComposableIcon().invoke()
                                     }
                                 },
                                 colors = ListItemDefaults.colors(

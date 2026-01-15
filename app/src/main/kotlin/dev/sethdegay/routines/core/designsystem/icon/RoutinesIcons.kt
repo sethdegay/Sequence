@@ -14,6 +14,7 @@ object RoutinesIcons {
     val LightModeUnchecked @Composable get() = ImageVector.vectorResource(drawable.light_mode_unchecked_24px)
     val NavigateUp @Composable get() = ImageVector.vectorResource(drawable.arrow_back_24px)
     val Next @Composable get() = ImageVector.vectorResource(drawable.skip_next_24px)
+    val PlayArrow @Composable get() = ImageVector.vectorResource(drawable.play_arrow_24px)
     val Previous @Composable get() = ImageVector.vectorResource(drawable.skip_previous_24px)
     val Settings @Composable get() = ImageVector.vectorResource(drawable.settings_24px)
     val SystemChecked @Composable get() = ImageVector.vectorResource(drawable.routine_checked_24px)
