@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 
 private val paddingDp = 16.dp
@@ -39,7 +39,7 @@ private val trailingItemPadding = PaddingValues(
 )
 
 @Composable
-private fun leadingItemShape(shape: CornerBasedShape = MaterialTheme.shapes.large) =
+internal fun leadingItemShape(shape: CornerBasedShape = RoundedCornerShape(16.dp)) =
     RoundedCornerShape(
         bottomEnd = middleItemShape().bottomEnd,
         bottomStart = middleItemShape().bottomStart,
@@ -48,10 +48,10 @@ private fun leadingItemShape(shape: CornerBasedShape = MaterialTheme.shapes.larg
     )
 
 @Composable
-private fun middleItemShape() = MaterialTheme.shapes.extraSmall
+internal fun middleItemShape() = RoundedCornerShape(4.dp)
 
 @Composable
-private fun trailingItemShape(shape: CornerBasedShape = MaterialTheme.shapes.large) =
+internal fun trailingItemShape(shape: CornerBasedShape = RoundedCornerShape(16.dp)) =
     RoundedCornerShape(
         bottomEnd = shape.bottomEnd,
         bottomStart = shape.bottomStart,
@@ -60,10 +60,13 @@ private fun trailingItemShape(shape: CornerBasedShape = MaterialTheme.shapes.lar
     )
 
 @Composable
-fun CardGroupLeadingItem(content: @Composable (PaddingValues) -> Unit) {
+fun CardGroupLeadingItem(
+    shape: Shape = leadingItemShape(),
+    content: @Composable (PaddingValues) -> Unit,
+) {
     Card(
         modifier = Modifier.padding(leadingItemPadding),
-        shape = leadingItemShape(),
+        shape = shape,
     ) {
         content(contentPadding)
     }
@@ -104,7 +107,7 @@ fun CardGroup(content: CardGroupScope.() -> Unit) {
     ) {
         scope.items.forEachIndexed { i, item ->
             when (i) {
-                0 -> CardGroupLeadingItem(item)
+                0 -> CardGroupLeadingItem(content = item)
                 scope.items.lastIndex -> CardGroupTrailingItem(item)
                 else -> CardGroupMiddleItem(item)
             }
