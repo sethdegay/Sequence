@@ -103,9 +103,9 @@ private fun ReorderableCardGroupPreview() {
     var tasks by remember {
         mutableStateOf(
             listOf(
-                Task(id = "", title = "Task A", duration = 30.seconds),
-                Task(id = "", title = "Task B", duration = 20.seconds),
-                Task(id = "", title = "Task C", duration = 10.seconds),
+                Task(id = "a", title = "Task A", duration = 30.seconds),
+                Task(id = "b", title = "Task B", duration = 20.seconds),
+                Task(id = "c", title = "Task C", duration = 10.seconds),
             )
         )
     }
