@@ -16,7 +16,7 @@
 
     <!-- User interface settings -->
     <string name="settings_theme_title">App theme</string>
-    <string name="settings_theme_description">Choose between Light, Dark, or automatically follow your System theme.</string>
+    <string name="settings_theme_description">Choose between light, dark, or automatically follow your system theme.</string>
     <string name="settings_system_theme_title">Auto</string>
     <string name="settings_dark_theme_title">Dark</string>
     <string name="settings_light_theme_title">Light</string>
