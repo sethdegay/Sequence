@@ -1,6 +1,8 @@
 package dev.sethdegay.routines.core.datastore
 
 import androidx.datastore.core.DataStore
+import dev.sethdegay.routines.core.model.Settings
+import dev.sethdegay.routines.core.model.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -12,35 +14,54 @@ class UserPreferencesDataSource @Inject constructor(
 ) {
     val userPreferences: Flow<ModelUserPreferences> = _userPreferences.data.map { userPreferences ->
         ModelUserPreferences(
-            themeConfig = when (userPreferences.themeConfig) {
-                null,
-                ThemeConfig.UNRECOGNIZED,
-                ThemeConfig.UNSPECIFIED,
-                ThemeConfig.FOLLOW_SYSTEM -> ModelThemeConfig.FOLLOW_SYSTEM
+            settings = Settings(
+                themeConfig = when (userPreferences.settings.themeConfig) {
+                    null,
+                    ThemeConfig.UNRECOGNIZED,
+                    ThemeConfig.UNSPECIFIED,
+                    ThemeConfig.FOLLOW_SYSTEM -> ModelThemeConfig.FOLLOW_SYSTEM
 
-                ThemeConfig.LIGHT -> ModelThemeConfig.LIGHT
-                ThemeConfig.DARK -> ModelThemeConfig.DARK
-            },
-            dynamicColor = userPreferences.dynamicColor,
+                    ThemeConfig.LIGHT -> ModelThemeConfig.LIGHT
+                    ThemeConfig.DARK -> ModelThemeConfig.DARK
+                },
+                dynamicColor = userPreferences.settings.dynamicColor,
+            ),
+            uiState = UiState(
+                routinesAccordionExpandedId = userPreferences.uiState.routinesAccordionExpandedId,
+            )
         )
     }
 
     suspend fun setThemeConfig(themeConfig: ModelThemeConfig) {
-        _userPreferences.updateData {
-            it.copy {
-                this.themeConfig = when (themeConfig) {
-                    ModelThemeConfig.FOLLOW_SYSTEM -> ThemeConfig.FOLLOW_SYSTEM
-                    ModelThemeConfig.LIGHT -> ThemeConfig.LIGHT
-                    ModelThemeConfig.DARK -> ThemeConfig.DARK
+        _userPreferences.updateData { current ->
+            current.copy {
+                this.settings = this.settings.copy {
+                    this.themeConfig = when (themeConfig) {
+                        ModelThemeConfig.FOLLOW_SYSTEM -> ThemeConfig.FOLLOW_SYSTEM
+                        ModelThemeConfig.LIGHT -> ThemeConfig.LIGHT
+                        ModelThemeConfig.DARK -> ThemeConfig.DARK
+                    }
                 }
             }
         }
     }
 
     suspend fun setDynamicColor(dynamicColor: Boolean) {
-        _userPreferences.updateData {
-            it.copy {
-                this.dynamicColor = dynamicColor
+        _userPreferences.updateData { current ->
+            current.copy {
+                this.settings = this.settings.copy {
+                    this.dynamicColor = dynamicColor
+                }
+            }
+        }
+    }
+
+    suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String) {
+        _userPreferences.updateData { current ->
+            current.copy {
+                this.uiState = this.uiState.copy {
+                    this.routinesAccordionExpandedId = routinesAccordionExpandedId
+                }
             }
         }
     }

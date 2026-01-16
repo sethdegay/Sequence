@@ -14,7 +14,7 @@ import javax.inject.Inject
 class RoutinesViewModel @Inject constructor(
     userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<RoutinesUiState> = userPreferencesRepository.userPreferences.map {
+    val uiState: StateFlow<RoutinesUiState> = userPreferencesRepository.settings.map {
         RoutinesUiState.Success(it)
     }.stateIn(
         scope = viewModelScope,

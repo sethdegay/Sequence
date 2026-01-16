@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option java_package = "dev.sethdegay.routines.core.datastore";
+option java_multiple_files = true;
+
+message UiState {
+  string routines_accordion_expanded_id = 1;
+}

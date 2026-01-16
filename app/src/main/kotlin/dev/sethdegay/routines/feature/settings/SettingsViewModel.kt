@@ -16,8 +16,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<SettingsUiState> = userPreferencesRepository.userPreferences.map {
-        SettingsUiState.Success(userPreferences = it)
+    val uiState: StateFlow<SettingsUiState> = userPreferencesRepository.settings.map {
+        SettingsUiState.Success(settings = it)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),

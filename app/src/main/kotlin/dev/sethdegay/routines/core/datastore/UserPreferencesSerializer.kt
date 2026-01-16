@@ -8,10 +8,7 @@ import java.io.OutputStream
 import javax.inject.Inject
 
 class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferences> {
-    override val defaultValue: UserPreferences = UserPreferences.newBuilder()
-        .setThemeConfig(ThemeConfig.UNSPECIFIED)
-        .setDynamicColor(false)
-        .build()
+    override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): UserPreferences {
         return try {
