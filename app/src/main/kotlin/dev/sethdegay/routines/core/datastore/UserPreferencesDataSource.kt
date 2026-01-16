@@ -27,7 +27,11 @@ class UserPreferencesDataSource @Inject constructor(
                 dynamicColor = userPreferences.settings.dynamicColor,
             ),
             uiState = UiState(
-                routinesAccordionExpandedId = userPreferences.uiState.routinesAccordionExpandedId,
+                routinesAccordionExpandedId = if (userPreferences.uiState.hasRoutinesAccordionExpandedId()) {
+                    userPreferences.uiState.routinesAccordionExpandedId
+                } else {
+                    null
+                },
             )
         )
     }
@@ -56,13 +60,15 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String) {
+    suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?) {
         _userPreferences.updateData { current ->
-            current.copy {
-                this.uiState = this.uiState.copy {
-                    this.routinesAccordionExpandedId = routinesAccordionExpandedId
-                }
+            val uiStateBuilder = current.uiState.toBuilder()
+            if (routinesAccordionExpandedId == null) {
+                uiStateBuilder.clearRoutinesAccordionExpandedId()
+            } else {
+                uiStateBuilder.setRoutinesAccordionExpandedId(routinesAccordionExpandedId)
             }
+            current.toBuilder().setUiState(uiStateBuilder).build()
         }
     }
 }

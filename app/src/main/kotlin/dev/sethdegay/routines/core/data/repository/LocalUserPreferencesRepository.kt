@@ -27,4 +27,8 @@ class LocalUserPreferencesRepository @Inject constructor(
     override suspend fun setDynamicColor(dynamicColor: Boolean) {
         dataSource.setDynamicColor(dynamicColor)
     }
+
+    override suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?) {
+        dataSource.setRoutinesAccordionExpandedId(routinesAccordionExpandedId)
+    }
 }

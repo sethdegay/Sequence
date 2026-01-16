@@ -1,6 +1,7 @@
 package dev.sethdegay.routines.feature.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.ui.RoutineAccordionHeader
 
@@ -53,7 +55,7 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            if (!uiState.showLoadingScreen()) {
+            if (!uiState.showLoadingScreen() && uiState.routinesAccordionExpandedId == null) {
                 MediumExtendedFloatingActionButton(
                     onClick = { navigateToEditor(null) }
                 ) {
@@ -66,39 +68,65 @@ fun HomeScreen(
         if (uiState.showLoadingScreen()) {
             LoadingScreen(modifier = Modifier.padding(padding))
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .consumeWindowInsets(padding)
-                    .fillMaxSize(),
-                contentPadding = padding,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                items(uiState.routines) {
-                    Accordion(
-                        isExpanded = true,
-                        header = { contentPadding ->
-                            RoutineAccordionHeader(
-                                modifier = Modifier.fillMaxWidth(),
-                                isExpanded = true,
-                                onClick = {},
-                                onLongClick = {},
-                                onPlayButtonClick = { navigateToTimer(it.id) },
-                                title = it.title,
-                                description = it.description,
-                                padding = contentPadding,
+            HomeScreen(
+                scaffoldPadding = padding,
+                navigateToTimer = navigateToTimer,
+                setRoutinesAccordionExpandedId = { viewModel.setRoutinesAccordionExpandedId(it) },
+                isExpanded = { it == uiState.routinesAccordionExpandedId },
+                routines = uiState.routines,
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeScreen(
+    scaffoldPadding: PaddingValues,
+    navigateToTimer: (String) -> Unit,
+    setRoutinesAccordionExpandedId: (String?) -> Unit,
+    isExpanded: (String) -> Boolean,
+    routines: List<Routine>,
+) {
+    LazyColumn(
+        modifier = Modifier
+            .consumeWindowInsets(scaffoldPadding)
+            .fillMaxSize(),
+        contentPadding = scaffoldPadding,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        items(routines) { routine ->
+            val isExpanded = isExpanded(routine.id)
+            Accordion(
+                isExpanded = isExpanded,
+                header = { contentPadding ->
+                    RoutineAccordionHeader(
+                        modifier = Modifier.fillMaxWidth(),
+                        isExpanded = isExpanded,
+                        onClick = { isExpanded ->
+                            setRoutinesAccordionExpandedId(
+                                if (isExpanded) {
+                                    routine.id
+                                } else {
+                                    null
+                                }
                             )
-                        }
-                    ) {
-                        it.tasks.forEach { task ->
-                            item { contentPadding ->
-                                RoutineTask(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(contentPadding),
-                                    task,
-                                )
-                            }
-                        }
+                        },
+                        onLongClick = {},
+                        onPlayButtonClick = { navigateToTimer(routine.id) },
+                        title = routine.title,
+                        description = routine.description,
+                        padding = contentPadding,
+                    )
+                }
+            ) {
+                routine.tasks.forEach { task ->
+                    item { contentPadding ->
+                        RoutineTask(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(contentPadding),
+                            task,
+                        )
                     }
                 }
             }

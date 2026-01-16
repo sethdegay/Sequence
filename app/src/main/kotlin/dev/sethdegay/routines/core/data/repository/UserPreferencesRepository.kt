@@ -13,4 +13,6 @@ interface UserPreferencesRepository {
     suspend fun setThemeConfig(themeConfig: ThemeConfig)
 
     suspend fun setDynamicColor(dynamicColor: Boolean)
+
+    suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?)
 }

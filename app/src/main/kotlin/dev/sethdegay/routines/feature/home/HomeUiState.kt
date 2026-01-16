@@ -7,9 +7,12 @@ sealed interface HomeUiState {
 
     data class Success(
         override val routines: List<Routine>,
+        override val routinesAccordionExpandedId: String?,
     ) : HomeUiState
 
     fun showLoadingScreen(): Boolean = this is Loading
 
     val routines: List<Routine> get() = emptyList()
+
+    val routinesAccordionExpandedId: String? get() = null
 }
