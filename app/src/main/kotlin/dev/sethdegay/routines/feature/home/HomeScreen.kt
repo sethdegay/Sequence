@@ -70,6 +70,7 @@ fun HomeScreen(
         } else {
             HomeScreen(
                 scaffoldPadding = padding,
+                navigateToEditor = navigateToEditor,
                 navigateToTimer = navigateToTimer,
                 setRoutinesAccordionExpandedId = { viewModel.setRoutinesAccordionExpandedId(it) },
                 isExpanded = { it == uiState.routinesAccordionExpandedId },
@@ -82,6 +83,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreen(
     scaffoldPadding: PaddingValues,
+    navigateToEditor: (String?) -> Unit,
     navigateToTimer: (String) -> Unit,
     setRoutinesAccordionExpandedId: (String?) -> Unit,
     isExpanded: (String) -> Boolean,
@@ -111,7 +113,7 @@ private fun HomeScreen(
                                 }
                             )
                         },
-                        onLongClick = {},
+                        onLongClick = { navigateToEditor(routine.id) },
                         onPlayButtonClick = { navigateToTimer(routine.id) },
                         title = routine.title,
                         description = routine.description,
