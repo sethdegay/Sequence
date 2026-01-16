@@ -1,6 +1,7 @@
 package dev.sethdegay.routines.feature.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,13 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumExtendedFloatingActionButton
 import androidx.compose.material3.Scaffold
@@ -31,9 +27,9 @@ import dev.sethdegay.routines.core.designsystem.component.Accordion
 import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
-import dev.sethdegay.routines.core.designsystem.util.asComposableIcon
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.routines.core.ui.RoutineAccordionHeader
 
 @Composable
 fun HomeScreen(
@@ -82,26 +78,15 @@ fun HomeScreen(
                     Accordion(
                         isExpanded = true,
                         header = { padding ->
-                            ListItem(
-                                headlineContent = { Text(it.title) },
-                                supportingContent = if (!it.description.isBlank()) {
-                                    { Text(it.description) }
-                                } else {
-                                    null
-                                },
-                                leadingContent = {
-                                    Button(
-                                        onClick = { navigateToTimer(it.id) },
-                                        shapes = ButtonDefaults.shapes()
-                                    ) {
-                                        RoutinesIcons.PlayArrow.asComposableIcon().invoke()
-                                    }
-                                },
-                                colors = ListItemDefaults.colors(
-                                    containerColor = CardDefaults.cardColors().containerColor,
-                                    headlineColor = CardDefaults.cardColors().contentColor,
-                                    supportingColor = CardDefaults.cardColors().contentColor,
-                                ),
+                            RoutineAccordionHeader(
+                                modifier = Modifier.fillMaxWidth(),
+                                isExpanded = true,
+                                onClick = {},
+                                onLongClick = {},
+                                onPlayButtonClick = { navigateToTimer(it.id) },
+                                title = it.title,
+                                description = it.description,
+                                padding = PaddingValues(16.dp),
                             )
                         }
                     ) {
