@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-private const val ENTER_ANIMATION_DURATION = 300
+private const val ENTER_ANIMATION_DURATION = 150
 private const val EXIT_ANIMATION_DURATION = 150
 private val SPACING = 1.5.dp
 
