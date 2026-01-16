@@ -70,7 +70,8 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
         Row(
             modifier = Modifier
                 .clickable(onClick = { onTaskClick(task) })
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(vertical = 10.dp, horizontal = 0.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {

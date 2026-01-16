@@ -1,7 +1,6 @@
 package dev.sethdegay.routines.feature.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -77,7 +76,7 @@ fun HomeScreen(
                 items(uiState.routines) {
                     Accordion(
                         isExpanded = true,
-                        header = { padding ->
+                        header = { contentPadding ->
                             RoutineAccordionHeader(
                                 modifier = Modifier.fillMaxWidth(),
                                 isExpanded = true,
@@ -86,12 +85,19 @@ fun HomeScreen(
                                 onPlayButtonClick = { navigateToTimer(it.id) },
                                 title = it.title,
                                 description = it.description,
-                                padding = PaddingValues(16.dp),
+                                padding = contentPadding,
                             )
                         }
                     ) {
                         it.tasks.forEach { task ->
-                            item { RoutineTask(task) }
+                            item { contentPadding ->
+                                RoutineTask(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(contentPadding),
+                                    task,
+                                )
+                            }
                         }
                     }
                 }
@@ -101,11 +107,9 @@ fun HomeScreen(
 }
 
 @Composable
-private fun RoutineTask(task: Task) {
+private fun RoutineTask(modifier: Modifier, task: Task) {
     Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {

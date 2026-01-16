@@ -80,16 +80,16 @@ private fun SettingsScreen(
         item {}
         item {
             CardGroup {
-                item { padding ->
+                item {
                     ThemePreference(
-                        modifier = Modifier.padding(padding),
+                        modifier = Modifier.padding(4.dp),
                         onCheckedRequest = { uiState.themeConfig == it },
                         onThemeConfigChanged = setThemeConfig,
                     )
                 }
-                item { padding ->
+                item {
                     DynamicColorPreference(
-                        modifier = Modifier.padding(padding),
+                        modifier = Modifier.padding(4.dp),
                         checked = uiState.useDynamicColor,
                         onCheckedChange = setDynamicColor,
                     )

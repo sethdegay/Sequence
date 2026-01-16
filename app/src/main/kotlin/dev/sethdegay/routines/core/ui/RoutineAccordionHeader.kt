@@ -65,7 +65,7 @@ fun RoutineAccordionHeader(
     onPlayButtonClick: () -> Unit,
     title: String,
     description: String,
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     Row(
         modifier = modifier
@@ -74,7 +74,7 @@ fun RoutineAccordionHeader(
                 onLongClick = onLongClick,
             )
             .padding(padding),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val size = ButtonDefaults.MediumContainerHeight

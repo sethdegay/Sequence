@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 
 private val paddingDp = 16.dp
 
-private val contentPadding = PaddingValues(0.dp)
+private val contentPadding = PaddingValues(16.dp)
 
 private val leadingItemPadding = PaddingValues(
     top = 0.dp,
