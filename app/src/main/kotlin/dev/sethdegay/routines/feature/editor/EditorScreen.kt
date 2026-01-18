@@ -2,10 +2,13 @@ package dev.sethdegay.routines.feature.editor
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -15,7 +18,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import dev.sethdegay.routines.R.string
+import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIcon
@@ -114,6 +119,11 @@ private fun EditorScreen(
                 singleLine = false,
                 minLines = 3,
                 maxLines = 10,
+            )
+            Spacer(Modifier.size(16.dp))
+            CountdownDisplay(
+                duration = uiState.routine.totalDuration,
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }

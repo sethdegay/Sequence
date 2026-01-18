@@ -117,6 +117,7 @@ private fun HomeScreen(
                         onPlayButtonClick = { navigateToTimer(routine.id) },
                         title = routine.title,
                         description = routine.description,
+                        totalDuration = routine.totalDuration,
                         padding = contentPadding,
                     )
                 }

@@ -30,8 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIcon
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 private val subtleInOutEasing = CubicBezierEasing(0.2f, 0.0f, 0.8f, 1.0f)
 private const val hiddenItemAnimationDuration = 70
@@ -65,6 +68,7 @@ fun RoutineAccordionHeader(
     onPlayButtonClick: () -> Unit,
     title: String,
     description: String,
+    totalDuration: Duration,
     padding: PaddingValues,
 ) {
     Row(
@@ -74,42 +78,51 @@ fun RoutineAccordionHeader(
                 onLongClick = onLongClick,
             )
             .padding(padding),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val size = ButtonDefaults.MediumContainerHeight
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = horizontalEnterTransition,
-            exit = horizontalExitTransition,
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Button(
-                modifier = Modifier.heightIn(size),
-                shapes = ButtonDefaults.shapes(),
-                onClick = onPlayButtonClick,
-            ) {
-                RoutinesIcons.PlayArrow.asComposableIcon(
-                    modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
-                ).invoke()
-            }
-        }
-        Column(
-            modifier = Modifier.animateContentSize(
-                animationSpec = subtleInOutTweenSpec(containerAnimationDuration),
-            ),
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-            )
+            val size = ButtonDefaults.MediumContainerHeight
             AnimatedVisibility(
-                visible = isExpanded && description.isNotBlank(),
-                enter = verticalEnterTransition,
-                exit = verticalExitTransition,
+                visible = isExpanded,
+                enter = horizontalEnterTransition,
+                exit = horizontalExitTransition,
             ) {
-                Text(text = description)
+                Button(
+                    modifier = Modifier.heightIn(size),
+                    shapes = ButtonDefaults.shapes(),
+                    onClick = onPlayButtonClick,
+                ) {
+                    RoutinesIcons.PlayArrow.asComposableIcon(
+                        modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
+                    ).invoke()
+                }
+            }
+            Column(
+                modifier = Modifier.animateContentSize(
+                    animationSpec = subtleInOutTweenSpec(containerAnimationDuration),
+                ),
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                AnimatedVisibility(
+                    visible = isExpanded && description.isNotBlank(),
+                    enter = verticalEnterTransition,
+                    exit = verticalExitTransition,
+                ) {
+                    Text(text = description)
+                }
             }
         }
+        CountdownDisplay(
+            duration = totalDuration,
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }
 
@@ -125,6 +138,7 @@ private fun RoutineAccordionHeaderPreview() {
         title = "Accordion Title",
         description = "Description",
         onPlayButtonClick = {},
+        totalDuration = 10.minutes,
         padding = PaddingValues(16.dp),
     )
 }
