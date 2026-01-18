@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.Task
+import kotlin.time.Duration
 import kotlin.time.Instant
 
 @Entity(tableName = "routine")
@@ -24,6 +25,9 @@ data class RoutineEntity(
 
     @ColumnInfo(name = "date_modified")
     val dateModified: Instant,
+
+    @ColumnInfo(name = "total_duration")
+    val totalDuration: Duration,
 )
 
 fun RoutineEntity.asExternalModel(tasks: List<Task>): Routine = Routine(
@@ -33,4 +37,5 @@ fun RoutineEntity.asExternalModel(tasks: List<Task>): Routine = Routine(
     dateCreated = dateCreated,
     dateModified = dateModified,
     tasks = tasks,
+    totalDuration = totalDuration,
 )

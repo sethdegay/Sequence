@@ -1,5 +1,6 @@
 package dev.sethdegay.routines.core.model
 
+import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
@@ -10,4 +11,5 @@ data class Routine(
     val dateCreated: Instant,
     val dateModified: Instant,
     val tasks: List<Task>,
+    val totalDuration: Duration,
 )

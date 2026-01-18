@@ -17,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
@@ -79,6 +80,7 @@ class RoutineDaoTest {
             description = "",
             dateCreated = r1Instant,
             dateModified = r1Instant,
+            totalDuration = 6.minutes,
         )
         val r1Tasks = listOf(
             TaskEntity(
@@ -109,6 +111,7 @@ class RoutineDaoTest {
             description = "",
             dateCreated = r2Instant,
             dateModified = r2Instant,
+            totalDuration = 0.seconds,
         )
         dao.upsertRoutineWithTasks(r2Entity)
     }

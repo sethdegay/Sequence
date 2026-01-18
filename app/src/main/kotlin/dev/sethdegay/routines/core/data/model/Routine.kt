@@ -9,4 +9,5 @@ fun Routine.asEntity(): RoutineEntity = RoutineEntity(
     description = description,
     dateCreated = dateCreated,
     dateModified = dateModified,
+    totalDuration = totalDuration,
 )

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel(assistedFactory = EditorViewModel.Factory::class)
@@ -41,6 +42,7 @@ class EditorViewModel @AssistedInject constructor(
             dateCreated = this,
             dateModified = this,
             tasks = emptyList(),
+            totalDuration = Duration.ZERO,
         )
     }
 
