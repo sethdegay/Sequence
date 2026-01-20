@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.routines.core.data.repository.RoutineRepository
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
+import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.timer.SequentialTimer
 import dev.sethdegay.routines.core.timer.SequentialTimerState
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
 
 @HiltViewModel(assistedFactory = TimerViewModel.Factory::class)
 class TimerViewModel @AssistedInject constructor(
@@ -30,6 +32,8 @@ class TimerViewModel @AssistedInject constructor(
         fun create(id: String): TimerViewModel
     }
 
+    private lateinit var routine: Routine
+
     val uiState: StateFlow<TimerUiState> = timer.state.map { it.asTimerUiState() }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -38,7 +42,7 @@ class TimerViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
-            timer.start(routineRepository.getRoutine(id).tasks)
+            timer.start(routineRepository.getRoutine(id).also { routine = it }.tasks)
         }
     }
 
@@ -62,17 +66,28 @@ class TimerViewModel @AssistedInject constructor(
             return TimerUiState.Finished
         }
 
-        val (items, index, time) = when (this) {
-            is SequentialTimerState.Running<*> -> Triple(items, currentItemIndex, timeLeft)
-            is SequentialTimerState.Paused<*> -> Triple(items, currentItemIndex, timeLeft)
-        }
+        val (tasks, index, time, accumulatedDuration) =
+            @Suppress("UNCHECKED_CAST")
+            when (this) {
+                is SequentialTimerState.Running<*> -> SequentialTimerStateData(
+                    items as List<Task>,
+                    currentItemIndex,
+                    timeLeft,
+                    accumulatedDuration,
+                )
 
-        @Suppress("UNCHECKED_CAST")
-        val tasks = items as List<Task>
+                is SequentialTimerState.Paused<*> -> SequentialTimerStateData(
+                    items as List<Task>,
+                    currentItemIndex,
+                    timeLeft,
+                    accumulatedDuration,
+                )
+            }
+
         val currentTask = tasks[index]
 
-        val progress = if (tasks.lastIndex > 0) {
-            index.toFloat() / tasks.lastIndex
+        val progress = if (routine.totalDuration > Duration.ZERO) {
+            (accumulatedDuration / routine.totalDuration).toFloat()
         } else {
             1.0f
         }
@@ -94,3 +109,10 @@ class TimerViewModel @AssistedInject constructor(
         )
     }
 }
+
+private data class SequentialTimerStateData(
+    val items: List<Task>,
+    val currentItemIndex: Int,
+    val timeLeft: Duration,
+    val accumulatedDuration: Duration,
+)

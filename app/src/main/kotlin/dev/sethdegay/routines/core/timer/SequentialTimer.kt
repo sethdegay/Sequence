@@ -55,15 +55,20 @@ class SequentialTimer<T>(
             return
         }
 
+        var accumulatedDuration = items.take(startIndex)
+            .fold(Duration.ZERO) { acc, item ->
+                acc + durationProvider(item)
+            }
+
         timerJob = scope.launch {
             try {
                 for (i in startIndex..items.lastIndex) {
                     val element = items[i]
 
+                    val providedDuration = durationProvider(element)
                     val duration = if (i == startIndex && timeLeft != null) {
                         timeLeft
                     } else {
-                        val providedDuration = durationProvider(element)
                         if (providedDuration.inWholeMilliseconds % 1000L != 0L) {
                             _state.value =
                                 SequentialTimerState.Error(IllegalArgumentException("Duration must be in whole seconds."))
@@ -80,8 +85,11 @@ class SequentialTimer<T>(
                             items = items,
                             currentItemIndex = i,
                             timeLeft = timeLeft,
+                            accumulatedDuration = accumulatedDuration + (providedDuration - timeLeft),
                         )
                     }
+
+                    accumulatedDuration += duration
                 }
                 _state.value = SequentialTimerState.Finished
             } catch (_: CancellationException) {
@@ -114,6 +122,7 @@ class SequentialTimer<T>(
                 items = currentState.items,
                 currentItemIndex = currentState.currentItemIndex,
                 timeLeft = currentState.timeLeft,
+                accumulatedDuration = currentState.accumulatedDuration,
             )
         }
     }
