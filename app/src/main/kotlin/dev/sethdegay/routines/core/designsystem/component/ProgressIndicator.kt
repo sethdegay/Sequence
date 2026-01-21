@@ -1,12 +1,13 @@
 package dev.sethdegay.routines.core.designsystem.component
 
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LinearWavyProgressIndicator
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +30,10 @@ fun ProgressIndicator(
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
-        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+        animationSpec = tween(
+            durationMillis = 1_000,
+            easing = LinearEasing,
+        ),
     )
     val thickStrokeWidth = with(LocalDensity.current) { 8.dp.toPx() }
     val thickStroke = remember(thickStrokeWidth) {
