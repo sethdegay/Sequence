@@ -25,6 +25,7 @@ import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIcon
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.ui.ReorderableCardGroup
 import dev.sethdegay.routines.core.ui.TaskEditorSheet
@@ -60,7 +61,7 @@ fun EditorScreen(
                 is EditorUiState.Success -> {
                     EditorScreen(
                         scaffoldPadding = padding,
-                        uiState = uiState as EditorUiState.Success,
+                        routine = uiState.routine!!,
                         onRoutineTitleSave = viewModel::onRoutineTitleSave,
                         onRoutineDescriptionSave = viewModel::onRoutineDescriptionSave,
                         onTaskOrderChanged = viewModel::onTasksSave,
@@ -88,7 +89,7 @@ fun EditorScreen(
 @Composable
 private fun EditorScreen(
     scaffoldPadding: PaddingValues,
-    uiState: EditorUiState.Success,
+    routine: Routine,
     onRoutineTitleSave: (String) -> Unit,
     onRoutineDescriptionSave: (String) -> Unit,
     onTaskOrderChanged: (List<Task>) -> Unit,
@@ -99,21 +100,21 @@ private fun EditorScreen(
             .consumeWindowInsets(scaffoldPadding)
             .padding(scaffoldPadding)
             .fillMaxWidth(),
-        tasks = uiState.routine.tasks,
+        tasks = routine.tasks,
         onTaskOrderChanged = onTaskOrderChanged,
         onTaskClick = onTaskClick,
     ) {
         Column {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = uiState.routine.title,
+                value = routine.title,
                 onValueChange = onRoutineTitleSave,
                 label = { Text("Title") },
                 singleLine = true,
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = uiState.routine.description,
+                value = routine.description,
                 onValueChange = onRoutineDescriptionSave,
                 label = { Text("Description") },
                 singleLine = false,
@@ -122,7 +123,7 @@ private fun EditorScreen(
             )
             Spacer(Modifier.size(16.dp))
             CountdownDisplay(
-                duration = uiState.routine.totalDuration,
+                duration = routine.totalDuration,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
