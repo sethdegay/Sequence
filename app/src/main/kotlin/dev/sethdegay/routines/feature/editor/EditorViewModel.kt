@@ -109,7 +109,7 @@ class EditorViewModel @AssistedInject constructor(
                 .map { it.routine }
                 .distinctUntilChanged()
                 .filter { it != emptyRoutine }
-                .collect { routineRepository.saveRoutine(it) }
+                .collect { updateAndSaveRoutine(it) }
         }
 
         if (id != null) {
@@ -119,5 +119,26 @@ class EditorViewModel @AssistedInject constructor(
         } else {
             _editableUiState.value = EditorUiState.Success(emptyRoutine)
         }
+    }
+
+    private suspend fun updateAndSaveRoutine(routine: Routine) {
+        val reorderedTasks = routine.tasks.mapIndexed { i, task ->
+            task.copy(order = i + 1)
+        }
+
+        val totalDuration = reorderedTasks.fold(Duration.ZERO) { acc, task ->
+            acc + task.duration
+        }
+
+        val updatedRoutine = routine.copy(
+            tasks = reorderedTasks,
+            totalDuration = totalDuration,
+        )
+
+        _editableUiState.update {
+            it?.copy(routine = updatedRoutine)
+        }
+
+        routineRepository.saveRoutine(updatedRoutine)
     }
 }
