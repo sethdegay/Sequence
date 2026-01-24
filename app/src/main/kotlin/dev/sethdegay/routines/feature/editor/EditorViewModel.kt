@@ -89,7 +89,7 @@ class EditorViewModel @AssistedInject constructor(
             val updatedTasks = if (state.activeTask == null) {
                 state.routine.tasks + task
             } else {
-                state.routine.tasks.map { if (state.activeTask.id == task.id) task else it }
+                state.routine.tasks.map { if (state.activeTask.id == it.id) task else it }
             }
             EditorUiState.Success(
                 routine = state.routine.copy(
