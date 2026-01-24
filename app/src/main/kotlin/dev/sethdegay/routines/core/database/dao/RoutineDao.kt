@@ -15,7 +15,12 @@ import kotlinx.coroutines.flow.map
 @Dao
 interface RoutineDao {
     @Query("SELECT * FROM routine WHERE id = :id")
-    suspend fun getRoutine(id: String): RoutineWithTasks
+    suspend fun _getRoutine(id: String): RoutineEntity
+
+    suspend fun getRoutine(id: String): RoutineWithTasks = RoutineWithTasks(
+        routineEntity = _getRoutine(id),
+        taskEntities = _getRoutineTasks(id),
+    )
 
     @Query("SELECT * FROM routine")
     fun _getRoutines(): Flow<List<RoutineEntity>>
