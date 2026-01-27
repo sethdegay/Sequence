@@ -15,13 +15,13 @@
             "notNull": true
           },
           {
-            "fieldPath": "startTimestamp",
+            "fieldPath": "start",
             "columnName": "start_timestamp",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "endTimestamp",
+            "fieldPath": "end",
             "columnName": "end_timestamp",
             "affinity": "INTEGER",
             "notNull": true
