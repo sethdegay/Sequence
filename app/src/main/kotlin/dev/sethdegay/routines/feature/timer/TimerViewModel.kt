@@ -6,25 +6,34 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
 import dev.sethdegay.routines.core.data.repository.RoutineRepository
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
+import dev.sethdegay.routines.core.model.CalendarEvent
 import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.timer.SequentialTimer
 import dev.sethdegay.routines.core.timer.SequentialTimerState
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @HiltViewModel(assistedFactory = TimerViewModel.Factory::class)
 class TimerViewModel @AssistedInject constructor(
     @Assisted private val id: String,
     private val timer: SequentialTimer<Task>,
     private val routineRepository: RoutineRepository,
+    private val calendarEventRepository: CalendarEventRepository,
 ) : ViewModel(), TimerControlsActions {
 
     @AssistedFactory
@@ -33,16 +42,22 @@ class TimerViewModel @AssistedInject constructor(
     }
 
     private lateinit var routine: Routine
+    private lateinit var start: Instant
+    private lateinit var saveCalendarEventJob: Job
 
-    val uiState: StateFlow<TimerUiState> = timer.state.map { it.asTimerUiState() }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = TimerUiState.Loading,
-    )
+    private val _uiState = MutableStateFlow<TimerUiState>(TimerUiState.Loading)
+    val uiState: StateFlow<TimerUiState>
+        get() = _uiState
 
     init {
         viewModelScope.launch {
+            timer.state.collectLatest { state ->
+                _uiState.update { state.asTimerUiState() }
+            }
+        }
+        viewModelScope.launch {
             timer.start(routineRepository.getRoutine(id).also { routine = it }.tasks)
+            start = Clock.System.now()
         }
     }
 
@@ -63,7 +78,8 @@ class TimerViewModel @AssistedInject constructor(
             return TimerUiState.Loading
         }
         if (this is SequentialTimerState.Finished) {
-            return TimerUiState.Finished
+            saveCalendarEvent()
+            return TimerUiState.Loading
         }
 
         val (tasks, index, time, accumulatedDuration) =
@@ -107,6 +123,37 @@ class TimerViewModel @AssistedInject constructor(
                 ProgressIndicatorAmplitudeLevel.FLAT
             },
         )
+    }
+
+    private fun saveCalendarEvent(timeout: Duration = 10.seconds) {
+        if (::saveCalendarEventJob.isInitialized && saveCalendarEventJob.isActive) {
+            return
+        }
+        val now = Clock.System.now()
+        val calendarEvent = CalendarEvent(
+            start = start,
+            end = now,
+            duration = now - start,
+            routine = routine,
+        )
+        saveCalendarEventJob = viewModelScope.launch {
+            try {
+                withTimeout(timeout) {
+                    calendarEventRepository.insertCalendarEvent(calendarEvent)
+                }
+            } catch (_: TimeoutCancellationException) {
+                // TODO handle error
+            } finally {
+                _uiState.update { TimerUiState.Finished }
+            }
+        }
+    }
+
+    override fun onCleared() {
+        if (::saveCalendarEventJob.isInitialized) {
+            saveCalendarEventJob.cancel()
+        }
+        super.onCleared()
     }
 }
 

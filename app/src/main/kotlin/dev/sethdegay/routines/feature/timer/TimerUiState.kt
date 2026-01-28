@@ -20,4 +20,6 @@ sealed interface TimerUiState {
     ) : TimerUiState
 
     fun showLoadingScreen(): Boolean = this is Loading
+
+    fun shouldNavigateUp(): Boolean = this is Finished
 }
