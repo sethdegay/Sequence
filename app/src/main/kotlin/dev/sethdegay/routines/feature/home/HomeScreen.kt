@@ -1,5 +1,11 @@
 package dev.sethdegay.routines.feature.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -58,13 +64,11 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            if (!uiState.showLoadingScreen() && uiState.routinesAccordionExpandedId == null) {
-                MediumExtendedFloatingActionButton(
-                    onClick = { navigateToEditor(null) }
-                ) {
-                    Text(text = stringResource(string.home_add_routine_button_text))
-                }
-            }
+            HomeFab(
+                visible = !uiState.showLoadingScreen() && uiState.routinesAccordionExpandedId == null,
+                text = stringResource(string.home_add_routine_button_text),
+                onClick = { navigateToEditor(null) },
+            )
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) { padding ->
@@ -153,6 +157,30 @@ private fun HomeScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun HomeFab(
+    modifier: Modifier = Modifier,
+    visible: Boolean,
+    text: String,
+    onClick: () -> Unit,
+    animationDurationMillis: Int = 200,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(animationSpec = tween(animationDurationMillis)) +
+                scaleIn(animationSpec = tween(animationDurationMillis)),
+        exit = scaleOut(animationSpec = tween(animationDurationMillis)) +
+                fadeOut(animationSpec = tween(animationDurationMillis)),
+    ) {
+        MediumExtendedFloatingActionButton(
+            modifier = modifier,
+            onClick = onClick,
+        ) {
+            Text(text = text)
         }
     }
 }
