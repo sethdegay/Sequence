@@ -28,9 +28,12 @@ import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.routines.core.model.HeatMapLevel
 import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.routines.core.ui.HeatMapCalendar
 import dev.sethdegay.routines.core.ui.RoutineAccordionHeader
+import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
@@ -75,6 +78,10 @@ fun HomeScreen(
                 setRoutinesAccordionExpandedId = { viewModel.setRoutinesAccordionExpandedId(it) },
                 isExpanded = { it == uiState.routinesAccordionExpandedId },
                 routines = uiState.routines,
+                heatMapData = uiState.heatMapData,
+                heatMapCalendarStart = uiState.heatMapCalendarStart,
+                heatMapCalendarEnd = uiState.heatMapCalendarEnd,
+                onDateClicked = viewModel::setActiveCalendarEventBottomSheetDate,
             )
         }
     }
@@ -88,6 +95,10 @@ private fun HomeScreen(
     setRoutinesAccordionExpandedId: (String?) -> Unit,
     isExpanded: (String) -> Boolean,
     routines: List<Routine>,
+    heatMapData: Map<LocalDate, HeatMapLevel>,
+    heatMapCalendarStart: LocalDate,
+    heatMapCalendarEnd: LocalDate,
+    onDateClicked: (LocalDate) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -96,6 +107,15 @@ private fun HomeScreen(
         contentPadding = scaffoldPadding,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        item {
+            HeatMapCalendar(
+                modifier = Modifier.padding(16.dp),
+                heatMapData = heatMapData,
+                start = heatMapCalendarStart,
+                end = heatMapCalendarEnd,
+                onDateClicked = onDateClicked,
+            )
+        }
         items(routines) { routine ->
             val isExpanded = isExpanded(routine.id)
             Accordion(

@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.core)
 
+    implementation(libs.calendar.compose)
     implementation(libs.reorderable)
 
     testImplementation(libs.junit)
