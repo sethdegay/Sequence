@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toLocalDateTime
@@ -21,7 +22,8 @@ import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Instant
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -32,17 +34,17 @@ class HomeViewModel @Inject constructor(
 
     private val timeZone = TimeZone.currentSystemDefault()
 
-    private val currentDay = Clock.System.now()
+    private val currentDateTime = Clock.System.now().toLocalDateTime(timeZone)
     private val firstDayOfTheYear =
-        LocalDateTime(currentDay.toLocalDateTime(timeZone).year, 1, 1, 0, 0).toInstant(timeZone)
-    private val endOfCurrentDay = currentDay.plus(1.days).minus(1.milliseconds)
+        LocalDateTime(currentDateTime.year, 1, 1, 0, 0).toInstant(timeZone)
+    private val endOfCurrentDay = currentDateTime.date.atEndOfDayIn(timeZone)
 
     private val heatMapCalendarStart = firstDayOfTheYear
         .toLocalDateTime(timeZone)
         .date
         .toJavaLocalDate()
 
-    private val heatMapCalendarEnd = currentDay
+    private val heatMapCalendarEnd = endOfCurrentDay
         .toLocalDateTime(timeZone)
         .date
         .toJavaLocalDate()
@@ -77,3 +79,6 @@ class HomeViewModel @Inject constructor(
     fun setActiveCalendarEventBottomSheetDate(date: LocalDate) {
     }
 }
+
+private fun kotlinx.datetime.LocalDate.atEndOfDayIn(timeZone: TimeZone): Instant =
+    atStartOfDayIn(timeZone).plus(1.days).minus(1.nanoseconds)
