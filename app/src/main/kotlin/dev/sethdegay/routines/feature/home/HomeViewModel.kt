@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
 import dev.sethdegay.routines.core.data.repository.RoutineRepository
 import dev.sethdegay.routines.core.data.repository.UserPreferencesRepository
+import dev.sethdegay.routines.core.model.HeatMapLevel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -18,12 +19,13 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toLocalDateTime
-import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Instant
+import kotlinx.datetime.LocalDate as KotlinLocalDate
+import java.time.LocalDate as JavaLocalDate
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -39,12 +41,12 @@ class HomeViewModel @Inject constructor(
         LocalDateTime(currentDateTime.year, 1, 1, 0, 0).toInstant(timeZone)
     private val endOfCurrentDay = currentDateTime.date.atEndOfDayIn(timeZone)
 
-    private val heatMapCalendarStart = firstDayOfTheYear
+    private val heatMapCalendarStart: JavaLocalDate = firstDayOfTheYear
         .toLocalDateTime(timeZone)
         .date
         .toJavaLocalDate()
 
-    private val heatMapCalendarEnd = endOfCurrentDay
+    private val heatMapCalendarEnd: JavaLocalDate = endOfCurrentDay
         .toLocalDateTime(timeZone)
         .date
         .toJavaLocalDate()
@@ -55,7 +57,7 @@ class HomeViewModel @Inject constructor(
         calendarEventRepository.getHeatMapData(
             start = firstDayOfTheYear,
             end = endOfCurrentDay,
-        ).map { it.mapKeys { entry -> entry.key.toJavaLocalDate() } },
+        ).map { it.toJavaHeatMapData() },
     ) { routines, uiState, heatMapData ->
         HomeUiState.Success(
             routines = routines,
@@ -76,9 +78,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setActiveCalendarEventBottomSheetDate(date: LocalDate) {
+    fun setActiveCalendarEventSheetDate(date: JavaLocalDate) {
     }
 }
 
-private fun kotlinx.datetime.LocalDate.atEndOfDayIn(timeZone: TimeZone): Instant =
+private fun KotlinLocalDate.atEndOfDayIn(timeZone: TimeZone): Instant =
     atStartOfDayIn(timeZone).plus(1.days).minus(1.nanoseconds)
+
+private fun Map<KotlinLocalDate, HeatMapLevel>.toJavaHeatMapData(): Map<JavaLocalDate, HeatMapLevel> =
+    mapKeys { entry -> entry.key.toJavaLocalDate() }

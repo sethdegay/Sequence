@@ -85,7 +85,7 @@ fun HomeScreen(
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
                 heatMapCalendarEnd = uiState.heatMapCalendarEnd,
-                onDateClicked = viewModel::setActiveCalendarEventBottomSheetDate,
+                onDateClicked = viewModel::setActiveCalendarEventSheetDate,
             )
         }
     }
