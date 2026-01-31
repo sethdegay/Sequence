@@ -37,6 +37,7 @@ import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.routines.core.model.HeatMapLevel
 import dev.sethdegay.routines.core.model.Routine
 import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.routines.core.ui.CalendarEventsSheet
 import dev.sethdegay.routines.core.ui.HeatMapCalendar
 import dev.sethdegay.routines.core.ui.RoutineAccordionHeader
 import java.time.LocalDate
@@ -85,8 +86,15 @@ fun HomeScreen(
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
                 heatMapCalendarEnd = uiState.heatMapCalendarEnd,
-                onDateClicked = viewModel::setActiveCalendarEventSheetDate,
+                onDateClicked = viewModel::showCalendarEventsSheet,
             )
+
+            if (uiState.showCalendarEventsSheet) {
+                CalendarEventsSheet(
+                    calendarEvents = uiState.activeCalendarEvents,
+                    onDismissRequest = { viewModel.showCalendarEventsSheet(null) },
+                )
+            }
         }
     }
 }

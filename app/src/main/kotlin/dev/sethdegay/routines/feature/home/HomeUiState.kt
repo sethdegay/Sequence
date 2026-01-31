@@ -1,5 +1,6 @@
 package dev.sethdegay.routines.feature.home
 
+import dev.sethdegay.routines.core.model.CalendarEvent
 import dev.sethdegay.routines.core.model.HeatMapLevel
 import dev.sethdegay.routines.core.model.Routine
 import java.time.LocalDate
@@ -13,6 +14,8 @@ sealed interface HomeUiState {
         override val heatMapData: Map<LocalDate, HeatMapLevel>,
         override val heatMapCalendarStart: LocalDate,
         override val heatMapCalendarEnd: LocalDate,
+        override val showCalendarEventsSheet: Boolean,
+        override val activeCalendarEvents: List<CalendarEvent>?,
     ) : HomeUiState
 
     fun showLoadingScreen(): Boolean = this is Loading
@@ -26,4 +29,8 @@ sealed interface HomeUiState {
     val heatMapCalendarStart: LocalDate get() = LocalDate.now()
 
     val heatMapCalendarEnd: LocalDate get() = LocalDate.now()
+
+    val showCalendarEventsSheet: Boolean get() = false
+
+    val activeCalendarEvents: List<CalendarEvent>? get() = null
 }

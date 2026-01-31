@@ -6,18 +6,25 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
 import dev.sethdegay.routines.core.data.repository.RoutineRepository
 import dev.sethdegay.routines.core.data.repository.UserPreferencesRepository
+import dev.sethdegay.routines.core.model.CalendarEvent
 import dev.sethdegay.routines.core.model.HeatMapLevel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 import kotlin.time.Clock
@@ -51,6 +58,15 @@ class HomeViewModel @Inject constructor(
         .date
         .toJavaLocalDate()
 
+    private val showCalendarEventsSheet = MutableStateFlow(false)
+
+    private val activeCalendarEventsRange = MutableStateFlow<Pair<Instant, Instant>?>(null)
+    private val activeCalendarEvents: Flow<List<CalendarEvent>?> =
+        activeCalendarEventsRange.flatMapLatest { range ->
+            range?.let { calendarEventRepository.getCalendarEvents(it.first, it.second) }
+                ?: flowOf(null)
+        }
+
     val uiState: StateFlow<HomeUiState> = combine(
         routineRepository.getRoutines(),
         userPreferencesRepository.uiState,
@@ -58,13 +74,17 @@ class HomeViewModel @Inject constructor(
             start = firstDayOfTheYear,
             end = endOfCurrentDay,
         ).map { it.toJavaHeatMapData() },
-    ) { routines, uiState, heatMapData ->
+        showCalendarEventsSheet,
+        activeCalendarEvents,
+    ) { routines, uiState, heatMapData, showCalendarEventsSheet, activeCalendarEvents ->
         HomeUiState.Success(
             routines = routines,
             routinesAccordionExpandedId = uiState.routinesAccordionExpandedId,
             heatMapData = heatMapData,
             heatMapCalendarStart = heatMapCalendarStart,
             heatMapCalendarEnd = heatMapCalendarEnd,
+            showCalendarEventsSheet = showCalendarEventsSheet,
+            activeCalendarEvents = activeCalendarEvents,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -78,7 +98,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setActiveCalendarEventSheetDate(date: JavaLocalDate) {
+    fun showCalendarEventsSheet(date: JavaLocalDate?) {
+        if (date != null) {
+            showCalendarEventsSheet.value = true
+            val kotlinDate = date.toKotlinLocalDate()
+            activeCalendarEventsRange.update {
+                Pair(kotlinDate.atStartOfDayIn(timeZone), kotlinDate.atEndOfDayIn(timeZone))
+            }
+        } else {
+            showCalendarEventsSheet.value = false
+            activeCalendarEventsRange.value = null
+        }
     }
 }
 
