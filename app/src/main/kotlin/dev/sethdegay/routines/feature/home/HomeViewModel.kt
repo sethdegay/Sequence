@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -101,10 +100,8 @@ class HomeViewModel @Inject constructor(
     fun showCalendarEventsSheet(date: JavaLocalDate?) {
         if (date != null) {
             showCalendarEventsSheet.value = true
-            val kotlinDate = date.toKotlinLocalDate()
-            activeCalendarEventsRange.update {
-                Pair(kotlinDate.atStartOfDayIn(timeZone), kotlinDate.atEndOfDayIn(timeZone))
-            }
+            activeCalendarEventsRange.value = date.toKotlinLocalDate()
+                .let { Pair(it.atStartOfDayIn(timeZone), it.atEndOfDayIn(timeZone)) }
         } else {
             showCalendarEventsSheet.value = false
             activeCalendarEventsRange.value = null
