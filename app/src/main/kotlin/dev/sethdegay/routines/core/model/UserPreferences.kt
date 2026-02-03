@@ -8,6 +8,10 @@ data class UserPreferences(
 data class Settings(
     val themeConfig: ThemeConfig,
     val dynamicColor: Boolean,
+    val muteAll: Boolean,
+    val tickSound: Boolean,
+    val completionSound: Boolean,
+    val speakTitle: Boolean,
 )
 
 data class UiState(

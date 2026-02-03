@@ -25,6 +25,10 @@ class UserPreferencesDataSource @Inject constructor(
                     ThemeConfig.DARK -> ModelThemeConfig.DARK
                 },
                 dynamicColor = userPreferences.settings.dynamicColor,
+                muteAll = userPreferences.settings.muteAll,
+                tickSound = userPreferences.settings.tickSound,
+                completionSound = userPreferences.settings.completionSound,
+                speakTitle = userPreferences.settings.speakTitle,
             ),
             uiState = UiState(
                 routinesAccordionExpandedId = if (userPreferences.uiState.hasRoutinesAccordionExpandedId()) {
@@ -69,6 +73,46 @@ class UserPreferencesDataSource @Inject constructor(
                 uiStateBuilder.setRoutinesAccordionExpandedId(routinesAccordionExpandedId)
             }
             current.toBuilder().setUiState(uiStateBuilder).build()
+        }
+    }
+
+    suspend fun setMuteAll(muteAll: Boolean) {
+        _userPreferences.updateData { current ->
+            current.copy {
+                this.settings = this.settings.copy {
+                    this.muteAll = muteAll
+                }
+            }
+        }
+    }
+
+    suspend fun setTickSound(tickSound: Boolean) {
+        _userPreferences.updateData { current ->
+            current.copy {
+                this.settings = this.settings.copy {
+                    this.tickSound = tickSound
+                }
+            }
+        }
+    }
+
+    suspend fun setCompletionSound(completionSound: Boolean) {
+        _userPreferences.updateData { current ->
+            current.copy {
+                this.settings = this.settings.copy {
+                    this.completionSound = completionSound
+                }
+            }
+        }
+    }
+
+    suspend fun setSpeakTitle(speakTitle: Boolean) {
+        _userPreferences.updateData { current ->
+            current.copy {
+                this.settings = this.settings.copy {
+                    this.speakTitle = speakTitle
+                }
+            }
         }
     }
 }

@@ -31,4 +31,20 @@ class LocalUserPreferencesRepository @Inject constructor(
     override suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?) {
         dataSource.setRoutinesAccordionExpandedId(routinesAccordionExpandedId)
     }
+
+    override suspend fun setMuteAll(muteAll: Boolean) {
+        dataSource.setMuteAll(muteAll)
+    }
+
+    override suspend fun setTickSound(tickSound: Boolean) {
+        dataSource.setTickSound(tickSound)
+    }
+
+    override suspend fun setCompletionSound(completionSound: Boolean) {
+        dataSource.setCompletionSound(completionSound)
+    }
+
+    override suspend fun setSpeakTitle(speakTitle: Boolean) {
+        dataSource.setSpeakTitle(speakTitle)
+    }
 }

@@ -8,4 +8,8 @@ option java_multiple_files = true;
 message Settings {
   ThemeConfig theme_config = 1;
   bool dynamic_color = 2;
+  bool mute_all = 3;
+  bool tick_sound = 4;
+  bool completion_sound = 5;
+  bool speak_title = 6;
 }
