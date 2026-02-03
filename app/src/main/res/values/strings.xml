@@ -23,6 +23,15 @@
     <string name="settings_dynamic_color_title">Match system colors</string>
     <string name="settings_dynamic_color_description">Apply your system\'s color palette to the app.</string>
 
+    <!-- Global audio settings -->
+    <string name="settings_mute_all_title">Mute all</string>
+    <string name="settings_tick_sound_title">Tick sound</string>
+    <string name="settings_tick_sound_description">Play a ticking sound when the countdown is almost done.</string>
+    <string name="settings_completion_sound_title">Completion sound</string>
+    <string name="settings_completion_sound_description">Play a bell sound when the countdown finishes.</string>
+    <string name="settings_speak_title_title">Speak title</string>
+    <string name="settings_speak_title_description">Read out task titles using text-to-speech.</string>
+
     <!-- =====================
            Timer screen
          ===================== -->

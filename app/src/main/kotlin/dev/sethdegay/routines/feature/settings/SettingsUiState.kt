@@ -8,8 +8,11 @@ sealed interface SettingsUiState {
 
     data class Success(val settings: Settings) : SettingsUiState {
         override val themeConfig: ThemeConfig = settings.themeConfig
-
-        override val useDynamicColor: Boolean = settings.dynamicColor
+        override val dynamicColor: Boolean = settings.dynamicColor
+        override val muteAll: Boolean = settings.muteAll
+        override val tickSound: Boolean = settings.tickSound
+        override val completionSound: Boolean = settings.completionSound
+        override val speakTitle: Boolean = settings.speakTitle
     }
 
     fun showLoadingScreen(): Boolean = this is Loading
@@ -17,6 +20,18 @@ sealed interface SettingsUiState {
     val themeConfig: ThemeConfig
         get() = ThemeConfig.FOLLOW_SYSTEM
 
-    val useDynamicColor: Boolean
+    val dynamicColor: Boolean
         get() = false
+
+    val muteAll: Boolean
+        get() = false
+
+    val tickSound: Boolean
+        get() = true
+
+    val completionSound: Boolean
+        get() = true
+
+    val speakTitle: Boolean
+        get() = true
 }

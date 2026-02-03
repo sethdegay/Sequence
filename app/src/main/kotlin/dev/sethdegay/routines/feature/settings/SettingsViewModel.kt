@@ -35,4 +35,28 @@ class SettingsViewModel @Inject constructor(
             userPreferencesRepository.setDynamicColor(dynamicColor)
         }
     }
+
+    fun setMuteAll(muteAll: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setMuteAll(muteAll)
+        }
+    }
+
+    fun setTickSound(tickSound: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setTickSound(tickSound)
+        }
+    }
+
+    fun setCompletionSound(completionSound: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setCompletionSound(completionSound)
+        }
+    }
+
+    fun setSpeakTitle(speakTitle: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setSpeakTitle(speakTitle)
+        }
+    }
 }

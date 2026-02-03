@@ -23,6 +23,7 @@ import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.routines.core.model.ThemeConfig
+import dev.sethdegay.routines.core.ui.BooleanPreference
 import dev.sethdegay.routines.core.ui.DynamicColorPreference
 import dev.sethdegay.routines.core.ui.ThemePreference
 
@@ -58,6 +59,10 @@ fun SettingsScreen(
                 uiState = uiState,
                 setThemeConfig = viewModel::setThemeConfig,
                 setDynamicColor = viewModel::setDynamicColor,
+                setMuteAll = viewModel::setMuteAll,
+                setTickSound = viewModel::setTickSound,
+                setCompletionSound = viewModel::setCompletionSound,
+                setSpeakTitle = viewModel::setSpeakTitle,
             )
         }
     }
@@ -69,6 +74,10 @@ private fun SettingsScreen(
     uiState: SettingsUiState,
     setThemeConfig: (ThemeConfig) -> Unit,
     setDynamicColor: (Boolean) -> Unit,
+    setMuteAll: (Boolean) -> Unit,
+    setTickSound: (Boolean) -> Unit,
+    setCompletionSound: (Boolean) -> Unit,
+    setSpeakTitle: (Boolean) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -90,8 +99,48 @@ private fun SettingsScreen(
                 item {
                     DynamicColorPreference(
                         modifier = Modifier.padding(4.dp),
-                        checked = uiState.useDynamicColor,
+                        checked = uiState.dynamicColor,
                         onCheckedChange = setDynamicColor,
+                    )
+                }
+            }
+        }
+        item {
+            CardGroup {
+                item {
+                    BooleanPreference(
+                        modifier = Modifier.padding(4.dp),
+                        title = stringResource(string.settings_mute_all_title),
+                        description = null,
+                        checked = uiState.muteAll,
+                        onCheckedChange = setMuteAll,
+                    )
+                }
+                item {
+                    BooleanPreference(
+                        modifier = Modifier.padding(4.dp),
+                        title = stringResource(string.settings_tick_sound_title),
+                        description = stringResource(string.settings_tick_sound_description),
+                        checked = uiState.tickSound,
+                        onCheckedChange = setTickSound,
+                    )
+                }
+                item {
+                    BooleanPreference(
+                        modifier = Modifier.padding(4.dp),
+                        title = stringResource(string.settings_completion_sound_title),
+                        description = stringResource(string.settings_completion_sound_description),
+                        checked = uiState.completionSound,
+                        onCheckedChange = setCompletionSound,
+                    )
+                }
+                item {
+                    BooleanPreference(
+                        modifier = Modifier.padding(4.dp),
+                        title = stringResource(string.settings_speak_title_title),
+                        description = stringResource(string.settings_speak_title_description),
+                        checked = uiState.speakTitle,
+                        onCheckedChange = setSpeakTitle,
                     )
                 }
             }
