@@ -8,7 +8,16 @@ import java.io.OutputStream
 import javax.inject.Inject
 
 class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferences> {
-    override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
+    override val defaultValue: UserPreferences = userPreferences {
+        settings = settings {
+            themeConfig = ThemeConfig.FOLLOW_SYSTEM
+            dynamicColor = false
+            muteAll = false
+            tickSound = true
+            completionSound = true
+            speakTitle = true
+        }
+    }
 
     override suspend fun readFrom(input: InputStream): UserPreferences {
         return try {
