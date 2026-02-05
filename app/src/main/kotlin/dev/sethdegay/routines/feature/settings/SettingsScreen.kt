@@ -121,6 +121,7 @@ private fun SettingsScreen(
                         description = stringResource(string.settings_tick_sound_description),
                         checked = uiState.tickSound,
                         onCheckedChange = setTickSound,
+                        isEnabled = !uiState.muteAll,
                     )
                 }
                 item {
@@ -129,6 +130,7 @@ private fun SettingsScreen(
                         description = stringResource(string.settings_completion_sound_description),
                         checked = uiState.completionSound,
                         onCheckedChange = setCompletionSound,
+                        isEnabled = !uiState.muteAll,
                     )
                 }
                 item {
@@ -137,6 +139,7 @@ private fun SettingsScreen(
                         description = stringResource(string.settings_speak_title_description),
                         checked = uiState.speakTitle,
                         onCheckedChange = setSpeakTitle,
+                        isEnabled = !uiState.muteAll,
                     )
                 }
             }
