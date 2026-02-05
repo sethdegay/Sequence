@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.routines.R.string
 import dev.sethdegay.routines.core.designsystem.component.CardGroup
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
@@ -44,7 +45,7 @@ fun SettingsScreen(
                     Text(text = stringResource(string.settings_top_app_bar_title))
                 },
                 navigationIcon = RoutinesIcons.NavigateUp.asComposableIconButton(
-                    onClick = navigateUp,
+                    onClick = dropUnlessResumed { navigateUp() },
                     contentDescription = stringResource(string.navigate_up_content_description),
                 ),
                 scrollBehavior = scrollBehavior,

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.routines.R.string
 import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
@@ -60,7 +61,7 @@ fun TimerScreen(
                     Text(text = "")
                 },
                 navigationIcon = RoutinesIcons.NavigateUp.asComposableIconButton(
-                    onClick = navigateUp,
+                    onClick = dropUnlessResumed { navigateUp() },
                     contentDescription = stringResource(string.navigate_up_content_description),
                 ),
                 scrollBehavior = scrollBehavior,
