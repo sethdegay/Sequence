@@ -21,11 +21,13 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.routines.R.string
 import dev.sethdegay.routines.core.designsystem.component.CardGroup
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
+import dev.sethdegay.routines.core.designsystem.component.ToggleButtonOption
+import dev.sethdegay.routines.core.designsystem.component.ToggleButtonPosition
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.routines.core.model.ThemeConfig
 import dev.sethdegay.routines.core.ui.BooleanPreference
-import dev.sethdegay.routines.core.ui.ThemePreference
+import dev.sethdegay.routines.core.ui.TogglePreference
 
 @Composable
 fun SettingsScreen(
@@ -90,9 +92,38 @@ private fun SettingsScreen(
         item {
             CardGroup {
                 item {
-                    ThemePreference(
+                    TogglePreference(
+                        title = stringResource(string.settings_theme_title),
+                        description = stringResource(string.settings_theme_description),
+                        options = {
+                            listOf(
+                                ToggleButtonOption(
+                                    label = stringResource(string.settings_system_theme_title),
+                                    iconChecked = RoutinesIcons.SystemChecked,
+                                    iconUnchecked = RoutinesIcons.SystemUnchecked,
+                                    value = ThemeConfig.FOLLOW_SYSTEM,
+                                    onValueChanged = setThemeConfig,
+                                    toggleButtonPosition = ToggleButtonPosition.LEADING,
+                                ),
+                                ToggleButtonOption(
+                                    label = stringResource(string.settings_light_theme_title),
+                                    iconChecked = RoutinesIcons.LightModeChecked,
+                                    iconUnchecked = RoutinesIcons.LightModeUnchecked,
+                                    value = ThemeConfig.LIGHT,
+                                    onValueChanged = setThemeConfig,
+                                    toggleButtonPosition = ToggleButtonPosition.MIDDLE,
+                                ),
+                                ToggleButtonOption(
+                                    label = stringResource(string.settings_dark_theme_title),
+                                    iconChecked = RoutinesIcons.DarkModeChecked,
+                                    iconUnchecked = RoutinesIcons.DarkModeUnchecked,
+                                    value = ThemeConfig.DARK,
+                                    onValueChanged = setThemeConfig,
+                                    toggleButtonPosition = ToggleButtonPosition.TRAILING,
+                                ),
+                            )
+                        },
                         onCheckedRequest = { uiState.themeConfig == it },
-                        onThemeConfigChanged = setThemeConfig,
                     )
                 }
                 item {
