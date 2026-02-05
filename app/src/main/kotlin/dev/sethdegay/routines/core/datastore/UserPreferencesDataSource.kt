@@ -31,11 +31,8 @@ class UserPreferencesDataSource @Inject constructor(
                 speakTitle = userPreferences.settings.speakTitle,
             ),
             uiState = UiState(
-                routinesAccordionExpandedId = if (userPreferences.uiState.hasRoutinesAccordionExpandedId()) {
-                    userPreferences.uiState.routinesAccordionExpandedId
-                } else {
-                    null
-                },
+                routinesAccordionExpandedId = userPreferences.uiState.routinesAccordionExpandedId
+                    .takeIf { userPreferences.uiState.hasRoutinesAccordionExpandedId() && it.isNotEmpty() },
             )
         )
     }
