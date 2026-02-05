@@ -25,7 +25,6 @@ import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.routines.core.model.ThemeConfig
 import dev.sethdegay.routines.core.ui.BooleanPreference
-import dev.sethdegay.routines.core.ui.DynamicColorPreference
 import dev.sethdegay.routines.core.ui.ThemePreference
 
 @Composable
@@ -97,7 +96,9 @@ private fun SettingsScreen(
                     )
                 }
                 item {
-                    DynamicColorPreference(
+                    BooleanPreference(
+                        title = stringResource(string.settings_dynamic_color_title),
+                        description = stringResource(string.settings_dynamic_color_description),
                         checked = uiState.dynamicColor,
                         onCheckedChange = setDynamicColor,
                     )

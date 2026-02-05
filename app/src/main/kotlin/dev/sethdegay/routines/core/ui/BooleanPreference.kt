@@ -9,8 +9,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import dev.sethdegay.routines.R.string
 
 @Composable
 fun BooleanPreference(
@@ -35,20 +33,4 @@ fun BooleanPreference(
             ),
         )
     }
-}
-
-@Composable
-fun DynamicColorPreference(
-    modifier: Modifier = Modifier,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-) {
-    BooleanPreference(
-        modifier = modifier,
-        title = stringResource(string.settings_dynamic_color_title),
-        description = stringResource(string.settings_dynamic_color_description),
-        checked = checked,
-        onCheckedChange = onCheckedChange,
-        icon = null,
-    )
 }
