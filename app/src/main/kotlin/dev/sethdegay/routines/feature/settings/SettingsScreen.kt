@@ -91,14 +91,12 @@ private fun SettingsScreen(
             CardGroup {
                 item {
                     ThemePreference(
-                        modifier = Modifier.padding(4.dp),
                         onCheckedRequest = { uiState.themeConfig == it },
                         onThemeConfigChanged = setThemeConfig,
                     )
                 }
                 item {
                     DynamicColorPreference(
-                        modifier = Modifier.padding(4.dp),
                         checked = uiState.dynamicColor,
                         onCheckedChange = setDynamicColor,
                     )
@@ -109,7 +107,6 @@ private fun SettingsScreen(
             CardGroup {
                 item {
                     BooleanPreference(
-                        modifier = Modifier.padding(4.dp),
                         title = stringResource(string.settings_mute_all_title),
                         description = null,
                         checked = uiState.muteAll,
@@ -118,7 +115,6 @@ private fun SettingsScreen(
                 }
                 item {
                     BooleanPreference(
-                        modifier = Modifier.padding(4.dp),
                         title = stringResource(string.settings_tick_sound_title),
                         description = stringResource(string.settings_tick_sound_description),
                         checked = uiState.tickSound,
@@ -127,7 +123,6 @@ private fun SettingsScreen(
                 }
                 item {
                     BooleanPreference(
-                        modifier = Modifier.padding(4.dp),
                         title = stringResource(string.settings_completion_sound_title),
                         description = stringResource(string.settings_completion_sound_description),
                         checked = uiState.completionSound,
@@ -136,7 +131,6 @@ private fun SettingsScreen(
                 }
                 item {
                     BooleanPreference(
-                        modifier = Modifier.padding(4.dp),
                         title = stringResource(string.settings_speak_title_title),
                         description = stringResource(string.settings_speak_title_description),
                         checked = uiState.speakTitle,
