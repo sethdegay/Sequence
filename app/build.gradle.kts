@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.protobuf)
     alias(libs.plugins.room)
 }
 
@@ -63,26 +62,9 @@ android {
     }
 }
 
-protobuf {
-    protoc {
-        artifact = libs.protobuf.protoc.get().toString()
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                register("java") {
-                    option("lite")
-                }
-                register("kotlin") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
 dependencies {
     implementation(projects.core.model)
+    implementation(projects.core.datastoreProto)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
@@ -118,8 +100,6 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore)
-
-    implementation(libs.protobuf.kotlin.lite)
 
     // Hilt
     implementation(libs.hilt.android)
