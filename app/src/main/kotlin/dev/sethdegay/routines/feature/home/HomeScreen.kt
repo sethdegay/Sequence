@@ -34,12 +34,12 @@ import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.routines.core.model.HeatMapLevel
-import dev.sethdegay.routines.core.model.Routine
-import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.routines.core.ui.AccordionHeader
 import dev.sethdegay.routines.core.ui.CalendarEventsSheet
 import dev.sethdegay.routines.core.ui.HeatMapCalendar
-import dev.sethdegay.routines.core.ui.RoutineAccordionHeader
+import dev.sethdegay.sequence.core.model.HeatMapLevel
+import dev.sethdegay.sequence.core.model.Sequence
+import dev.sethdegay.sequence.core.model.Step
 import java.time.LocalDate
 
 @Composable
@@ -82,7 +82,7 @@ fun HomeScreen(
                 navigateToTimer = navigateToTimer,
                 setRoutinesAccordionExpandedId = { viewModel.setRoutinesAccordionExpandedId(it) },
                 isExpanded = { it == uiState.routinesAccordionExpandedId },
-                routines = uiState.routines,
+                sequences = uiState.sequences,
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
                 heatMapCalendarEnd = uiState.heatMapCalendarEnd,
@@ -106,7 +106,7 @@ private fun HomeScreen(
     navigateToTimer: (String) -> Unit,
     setRoutinesAccordionExpandedId: (String?) -> Unit,
     isExpanded: (String) -> Boolean,
-    routines: List<Routine>,
+    sequences: List<Sequence>,
     heatMapData: Map<LocalDate, HeatMapLevel>,
     heatMapCalendarStart: LocalDate,
     heatMapCalendarEnd: LocalDate,
@@ -128,39 +128,39 @@ private fun HomeScreen(
                 onDateClicked = onDateClicked,
             )
         }
-        items(routines) { routine ->
-            val isExpanded = isExpanded(routine.id)
+        items(sequences) { sequence ->
+            val isExpanded = isExpanded(sequence.id)
             Accordion(
                 isExpanded = isExpanded,
                 header = { contentPadding ->
-                    RoutineAccordionHeader(
+                    AccordionHeader(
                         modifier = Modifier.fillMaxWidth(),
                         isExpanded = isExpanded,
                         onClick = { isExpanded ->
                             setRoutinesAccordionExpandedId(
                                 if (isExpanded) {
-                                    routine.id
+                                    sequence.id
                                 } else {
                                     null
                                 }
                             )
                         },
-                        onLongClick = { navigateToEditor(routine.id) },
-                        onPlayButtonClick = { navigateToTimer(routine.id) },
-                        title = routine.title,
-                        description = routine.description,
-                        totalDuration = routine.totalDuration,
+                        onLongClick = { navigateToEditor(sequence.id) },
+                        onPlayButtonClick = { navigateToTimer(sequence.id) },
+                        title = sequence.title,
+                        description = sequence.description,
+                        totalDuration = sequence.totalDuration,
                         padding = contentPadding,
                     )
                 }
             ) {
-                routine.tasks.forEach { task ->
+                sequence.steps.forEach { step ->
                     item { contentPadding ->
-                        RoutineTask(
+                        SequenceStep(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(contentPadding),
-                            task,
+                            step,
                         )
                     }
                 }
@@ -194,15 +194,15 @@ private fun HomeFab(
 }
 
 @Composable
-private fun RoutineTask(modifier: Modifier, task: Task) {
+private fun SequenceStep(modifier: Modifier, step: Step) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(text = task.title)
+        Text(text = step.title)
         CountdownDisplay(
-            duration = task.duration,
+            duration = step.duration,
             style = MaterialTheme.typography.bodyMedium,
         )
     }

@@ -1,7 +1,7 @@
 package dev.sethdegay.routines.feature.timer
 
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
-import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 
 sealed interface TimerUiState {
@@ -10,7 +10,7 @@ sealed interface TimerUiState {
     data object Finished : TimerUiState
 
     data class Success(
-        val currentTask: Task,
+        val currentStep: Step,
         val remainingTime: Duration,
         val progress: Float,
         val isTimerRunning: Boolean,

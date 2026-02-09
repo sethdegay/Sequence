@@ -108,7 +108,7 @@ private fun TimerScreen(
             amplitudeLevel = uiState.amplitudeLevel,
         )
         Column(modifier = Modifier.align(Alignment.Center)) {
-            Text(text = uiState.currentTask.title)
+            Text(text = uiState.currentStep.title)
             CountdownDisplay(duration = uiState.remainingTime)
         }
         Box(

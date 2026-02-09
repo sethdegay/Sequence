@@ -1,15 +1,15 @@
 package dev.sethdegay.routines.feature.home
 
-import dev.sethdegay.routines.core.model.CalendarEvent
-import dev.sethdegay.routines.core.model.HeatMapLevel
-import dev.sethdegay.routines.core.model.Routine
+import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.HeatMapLevel
+import dev.sethdegay.sequence.core.model.Sequence
 import java.time.LocalDate
 
 sealed interface HomeUiState {
     data object Loading : HomeUiState
 
     data class Success(
-        override val routines: List<Routine>,
+        override val sequences: List<Sequence>,
         override val routinesAccordionExpandedId: String?,
         override val heatMapData: Map<LocalDate, HeatMapLevel>,
         override val heatMapCalendarStart: LocalDate,
@@ -22,7 +22,7 @@ sealed interface HomeUiState {
 
     val heatMapData: Map<LocalDate, HeatMapLevel> get() = emptyMap()
 
-    val routines: List<Routine> get() = emptyList()
+    val sequences: List<Sequence> get() = emptyList()
 
     val routinesAccordionExpandedId: String? get() = null
 

@@ -27,7 +27,7 @@ import dev.sethdegay.routines.core.designsystem.component.CardGroupItem
 import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.sequence.core.model.Step
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
@@ -36,15 +36,15 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun ReorderableCardGroup(
     modifier: Modifier = Modifier,
-    tasks: List<Task>,
-    onTaskOrderChanged: (List<Task>) -> Unit,
-    onTaskClick: (Task) -> Unit,
+    steps: List<Step>,
+    onStepOrderChanged: (List<Step>) -> Unit,
+    onStepClick: (Step) -> Unit,
     headerContent: @Composable LazyItemScope.() -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        onTaskOrderChanged(
-            tasks.toMutableList().apply { add(to.index - 1, removeAt(from.index - 1)) })
+        onStepOrderChanged(
+            steps.toMutableList().apply { add(to.index - 1, removeAt(from.index - 1)) })
     }
     LazyColumn(
         modifier = modifier,
@@ -53,9 +53,9 @@ fun ReorderableCardGroup(
         state = lazyListState,
     ) {
         item(content = headerContent)
-        items(items = tasks, key = { it.id }) { task ->
-            ReorderableItem(reorderableLazyListState, key = task.id) {
-                ReorderableCardGroupItem(task, onTaskClick)
+        items(items = steps, key = { it.id }) { step ->
+            ReorderableItem(reorderableLazyListState, key = step.id) {
+                ReorderableCardGroupItem(step, onStepClick)
             }
         }
     }
@@ -63,13 +63,13 @@ fun ReorderableCardGroup(
 
 @Composable
 internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
-    task: Task,
-    onTaskClick: (Task) -> Unit,
+    step: Step,
+    onStepClick: (Step) -> Unit,
 ) {
     CardGroupItem {
         Row(
             modifier = Modifier
-                .clickable(onClick = { onTaskClick(task) })
+                .clickable(onClick = { onStepClick(step) })
                 .fillMaxWidth()
                 .padding(vertical = 10.dp, horizontal = 0.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -80,9 +80,9 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(modifier = Modifier.padding(start = 16.dp), text = task.title)
+                Text(modifier = Modifier.padding(start = 16.dp), text = step.title)
                 CountdownDisplay(
-                    duration = task.duration,
+                    duration = step.duration,
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
@@ -101,20 +101,20 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
 @Preview(showBackground = true)
 @Composable
 private fun ReorderableCardGroupPreview() {
-    var tasks by remember {
+    var steps by remember {
         mutableStateOf(
             listOf(
-                Task(id = "a", title = "Task A", duration = 30.seconds),
-                Task(id = "b", title = "Task B", duration = 20.seconds),
-                Task(id = "c", title = "Task C", duration = 10.seconds),
+                Step(id = "a", title = "Step 1", duration = 30.seconds),
+                Step(id = "b", title = "Step 2", duration = 20.seconds),
+                Step(id = "c", title = "Step 3", duration = 10.seconds),
             )
         )
     }
     ReorderableCardGroup(
         modifier = Modifier,
-        tasks = tasks,
-        onTaskOrderChanged = { tasks = it },
-        onTaskClick = {},
+        steps = steps,
+        onStepOrderChanged = { steps = it },
+        onStepClick = {},
         headerContent = {},
     )
 }

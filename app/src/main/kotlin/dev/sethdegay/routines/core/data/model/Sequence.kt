@@ -1,9 +1,9 @@
 package dev.sethdegay.routines.core.data.model
 
-import dev.sethdegay.routines.core.database.model.RoutineEntity
-import dev.sethdegay.routines.core.model.Routine
+import dev.sethdegay.routines.core.database.model.SequenceEntity
+import dev.sethdegay.sequence.core.model.Sequence
 
-fun Routine.asEntity(): RoutineEntity = RoutineEntity(
+fun Sequence.asEntity(): SequenceEntity = SequenceEntity(
     id = id,
     title = title,
     description = description,

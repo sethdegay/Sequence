@@ -6,9 +6,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
 import dev.sethdegay.routines.core.data.repository.LocalCalendarEventRepository
-import dev.sethdegay.routines.core.data.repository.LocalRoutineRepository
+import dev.sethdegay.routines.core.data.repository.LocalSequenceRepository
 import dev.sethdegay.routines.core.data.repository.LocalUserPreferencesRepository
-import dev.sethdegay.routines.core.data.repository.RoutineRepository
+import dev.sethdegay.routines.core.data.repository.SequenceRepository
 import dev.sethdegay.routines.core.data.repository.UserPreferencesRepository
 
 @Module
@@ -21,8 +21,8 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindRoutineRepository(
-        routineRepository: LocalRoutineRepository
-    ): RoutineRepository
+        routineRepository: LocalSequenceRepository
+    ): SequenceRepository
 
     @Binds
     abstract fun bindUserPreferencesRepository(

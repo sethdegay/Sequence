@@ -25,9 +25,9 @@ import dev.sethdegay.routines.core.designsystem.component.ToggleButtonOption
 import dev.sethdegay.routines.core.designsystem.component.ToggleButtonPosition
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.routines.core.model.ThemeConfig
 import dev.sethdegay.routines.core.ui.BooleanPreference
 import dev.sethdegay.routines.core.ui.TogglePreference
+import dev.sethdegay.sequence.core.model.ThemeConfig
 
 @Composable
 fun SettingsScreen(

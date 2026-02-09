@@ -4,21 +4,21 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 
 @Entity(
-    tableName = "task",
+    tableName = "step",
     foreignKeys = [
         ForeignKey(
-            entity = RoutineEntity::class,
+            entity = SequenceEntity::class,
             parentColumns = ["id"],
-            childColumns = ["routine_id"],
+            childColumns = ["sequence_id"],
             onDelete = ForeignKey.CASCADE,
         ),
     ],
 )
-data class TaskEntity(
+data class StepEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,
@@ -32,11 +32,11 @@ data class TaskEntity(
     @ColumnInfo(name = "list_order")
     val order: Int = 0,
 
-    @ColumnInfo(name = "routine_id")
-    val routineId: String,
+    @ColumnInfo(name = "sequence_id")
+    val sequenceId: String,
 )
 
-fun TaskEntity.asExternalModel(): Task = Task(
+fun StepEntity.asExternalModel(): Step = Step(
     id = id,
     title = title,
     duration = duration,

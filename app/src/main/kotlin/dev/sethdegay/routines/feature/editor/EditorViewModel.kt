@@ -6,9 +6,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sethdegay.routines.core.data.repository.RoutineRepository
-import dev.sethdegay.routines.core.model.Routine
-import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.routines.core.data.repository.SequenceRepository
+import dev.sethdegay.sequence.core.model.Sequence
+import dev.sethdegay.sequence.core.model.Step
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @HiltViewModel(assistedFactory = EditorViewModel.Factory::class)
 class EditorViewModel @AssistedInject constructor(
     @Assisted private val id: String?,
-    private val routineRepository: RoutineRepository,
+    private val sequenceRepository: SequenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -35,13 +35,13 @@ class EditorViewModel @AssistedInject constructor(
         fun create(id: String?): EditorViewModel
     }
 
-    private val emptyRoutine = with(Clock.System.now()) {
-        Routine(
+    private val emptySequence = with(Clock.System.now()) {
+        Sequence(
             title = "",
             description = "",
             dateCreated = this,
             dateModified = this,
-            tasks = emptyList(),
+            steps = emptyList(),
             totalDuration = Duration.ZERO,
         )
     }
@@ -56,48 +56,48 @@ class EditorViewModel @AssistedInject constructor(
             initialValue = EditorUiState.Loading,
         )
 
-    fun onRoutineTitleSave(title: String) {
-        _editableUiState.update { it?.copy(routine = it.routine.copy(title = title)) }
+    fun onTitleSave(title: String) {
+        _editableUiState.update { it?.copy(sequence = it.sequence.copy(title = title)) }
     }
 
-    fun onRoutineDescriptionSave(description: String) {
-        _editableUiState.update { it?.copy(routine = it.routine.copy(description = description)) }
+    fun onDescriptionSave(description: String) {
+        _editableUiState.update { it?.copy(sequence = it.sequence.copy(description = description)) }
     }
 
-    fun showTaskEditor(task: Task?) {
-        _editableUiState.update { it?.copy(showTaskEditorSheet = true, activeTask = task) }
+    fun showStepEditor(step: Step?) {
+        _editableUiState.update { it?.copy(showStepEditorSheet = true, activeStep = step) }
     }
 
-    fun hideTaskEditor() {
-        _editableUiState.update { it?.copy(showTaskEditorSheet = false, activeTask = null) }
+    fun hideStepEditor() {
+        _editableUiState.update { it?.copy(showStepEditorSheet = false, activeStep = null) }
     }
 
-    fun onTasksSave(tasks: List<Task>) {
+    fun onStepsSave(steps: List<Step>) {
         _editableUiState.update {
             it?.copy(
-                routine = it.routine.copy(
-                    tasks = tasks,
+                sequence = it.sequence.copy(
+                    steps = steps,
                     dateModified = Clock.System.now(),
                 )
             )
         }
     }
 
-    fun onTaskSave(task: Task) {
+    fun onStepSave(step: Step) {
         _editableUiState.update { state ->
             if (state == null) return@update state
-            val updatedTasks = if (state.activeTask == null) {
-                state.routine.tasks + task
+            val updatedSteps = if (state.activeStep == null) {
+                state.sequence.steps + step
             } else {
-                state.routine.tasks.map { if (state.activeTask.id == it.id) task else it }
+                state.sequence.steps.map { if (state.activeStep.id == it.id) step else it }
             }
             EditorUiState.Success(
-                routine = state.routine.copy(
-                    tasks = updatedTasks,
+                sequence = state.sequence.copy(
+                    steps = updatedSteps,
                     dateModified = Clock.System.now(),
                 ),
-                showTaskEditorSheet = false,
-                activeTask = null,
+                showStepEditorSheet = false,
+                activeStep = null,
             )
         }
     }
@@ -106,39 +106,39 @@ class EditorViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _editableUiState.debounce(250.milliseconds)
                 .filterNotNull()
-                .map { it.routine }
+                .map { it.sequence }
                 .distinctUntilChanged()
-                .filter { it != emptyRoutine }
-                .collect { updateAndSaveRoutine(it) }
+                .filter { it != emptySequence }
+                .collect { updateAndSaveSequence(it) }
         }
 
         if (id != null) {
             viewModelScope.launch {
-                _editableUiState.value = EditorUiState.Success(routineRepository.getRoutine(id))
+                _editableUiState.value = EditorUiState.Success(sequenceRepository.getSequence(id))
             }
         } else {
-            _editableUiState.value = EditorUiState.Success(emptyRoutine)
+            _editableUiState.value = EditorUiState.Success(emptySequence)
         }
     }
 
-    private suspend fun updateAndSaveRoutine(routine: Routine) {
-        val reorderedTasks = routine.tasks.mapIndexed { i, task ->
-            task.copy(order = i + 1)
+    private suspend fun updateAndSaveSequence(sequence: Sequence) {
+        val reorderedSteps = sequence.steps.mapIndexed { i, step ->
+            step.copy(order = i + 1)
         }
 
-        val totalDuration = reorderedTasks.fold(Duration.ZERO) { acc, task ->
+        val totalDuration = reorderedSteps.fold(Duration.ZERO) { acc, task ->
             acc + task.duration
         }
 
-        val updatedRoutine = routine.copy(
-            tasks = reorderedTasks,
+        val updatedSequence = sequence.copy(
+            steps = reorderedSteps,
             totalDuration = totalDuration,
         )
 
         _editableUiState.update {
-            it?.copy(routine = updatedRoutine)
+            it?.copy(sequence = updatedSequence)
         }
 
-        routineRepository.saveRoutine(updatedRoutine)
+        sequenceRepository.saveSequence(updatedSequence)
     }
 }

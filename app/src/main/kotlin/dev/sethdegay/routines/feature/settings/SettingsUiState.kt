@@ -1,7 +1,7 @@
 package dev.sethdegay.routines.feature.settings
 
-import dev.sethdegay.routines.core.model.Settings
-import dev.sethdegay.routines.core.model.ThemeConfig
+import dev.sethdegay.sequence.core.model.Settings
+import dev.sethdegay.sequence.core.model.ThemeConfig
 
 sealed interface SettingsUiState {
     data object Loading : SettingsUiState

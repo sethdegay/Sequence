@@ -26,10 +26,10 @@ import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
 import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
 import dev.sethdegay.routines.core.designsystem.util.asComposableIcon
 import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.routines.core.model.Routine
-import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.ui.ReorderableCardGroup
-import dev.sethdegay.routines.core.ui.TaskEditorSheet
+import dev.sethdegay.routines.core.ui.StepEditorSheet
+import dev.sethdegay.sequence.core.model.Sequence
+import dev.sethdegay.sequence.core.model.Step
 
 @Composable
 fun EditorScreen(
@@ -50,7 +50,7 @@ fun EditorScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.showTaskEditor(null) },
+                onClick = { viewModel.showStepEditor(null) },
                 content = RoutinesIcons.Add.asComposableIcon(),
             )
         }
@@ -62,18 +62,18 @@ fun EditorScreen(
                 is EditorUiState.Success -> {
                     EditorScreen(
                         scaffoldPadding = padding,
-                        routine = uiState.routine!!,
-                        onRoutineTitleSave = viewModel::onRoutineTitleSave,
-                        onRoutineDescriptionSave = viewModel::onRoutineDescriptionSave,
-                        onTaskOrderChanged = viewModel::onTasksSave,
-                        onTaskClick = viewModel::showTaskEditor,
+                        sequence = uiState.sequence!!,
+                        onTitleSave = viewModel::onTitleSave,
+                        onDescriptionSave = viewModel::onDescriptionSave,
+                        onStepOrderChanged = viewModel::onStepsSave,
+                        onStepClick = viewModel::showStepEditor,
                     )
 
-                    if (uiState.showTaskEditorSheet) {
-                        TaskEditorSheet(
-                            task = uiState.activeTask,
-                            onTaskSave = viewModel::onTaskSave,
-                            onDismissRequest = viewModel::hideTaskEditor,
+                    if (uiState.showStepEditorSheet) {
+                        StepEditorSheet(
+                            step = uiState.activeStep,
+                            onStepSave = viewModel::onStepSave,
+                            onDismissRequest = viewModel::hideStepEditor,
                         )
                     }
                 }
@@ -90,33 +90,33 @@ fun EditorScreen(
 @Composable
 private fun EditorScreen(
     scaffoldPadding: PaddingValues,
-    routine: Routine,
-    onRoutineTitleSave: (String) -> Unit,
-    onRoutineDescriptionSave: (String) -> Unit,
-    onTaskOrderChanged: (List<Task>) -> Unit,
-    onTaskClick: (Task) -> Unit,
+    sequence: Sequence,
+    onTitleSave: (String) -> Unit,
+    onDescriptionSave: (String) -> Unit,
+    onStepOrderChanged: (List<Step>) -> Unit,
+    onStepClick: (Step) -> Unit,
 ) {
     ReorderableCardGroup(
         modifier = Modifier
             .consumeWindowInsets(scaffoldPadding)
             .padding(scaffoldPadding)
             .fillMaxWidth(),
-        tasks = routine.tasks,
-        onTaskOrderChanged = onTaskOrderChanged,
-        onTaskClick = onTaskClick,
+        steps = sequence.steps,
+        onStepOrderChanged = onStepOrderChanged,
+        onStepClick = onStepClick,
     ) {
         Column {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = routine.title,
-                onValueChange = onRoutineTitleSave,
+                value = sequence.title,
+                onValueChange = onTitleSave,
                 label = { Text("Title") },
                 singleLine = true,
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = routine.description,
-                onValueChange = onRoutineDescriptionSave,
+                value = sequence.description,
+                onValueChange = onDescriptionSave,
                 label = { Text("Description") },
                 singleLine = false,
                 minLines = 3,
@@ -124,7 +124,7 @@ private fun EditorScreen(
             )
             Spacer(Modifier.size(16.dp))
             CountdownDisplay(
-                duration = routine.totalDuration,
+                duration = sequence.totalDuration,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

@@ -1,13 +1,13 @@
 package dev.sethdegay.routines.core.datastore
 
 import androidx.datastore.core.DataStore
-import dev.sethdegay.routines.core.model.Settings
-import dev.sethdegay.routines.core.model.UiState
+import dev.sethdegay.sequence.core.model.Settings
+import dev.sethdegay.sequence.core.model.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import dev.sethdegay.routines.core.model.ThemeConfig as ModelThemeConfig
-import dev.sethdegay.routines.core.model.UserPreferences as ModelUserPreferences
+import dev.sethdegay.sequence.core.model.ThemeConfig as ModelThemeConfig
+import dev.sethdegay.sequence.core.model.UserPreferences as ModelUserPreferences
 
 class UserPreferencesDataSource @Inject constructor(
     private val _userPreferences: DataStore<UserPreferences>,

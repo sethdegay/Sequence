@@ -6,8 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.ViewModelLifecycle
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.timer.SequentialTimer
+import dev.sethdegay.sequence.core.model.Step
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,7 +18,7 @@ import kotlinx.coroutines.cancel
 object TimerModule {
     @Provides
     @ViewModelScoped
-    fun provideSequentialTimer(lifecycle: ViewModelLifecycle): SequentialTimer<Task> {
+    fun provideSequentialTimer(lifecycle: ViewModelLifecycle): SequentialTimer<Step> {
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         lifecycle.addOnClearedListener { scope.cancel() }
         return SequentialTimer(

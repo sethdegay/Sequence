@@ -1,3 +1,3 @@
-package dev.sethdegay.routines.core.model
+package dev.sethdegay.sequence.core.model
 
 enum class HeatMapLevel { Zero, One, Two, Three, Four; }

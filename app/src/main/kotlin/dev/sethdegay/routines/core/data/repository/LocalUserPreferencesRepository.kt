@@ -1,9 +1,9 @@
 package dev.sethdegay.routines.core.data.repository
 
 import dev.sethdegay.routines.core.datastore.UserPreferencesDataSource
-import dev.sethdegay.routines.core.model.Settings
-import dev.sethdegay.routines.core.model.ThemeConfig
-import dev.sethdegay.routines.core.model.UiState
+import dev.sethdegay.sequence.core.model.Settings
+import dev.sethdegay.sequence.core.model.ThemeConfig
+import dev.sethdegay.sequence.core.model.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

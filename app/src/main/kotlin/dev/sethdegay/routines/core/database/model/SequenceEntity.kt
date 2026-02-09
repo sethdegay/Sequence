@@ -3,13 +3,13 @@ package dev.sethdegay.routines.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.sethdegay.routines.core.model.Routine
-import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.sequence.core.model.Sequence
+import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 import kotlin.time.Instant
 
-@Entity(tableName = "routine")
-data class RoutineEntity(
+@Entity(tableName = "sequence")
+data class SequenceEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,
@@ -30,12 +30,12 @@ data class RoutineEntity(
     val totalDuration: Duration,
 )
 
-fun RoutineEntity.asExternalModel(tasks: List<Task>): Routine = Routine(
+fun SequenceEntity.asExternalModel(steps: List<Step>): Sequence = Sequence(
     id = id,
     title = title,
     description = description,
     dateCreated = dateCreated,
     dateModified = dateModified,
-    tasks = tasks,
+    steps = steps,
     totalDuration = totalDuration,
 )

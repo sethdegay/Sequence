@@ -7,9 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.sethdegay.routines.core.database.RoutinesDatabase
+import dev.sethdegay.routines.core.database.SequenceDatabase
 import dev.sethdegay.routines.core.database.dao.CalendarEventDao
-import dev.sethdegay.routines.core.database.dao.RoutineDao
+import dev.sethdegay.routines.core.database.dao.SequenceDao
 import javax.inject.Singleton
 
 @Module
@@ -17,19 +17,19 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides
     @Singleton
-    fun provideRoutinesDatabase(
+    fun provideSequenceDatabase(
         @ApplicationContext context: Context,
-    ): RoutinesDatabase = Room.databaseBuilder(
+    ): SequenceDatabase = Room.databaseBuilder(
         context = context,
-        klass = RoutinesDatabase::class.java,
-        name = "routines.db",
+        klass = SequenceDatabase::class.java,
+        name = "sequence.db",
     ).build()
 
     @Provides
-    fun provideCalendarEventDao(database: RoutinesDatabase): CalendarEventDao =
+    fun provideCalendarEventDao(database: SequenceDatabase): CalendarEventDao =
         database.calendarEventDao()
 
     @Provides
-    fun provideRoutineDao(database: RoutinesDatabase): RoutineDao =
-        database.routineDao()
+    fun provideSequenceDao(database: SequenceDatabase): SequenceDao =
+        database.sequenceDao()
 }

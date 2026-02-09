@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import dev.sethdegay.routines.core.database.model.CalendarEventEntity
-import dev.sethdegay.routines.core.database.model.CalendarEventWithRoutine
+import dev.sethdegay.routines.core.database.model.CalendarEventWithSequence
 import dev.sethdegay.routines.core.database.model.DailyEventCount
 import kotlinx.coroutines.flow.Flow
 import kotlin.time.Instant
@@ -14,7 +14,7 @@ import kotlin.time.Instant
 interface CalendarEventDao {
     @Transaction
     @Query("SELECT * FROM calendar_event WHERE start_timestamp BETWEEN :start AND :end")
-    fun getCalendarEvents(start: Instant, end: Instant): Flow<List<CalendarEventWithRoutine>>
+    fun getCalendarEvents(start: Instant, end: Instant): Flow<List<CalendarEventWithSequence>>
 
     @Query(
         """

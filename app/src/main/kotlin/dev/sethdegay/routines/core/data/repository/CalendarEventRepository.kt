@@ -1,7 +1,7 @@
 package dev.sethdegay.routines.core.data.repository
 
-import dev.sethdegay.routines.core.model.CalendarEvent
-import dev.sethdegay.routines.core.model.HeatMapLevel
+import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.HeatMapLevel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import kotlin.time.Instant

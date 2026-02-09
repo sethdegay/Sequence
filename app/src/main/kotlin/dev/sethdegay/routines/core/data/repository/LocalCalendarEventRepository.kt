@@ -3,8 +3,8 @@ package dev.sethdegay.routines.core.data.repository
 import dev.sethdegay.routines.core.data.model.asEntity
 import dev.sethdegay.routines.core.database.dao.CalendarEventDao
 import dev.sethdegay.routines.core.database.model.asExternalModel
-import dev.sethdegay.routines.core.model.CalendarEvent
-import dev.sethdegay.routines.core.model.HeatMapLevel
+import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.HeatMapLevel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate

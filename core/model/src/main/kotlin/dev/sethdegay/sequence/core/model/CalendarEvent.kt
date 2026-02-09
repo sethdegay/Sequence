@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.model
+package dev.sethdegay.sequence.core.model
 
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -9,5 +9,5 @@ data class CalendarEvent(
     val start: Instant,
     val end: Instant,
     val duration: Duration,
-    val routine: Routine,
+    val sequence: Sequence,
 )

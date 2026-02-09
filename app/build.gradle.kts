@@ -53,7 +53,6 @@ android {
                 "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
                 "kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "kotlinx.coroutines.FlowPreview",
-                "kotlin.uuid.ExperimentalUuidApi",
             )
         }
     }
@@ -83,6 +82,8 @@ protobuf {
 }
 
 dependencies {
+    implementation(projects.core.model)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.datetime)

@@ -60,7 +60,7 @@ private val verticalExitTransition =
             shrinkVertically(animationSpec = subtleInOutTweenSpec(hiddenItemAnimationDuration))
 
 @Composable
-fun RoutineAccordionHeader(
+fun AccordionHeader(
     modifier: Modifier = Modifier,
     isExpanded: Boolean,
     onClick: (Boolean) -> Unit,
@@ -128,9 +128,9 @@ fun RoutineAccordionHeader(
 
 @Preview(showBackground = true)
 @Composable
-private fun RoutineAccordionHeaderPreview() {
+private fun AccordionHeaderPreview() {
     val (isExpanded, setExpanded) = remember { mutableStateOf(true) }
-    RoutineAccordionHeader(
+    AccordionHeader(
         modifier = Modifier.fillMaxWidth(),
         isExpanded = isExpanded,
         onClick = { setExpanded(!isExpanded) },

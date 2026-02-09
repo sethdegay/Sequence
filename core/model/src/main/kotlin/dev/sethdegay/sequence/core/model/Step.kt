@@ -1,9 +1,9 @@
-package dev.sethdegay.routines.core.model
+package dev.sethdegay.sequence.core.model
 
 import kotlin.time.Duration
 import kotlin.uuid.Uuid
 
-data class Task(
+data class Step(
     val id: String = Uuid.random().toHexDashString(),
     val title: String,
     val duration: Duration,

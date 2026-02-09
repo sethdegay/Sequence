@@ -31,7 +31,7 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.yearMonth
 import dev.sethdegay.routines.R.string
-import dev.sethdegay.routines.core.model.HeatMapLevel
+import dev.sethdegay.sequence.core.model.HeatMapLevel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle

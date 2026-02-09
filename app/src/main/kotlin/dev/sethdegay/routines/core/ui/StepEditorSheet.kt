@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.sethdegay.routines.core.model.Task
+import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -28,8 +28,8 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @Stable
-private class TaskEditorState(private val initialTask: Task?) {
-    val titleState = TextFieldState(initialText = initialTask?.title ?: "")
+private class StepEditorState(private val initialStep: Step?) {
+    val titleState = TextFieldState(initialText = initialStep?.title ?: "")
 
     var daysInput by mutableStateOf("0")
     var hoursInput by mutableStateOf("0")
@@ -37,7 +37,7 @@ private class TaskEditorState(private val initialTask: Task?) {
     var secondsInput by mutableStateOf("0")
 
     init {
-        initialTask?.duration?.toComponents { days, hours, minutes, seconds, _ ->
+        initialStep?.duration?.toComponents { days, hours, minutes, seconds, _ ->
             daysInput = days.toString()
             hoursInput = hours.toString()
             minutesInput = minutes.toString()
@@ -45,20 +45,20 @@ private class TaskEditorState(private val initialTask: Task?) {
         }
     }
 
-    fun toTask(): Task {
+    fun toStep(): Step {
         val newDuration = calculateDuration()
         val newTitle = titleState.text.toString()
 
-        return initialTask?.copy(
+        return initialStep?.copy(
             title = newTitle,
-            duration = newDuration
-        ) ?: Task(
+            duration = newDuration,
+        ) ?: Step(
             title = newTitle,
-            duration = newDuration
+            duration = newDuration,
         )
     }
 
-    fun isEmpty(): Boolean = initialTask == null &&
+    fun isEmpty(): Boolean = initialStep == null &&
             titleState.text.isEmpty() &&
             daysInput == "0" &&
             hoursInput == "0" &&
@@ -76,44 +76,44 @@ private class TaskEditorState(private val initialTask: Task?) {
 }
 
 private fun handleOnDismissRequest(
-    state: TaskEditorState,
-    task: Task?,
-    onTaskSave: (Task) -> Unit,
+    state: StepEditorState,
+    step: Step?,
+    onStepSave: (Step) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     if (state.isEmpty()) {
         onDismissRequest()
         return
     }
-    when (val updatedTask = state.toTask()) {
-        task -> onDismissRequest()
-        else -> onTaskSave(updatedTask)
+    when (val updatedStep = state.toStep()) {
+        step -> onDismissRequest()
+        else -> onStepSave(updatedStep)
     }
 }
 
 @Composable
-fun TaskEditorSheet(
-    task: Task?,
-    onTaskSave: (Task) -> Unit,
+fun StepEditorSheet(
+    step: Step?,
+    onStepSave: (Step) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val state = remember(task) { TaskEditorState(task) }
+    val state = remember(step) { StepEditorState(step) }
     ModalBottomSheet(
         onDismissRequest = {
             handleOnDismissRequest(
                 state = state,
-                task = task,
-                onTaskSave = onTaskSave,
+                step = step,
+                onStepSave = onStepSave,
                 onDismissRequest = onDismissRequest,
             )
         },
     ) {
-        TaskEditorSheetContent(state)
+        StepEditorSheetContent(state)
     }
 }
 
 @Composable
-private fun TaskEditorSheetContent(state: TaskEditorState) {
+private fun StepEditorSheetContent(state: StepEditorState) {
     Column(
         modifier = Modifier.padding(
             start = 16.dp,
@@ -207,15 +207,15 @@ private fun TimeInputField(
 
 @Preview
 @Composable
-private fun TaskEditorPreview() {
-    TaskEditorSheet(
-        task = Task(
+private fun StepEditorPreview() {
+    StepEditorSheet(
+        step = Step(
             id = "",
-            title = "Task A",
+            title = "Step 1",
             duration = 30.days + 4.hours + 58.minutes + 15.seconds,
             order = 0,
         ),
-        onTaskSave = {},
+        onStepSave = {},
         onDismissRequest = {},
     )
 }

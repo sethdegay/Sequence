@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
-import dev.sethdegay.routines.core.data.repository.RoutineRepository
+import dev.sethdegay.routines.core.data.repository.SequenceRepository
 import dev.sethdegay.routines.core.data.repository.UserPreferencesRepository
-import dev.sethdegay.routines.core.model.CalendarEvent
-import dev.sethdegay.routines.core.model.HeatMapLevel
+import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.HeatMapLevel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,7 +35,7 @@ import java.time.LocalDate as JavaLocalDate
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    routineRepository: RoutineRepository,
+    sequenceRepository: SequenceRepository,
     calendarEventRepository: CalendarEventRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
@@ -67,7 +67,7 @@ class HomeViewModel @Inject constructor(
         }
 
     val uiState: StateFlow<HomeUiState> = combine(
-        routineRepository.getRoutines(),
+        sequenceRepository.getSequences(),
         userPreferencesRepository.uiState,
         calendarEventRepository.getHeatMapData(
             start = firstDayOfTheYear,
@@ -77,7 +77,7 @@ class HomeViewModel @Inject constructor(
         activeCalendarEvents,
     ) { routines, uiState, heatMapData, showCalendarEventsSheet, activeCalendarEvents ->
         HomeUiState.Success(
-            routines = routines,
+            sequences = routines,
             routinesAccordionExpandedId = uiState.routinesAccordionExpandedId,
             heatMapData = heatMapData,
             heatMapCalendarStart = heatMapCalendarStart,

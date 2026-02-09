@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.routines.core.designsystem.component.DurationDisplay
-import dev.sethdegay.routines.core.model.CalendarEvent
-import dev.sethdegay.routines.core.model.Routine
+import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.Sequence
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -79,7 +79,7 @@ private fun CalendarEventsSheetContent(calendarEvents: List<CalendarEvent>?) {
                 )
             }
             Text(
-                text = calendarEvent.routine.title,
+                text = calendarEvent.sequence.title,
                 style = MaterialTheme.typography.bodyMediumEmphasized,
             )
         }
@@ -106,12 +106,12 @@ private fun CalendarEventsSheetPreview() {
                 start = Clock.System.now().minus(10.minutes),
                 end = Clock.System.now(),
                 duration = 10.minutes,
-                routine = Routine(
-                    title = "Routine A",
-                    description = "This is a routine",
+                sequence = Sequence(
+                    title = "Sequence A",
+                    description = "This is a sequence",
                     dateCreated = Clock.System.now(),
                     dateModified = Clock.System.now(),
-                    tasks = emptyList(),
+                    steps = emptyList(),
                     totalDuration = Duration.ZERO,
                 )
             ),
@@ -119,12 +119,12 @@ private fun CalendarEventsSheetPreview() {
                 start = Clock.System.now().minus(5.minutes + 40.seconds),
                 end = Clock.System.now(),
                 duration = 5.minutes + 40.seconds,
-                routine = Routine(
-                    title = "Routine B",
-                    description = "This is another routine",
+                sequence = Sequence(
+                    title = "Sequence B",
+                    description = "This is another sequence",
                     dateCreated = Clock.System.now(),
                     dateModified = Clock.System.now(),
-                    tasks = emptyList(),
+                    steps = emptyList(),
                     totalDuration = Duration.ZERO,
                 )
             ),

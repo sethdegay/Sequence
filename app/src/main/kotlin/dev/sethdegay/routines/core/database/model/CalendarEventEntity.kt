@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import dev.sethdegay.routines.core.model.CalendarEvent
-import dev.sethdegay.routines.core.model.Routine
+import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.Sequence
 import kotlin.time.Duration
 import kotlin.time.Instant
 
@@ -13,9 +13,9 @@ import kotlin.time.Instant
     tableName = "calendar_event",
     foreignKeys = [
         ForeignKey(
-            entity = RoutineEntity::class,
+            entity = SequenceEntity::class,
             parentColumns = ["id"],
-            childColumns = ["routine_id"],
+            childColumns = ["sequence_id"],
             onDelete = ForeignKey.CASCADE,
         ),
     ],
@@ -34,14 +34,14 @@ data class CalendarEventEntity(
     @ColumnInfo(name = "duration")
     val duration: Duration,
 
-    @ColumnInfo(name = "routine_id")
-    val routineId: String,
+    @ColumnInfo(name = "sequence_id")
+    val sequenceId: String,
 )
 
-fun CalendarEventEntity.asExternalModel(routine: Routine): CalendarEvent = CalendarEvent(
+fun CalendarEventEntity.asExternalModel(sequence: Sequence): CalendarEvent = CalendarEvent(
     id = id,
     start = start,
     end = end,
     duration = duration,
-    routine = routine,
+    sequence = sequence,
 )

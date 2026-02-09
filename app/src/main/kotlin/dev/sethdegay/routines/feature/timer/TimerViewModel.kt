@@ -7,14 +7,14 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
-import dev.sethdegay.routines.core.data.repository.RoutineRepository
+import dev.sethdegay.routines.core.data.repository.SequenceRepository
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
-import dev.sethdegay.routines.core.model.CalendarEvent
-import dev.sethdegay.routines.core.model.Routine
-import dev.sethdegay.routines.core.model.Task
 import dev.sethdegay.routines.core.timer.SequentialTimer
 import dev.sethdegay.routines.core.timer.SequentialTimerState
+import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.Sequence
+import dev.sethdegay.sequence.core.model.Step
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,8 +31,8 @@ import kotlin.time.Instant
 @HiltViewModel(assistedFactory = TimerViewModel.Factory::class)
 class TimerViewModel @AssistedInject constructor(
     @Assisted private val id: String,
-    private val timer: SequentialTimer<Task>,
-    private val routineRepository: RoutineRepository,
+    private val timer: SequentialTimer<Step>,
+    private val sequenceRepository: SequenceRepository,
     private val calendarEventRepository: CalendarEventRepository,
 ) : ViewModel(), TimerControlsActions {
 
@@ -41,7 +41,7 @@ class TimerViewModel @AssistedInject constructor(
         fun create(id: String): TimerViewModel
     }
 
-    private lateinit var routine: Routine
+    private lateinit var sequence: Sequence
     private lateinit var start: Instant
     private lateinit var saveCalendarEventJob: Job
 
@@ -56,7 +56,7 @@ class TimerViewModel @AssistedInject constructor(
             }
         }
         viewModelScope.launch {
-            timer.start(routineRepository.getRoutine(id).also { routine = it }.tasks)
+            timer.start(sequenceRepository.getSequence(id).also { sequence = it }.steps)
             start = Clock.System.now()
         }
     }
@@ -82,28 +82,28 @@ class TimerViewModel @AssistedInject constructor(
             return TimerUiState.Loading
         }
 
-        val (tasks, index, time, accumulatedDuration) =
+        val (steps, index, time, accumulatedDuration) =
             @Suppress("UNCHECKED_CAST")
             when (this) {
                 is SequentialTimerState.Running<*> -> SequentialTimerStateData(
-                    items as List<Task>,
+                    items as List<Step>,
                     currentItemIndex,
                     timeLeft,
                     accumulatedDuration,
                 )
 
                 is SequentialTimerState.Paused<*> -> SequentialTimerStateData(
-                    items as List<Task>,
+                    items as List<Step>,
                     currentItemIndex,
                     timeLeft,
                     accumulatedDuration,
                 )
             }
 
-        val currentTask = tasks[index]
+        val currentStep = steps[index]
 
-        val progress = if (routine.totalDuration > Duration.ZERO) {
-            (accumulatedDuration / routine.totalDuration).toFloat()
+        val progress = if (sequence.totalDuration > Duration.ZERO) {
+            (accumulatedDuration / sequence.totalDuration).toFloat()
         } else {
             1.0f
         }
@@ -111,11 +111,11 @@ class TimerViewModel @AssistedInject constructor(
         val isTimerRunning = this is SequentialTimerState.Running<*>
 
         return TimerUiState.Success(
-            currentTask = currentTask,
+            currentStep = currentStep,
             remainingTime = time,
             isTimerRunning = isTimerRunning,
             canMovePrevious = index > 0,
-            canMoveNext = index < tasks.lastIndex,
+            canMoveNext = index < steps.lastIndex,
             progress = progress,
             amplitudeLevel = if (isTimerRunning) {
                 ProgressIndicatorAmplitudeLevel.MAXIMUM
@@ -134,7 +134,7 @@ class TimerViewModel @AssistedInject constructor(
             start = start,
             end = now,
             duration = now - start,
-            routine = routine,
+            sequence = sequence,
         )
         saveCalendarEventJob = viewModelScope.launch {
             try {
@@ -158,7 +158,7 @@ class TimerViewModel @AssistedInject constructor(
 }
 
 private data class SequentialTimerStateData(
-    val items: List<Task>,
+    val items: List<Step>,
     val currentItemIndex: Int,
     val timeLeft: Duration,
     val accumulatedDuration: Duration,

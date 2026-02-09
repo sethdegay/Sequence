@@ -4,10 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.sethdegay.routines.core.database.dao.CalendarEventDao
-import dev.sethdegay.routines.core.database.dao.RoutineDao
+import dev.sethdegay.routines.core.database.dao.SequenceDao
 import dev.sethdegay.routines.core.database.model.CalendarEventEntity
-import dev.sethdegay.routines.core.database.model.RoutineEntity
-import dev.sethdegay.routines.core.database.model.TaskEntity
+import dev.sethdegay.routines.core.database.model.SequenceEntity
+import dev.sethdegay.routines.core.database.model.StepEntity
 import dev.sethdegay.routines.core.database.util.DurationConverter
 import dev.sethdegay.routines.core.database.util.InstantConverter
 import dev.sethdegay.routines.core.database.util.LocalDateConverter
@@ -15,8 +15,8 @@ import dev.sethdegay.routines.core.database.util.LocalDateConverter
 @Database(
     entities = [
         CalendarEventEntity::class,
-        TaskEntity::class,
-        RoutineEntity::class,
+        SequenceEntity::class,
+        StepEntity::class,
     ],
     version = 1,
     exportSchema = true,
@@ -28,7 +28,7 @@ import dev.sethdegay.routines.core.database.util.LocalDateConverter
         LocalDateConverter::class,
     ],
 )
-abstract class RoutinesDatabase : RoomDatabase() {
+abstract class SequenceDatabase : RoomDatabase() {
     abstract fun calendarEventDao(): CalendarEventDao
-    abstract fun routineDao(): RoutineDao
+    abstract fun sequenceDao(): SequenceDao
 }
