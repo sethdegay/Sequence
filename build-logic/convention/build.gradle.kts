@@ -35,5 +35,9 @@ gradlePlugin {
             id = libs.plugins.sequence.core.get().pluginId
             implementationClass = "SequenceCoreConventionPlugin"
         }
+        register("sequenceJvm") {
+            id = libs.plugins.sequence.jvm.get().pluginId
+            implementationClass = "SequenceJvmConventionPlugin"
+        }
     }
 }
