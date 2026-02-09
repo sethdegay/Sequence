@@ -64,6 +64,10 @@ protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref 
 reorderable = { group = "sh.calvin.reorderable", name = "reorderable", version.ref = "reorderable" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
+# build-logic dependencies
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
@@ -72,3 +76,6 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-gradle-plugin" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
+
+# build-logic plugins
+sequence-core = { id = "sequence.core" }
