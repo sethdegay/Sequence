@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.datastore
+package dev.sethdegay.sequence.core.datastore
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer

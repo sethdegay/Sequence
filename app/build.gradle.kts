@@ -61,7 +61,7 @@ room {
 
 dependencies {
     implementation(projects.core.model)
-    implementation(projects.core.datastoreProto)
+    implementation(projects.core.datastore)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
@@ -94,9 +94,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.kotlinx.coroutines.test)
-
-    // DataStore
-    implementation(libs.androidx.datastore)
 
     // Hilt
     implementation(libs.androidx.hilt.navigation.compose)

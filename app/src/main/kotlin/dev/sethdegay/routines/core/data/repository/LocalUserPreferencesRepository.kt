@@ -1,6 +1,6 @@
 package dev.sethdegay.routines.core.data.repository
 
-import dev.sethdegay.routines.core.datastore.UserPreferencesDataSource
+import dev.sethdegay.sequence.core.datastore.UserPreferencesDataSource
 import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.ThemeConfig
 import dev.sethdegay.sequence.core.model.UiState

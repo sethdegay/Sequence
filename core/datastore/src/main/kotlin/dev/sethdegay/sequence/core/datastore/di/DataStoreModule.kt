@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.di
+package dev.sethdegay.sequence.core.datastore.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -9,14 +9,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.sethdegay.routines.core.datastore.UserPreferences
-import dev.sethdegay.routines.core.datastore.UserPreferencesSerializer
+import dev.sethdegay.sequence.core.datastore.UserPreferences
+import dev.sethdegay.sequence.core.datastore.UserPreferencesSerializer
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
-
     @Provides
     @Singleton
     fun provideUserPreferencesDataStore(
