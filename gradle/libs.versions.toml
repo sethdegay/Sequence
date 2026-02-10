@@ -79,5 +79,5 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobuf-gradle-plugin" 
 room = { id = "androidx.room", version.ref = "androidx-room" }
 
 # build-logic plugins
-sequence-core = { id = "sequence.core" }
 sequence-jvm = { id = "sequence.jvm" }
+sequence-library = { id = "sequence.library" }

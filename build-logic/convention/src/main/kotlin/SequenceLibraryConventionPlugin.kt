@@ -5,7 +5,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
-class SequenceCoreConventionPlugin : Plugin<Project> {
+class SequenceLibraryConventionPlugin : Plugin<Project> {
 
     companion object {
         private const val COMPILE_SDK = SdkVersions.CORE_COMPILE_SDK

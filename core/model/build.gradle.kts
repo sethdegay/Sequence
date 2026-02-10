@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.sequence.core)
+    alias(libs.plugins.sequence.library)
 }
 
 android {

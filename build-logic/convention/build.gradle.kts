@@ -31,13 +31,13 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("sequenceCore") {
-            id = libs.plugins.sequence.core.get().pluginId
-            implementationClass = "SequenceCoreConventionPlugin"
-        }
         register("sequenceJvm") {
             id = libs.plugins.sequence.jvm.get().pluginId
             implementationClass = "SequenceJvmConventionPlugin"
+        }
+        register("sequenceLibrary") {
+            id = libs.plugins.sequence.library.get().pluginId
+            implementationClass = "SequenceLibraryConventionPlugin"
         }
     }
 }
