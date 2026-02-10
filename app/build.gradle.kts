@@ -2,9 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.room)
+    alias(libs.plugins.sequence.hilt)
 }
 
 android {
@@ -99,9 +99,6 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Navigation3

@@ -31,6 +31,10 @@ tasks {
 
 gradlePlugin {
     plugins {
+        register("sequenceHilt") {
+            id = libs.plugins.sequence.hilt.get().pluginId
+            implementationClass = "SequenceHiltConventionPlugin"
+        }
         register("sequenceJvm") {
             id = libs.plugins.sequence.jvm.get().pluginId
             implementationClass = "SequenceJvmConventionPlugin"
