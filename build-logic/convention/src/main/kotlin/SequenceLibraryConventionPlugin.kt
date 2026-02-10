@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.LibraryExtension
 import dev.sethdegay.buildlogic.SdkVersions
+import dev.sethdegay.buildlogic.pluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -24,7 +25,7 @@ class SequenceLibraryConventionPlugin : Plugin<Project> {
 
     private fun applyPlugins(project: Project) {
         project.apply {
-            plugin("com.android.library")
+            plugin(project.pluginId("android-library"))
         }
     }
 

@@ -1,4 +1,5 @@
 import dev.sethdegay.buildlogic.SdkVersions
+import dev.sethdegay.buildlogic.pluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -20,7 +21,7 @@ class SequenceJvmConventionPlugin : Plugin<Project> {
 
     private fun applyPlugins(project: Project) {
         project.apply {
-            plugin("org.jetbrains.kotlin.jvm")
+            plugin(project.pluginId("kotlin-jvm"))
         }
     }
 
