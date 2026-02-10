@@ -1,6 +1,6 @@
-package dev.sethdegay.routines.core.data.repository
+package dev.sethdegay.sequence.core.data.repository
 
-import dev.sethdegay.routines.core.data.model.asEntity
+import dev.sethdegay.sequence.core.data.model.asEntity
 import dev.sethdegay.sequence.core.database.dao.SequenceDao
 import dev.sethdegay.sequence.core.database.model.asExternalModel
 import dev.sethdegay.sequence.core.model.Sequence
@@ -15,7 +15,7 @@ class LocalSequenceRepository @Inject constructor(
         sequenceDao.getSequence(id).asExternalModel()
 
     override fun getSequences(): Flow<List<Sequence>> = sequenceDao.getSequences()
-        .map { routines -> routines.map { it.asExternalModel() } }
+        .map { sequences -> sequences.map { it.asExternalModel() } }
 
     override suspend fun saveSequence(sequence: Sequence) {
         sequenceDao.upsertSequenceWithSteps(

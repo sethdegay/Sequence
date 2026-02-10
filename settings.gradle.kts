@@ -24,6 +24,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "Routines"
 include(":app")
+include(":core:data")
 include(":core:database")
 include(":core:datastore")
 include(":core:datastore-proto")

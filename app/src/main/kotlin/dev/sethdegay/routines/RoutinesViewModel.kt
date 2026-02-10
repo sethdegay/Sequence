@@ -3,7 +3,7 @@ package dev.sethdegay.routines
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sethdegay.routines.core.data.repository.UserPreferencesRepository
+import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

@@ -1,6 +1,6 @@
-package dev.sethdegay.routines.core.data.repository
+package dev.sethdegay.sequence.core.data.repository
 
-import dev.sethdegay.routines.core.data.model.asEntity
+import dev.sethdegay.sequence.core.data.model.asEntity
 import dev.sethdegay.sequence.core.database.dao.CalendarEventDao
 import dev.sethdegay.sequence.core.database.model.asExternalModel
 import dev.sethdegay.sequence.core.model.CalendarEvent

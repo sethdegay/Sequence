@@ -54,8 +54,7 @@ kotlin {
 
 dependencies {
     implementation(projects.core.model)
-    implementation(projects.core.database)
-    implementation(projects.core.datastore)
+    implementation(projects.core.data)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)

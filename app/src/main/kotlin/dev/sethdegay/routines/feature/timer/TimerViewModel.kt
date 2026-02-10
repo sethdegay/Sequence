@@ -6,12 +6,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
-import dev.sethdegay.routines.core.data.repository.SequenceRepository
 import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
 import dev.sethdegay.routines.core.timer.SequentialTimer
 import dev.sethdegay.routines.core.timer.SequentialTimerState
+import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
+import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Step

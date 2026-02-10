@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.data.model
+package dev.sethdegay.sequence.core.data.model
 
 import dev.sethdegay.sequence.core.database.model.StepEntity
 import dev.sethdegay.sequence.core.model.Step

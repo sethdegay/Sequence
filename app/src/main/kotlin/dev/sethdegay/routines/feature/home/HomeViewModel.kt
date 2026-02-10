@@ -3,9 +3,9 @@ package dev.sethdegay.routines.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sethdegay.routines.core.data.repository.CalendarEventRepository
-import dev.sethdegay.routines.core.data.repository.SequenceRepository
-import dev.sethdegay.routines.core.data.repository.UserPreferencesRepository
+import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
+import dev.sethdegay.sequence.core.data.repository.SequenceRepository
+import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.HeatMapLevel
 import kotlinx.coroutines.flow.Flow

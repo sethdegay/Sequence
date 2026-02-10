@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.data.repository
+package dev.sethdegay.sequence.core.data.repository
 
 import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.ThemeConfig
