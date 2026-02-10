@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.di
+package dev.sethdegay.sequence.core.timer.di
 
 import dagger.Module
 import dagger.Provides
@@ -6,8 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.ViewModelLifecycle
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import dev.sethdegay.routines.core.timer.SequentialTimer
 import dev.sethdegay.sequence.core.model.Step
+import dev.sethdegay.sequence.core.timer.SequentialTimer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

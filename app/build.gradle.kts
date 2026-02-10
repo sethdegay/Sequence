@@ -55,6 +55,7 @@ kotlin {
 dependencies {
     implementation(projects.core.model)
     implementation(projects.core.data)
+    implementation(projects.core.timer)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
@@ -65,7 +66,6 @@ dependencies {
     implementation(libs.reorderable)
 
     testImplementation(libs.junit)
-    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
 

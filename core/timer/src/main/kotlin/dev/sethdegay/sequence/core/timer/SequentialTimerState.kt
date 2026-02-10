@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.timer
+package dev.sethdegay.sequence.core.timer
 
 import kotlin.time.Duration
 

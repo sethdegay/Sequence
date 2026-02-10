@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.timer
+package dev.sethdegay.sequence.core.timer
 
 import app.cash.turbine.test
 import kotlinx.coroutines.Dispatchers
