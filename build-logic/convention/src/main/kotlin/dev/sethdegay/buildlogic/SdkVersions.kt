@@ -11,6 +11,6 @@ object SdkVersions {
     const val APP_COMPILE_SDK = 36
     const val APP_MIN_SDK = 31
 
-    const val CORE_COMPILE_SDK = APP_COMPILE_SDK
-    const val CORE_MIN_SDK = APP_MIN_SDK
+    const val LIBRARY_COMPILE_SDK = APP_COMPILE_SDK
+    const val LIBRARY_MIN_SDK = APP_MIN_SDK
 }

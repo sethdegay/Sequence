@@ -9,8 +9,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 class SequenceLibraryConventionPlugin : Plugin<Project> {
 
     companion object {
-        private const val COMPILE_SDK = SdkVersions.CORE_COMPILE_SDK
-        private const val MIN_SDK = SdkVersions.CORE_MIN_SDK
+        private const val COMPILE_SDK = SdkVersions.LIBRARY_COMPILE_SDK
+        private const val MIN_SDK = SdkVersions.LIBRARY_MIN_SDK
 
         private val SOURCE_COMPATIBILITY = SdkVersions.PROJECT_SOURCE_COMPATIBILITY
         private val TARGET_COMPATIBILITY = SdkVersions.PROJECT_TARGET_COMPATIBILITY
