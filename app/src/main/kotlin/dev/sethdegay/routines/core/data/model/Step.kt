@@ -1,6 +1,6 @@
 package dev.sethdegay.routines.core.data.model
 
-import dev.sethdegay.routines.core.database.model.StepEntity
+import dev.sethdegay.sequence.core.database.model.StepEntity
 import dev.sethdegay.sequence.core.model.Step
 
 fun Step.asEntity(sequenceId: String): StepEntity = StepEntity(

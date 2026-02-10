@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.database.util
+package dev.sethdegay.sequence.core.database.util
 
 import androidx.room.TypeConverter
 import kotlinx.datetime.LocalDate

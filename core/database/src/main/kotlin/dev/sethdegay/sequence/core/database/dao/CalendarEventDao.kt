@@ -1,12 +1,12 @@
-package dev.sethdegay.routines.core.database.dao
+package dev.sethdegay.sequence.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import dev.sethdegay.routines.core.database.model.CalendarEventEntity
-import dev.sethdegay.routines.core.database.model.CalendarEventWithSequence
-import dev.sethdegay.routines.core.database.model.DailyEventCount
+import dev.sethdegay.sequence.core.database.model.CalendarEventEntity
+import dev.sethdegay.sequence.core.database.model.CalendarEventWithSequence
+import dev.sethdegay.sequence.core.database.model.DailyEventCount
 import kotlinx.coroutines.flow.Flow
 import kotlin.time.Instant
 

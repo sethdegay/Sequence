@@ -1,13 +1,13 @@
-package dev.sethdegay.routines.core.database.dao
+package dev.sethdegay.sequence.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import dev.sethdegay.routines.core.database.model.SequenceEntity
-import dev.sethdegay.routines.core.database.model.SequenceWithSteps
-import dev.sethdegay.routines.core.database.model.StepEntity
+import dev.sethdegay.sequence.core.database.model.SequenceEntity
+import dev.sethdegay.sequence.core.database.model.SequenceWithSteps
+import dev.sethdegay.sequence.core.database.model.StepEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -28,11 +28,11 @@ interface SequenceDao {
     @Query("SELECT * FROM step WHERE sequence_id = :id ORDER BY list_order ASC")
     suspend fun _getSequenceSteps(id: String): List<StepEntity>
 
-    fun getSequences(): Flow<List<SequenceWithSteps>> = _getSequences().map { routineEntities ->
-        routineEntities.map { routineEntity ->
+    fun getSequences(): Flow<List<SequenceWithSteps>> = _getSequences().map { entities ->
+        entities.map { entity ->
             SequenceWithSteps(
-                sequenceEntity = routineEntity,
-                stepEntities = _getSequenceSteps(routineEntity.id),
+                sequenceEntity = entity,
+                stepEntities = _getSequenceSteps(entity.id),
             )
         }
     }

@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sequence.hilt)
-    alias(libs.plugins.sequence.room)
 }
 
 android {
@@ -55,6 +54,7 @@ kotlin {
 
 dependencies {
     implementation(projects.core.model)
+    implementation(projects.core.database)
     implementation(projects.core.datastore)
 
     implementation(libs.androidx.core.ktx)

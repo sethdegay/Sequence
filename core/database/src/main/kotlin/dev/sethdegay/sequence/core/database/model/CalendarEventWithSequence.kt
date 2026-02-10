@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.database.model
+package dev.sethdegay.sequence.core.database.model
 
 import androidx.room.Embedded
 import androidx.room.Relation

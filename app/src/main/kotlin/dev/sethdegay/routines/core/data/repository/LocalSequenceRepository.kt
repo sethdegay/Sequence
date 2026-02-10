@@ -1,8 +1,8 @@
 package dev.sethdegay.routines.core.data.repository
 
 import dev.sethdegay.routines.core.data.model.asEntity
-import dev.sethdegay.routines.core.database.dao.SequenceDao
-import dev.sethdegay.routines.core.database.model.asExternalModel
+import dev.sethdegay.sequence.core.database.dao.SequenceDao
+import dev.sethdegay.sequence.core.database.model.asExternalModel
 import dev.sethdegay.sequence.core.model.Sequence
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
