@@ -66,6 +66,8 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine
 # build-logic dependencies
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -82,3 +84,4 @@ room = { id = "androidx.room", version.ref = "androidx-room" }
 sequence-hilt = { id = "sequence.hilt" }
 sequence-jvm = { id = "sequence.jvm" }
 sequence-library = { id = "sequence.library" }
+sequence-room = { id = "sequence.room" }

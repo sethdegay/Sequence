@@ -20,6 +20,8 @@ kotlin {
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
+    compileOnly(libs.ksp.gradle.plugin)
+    compileOnly(libs.room.gradle.plugin)
 }
 
 tasks {
@@ -42,6 +44,10 @@ gradlePlugin {
         register("sequenceLibrary") {
             id = libs.plugins.sequence.library.get().pluginId
             implementationClass = "SequenceLibraryConventionPlugin"
+        }
+        register("sequenceRoom") {
+            id = libs.plugins.sequence.room.get().pluginId
+            implementationClass = "SequenceRoomConventionPlugin"
         }
     }
 }

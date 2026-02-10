@@ -1,10 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.room)
     alias(libs.plugins.sequence.hilt)
+    alias(libs.plugins.sequence.room)
 }
 
 android {
@@ -54,11 +53,6 @@ kotlin {
     }
 }
 
-room {
-    schemaDirectory("${project.projectDir}/schemas")
-    generateKotlin = true
-}
-
 dependencies {
     implementation(projects.core.model)
     implementation(projects.core.datastore)
@@ -103,12 +97,6 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
 
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-
-    // Room
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    testImplementation(libs.androidx.room.testing)
 
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
