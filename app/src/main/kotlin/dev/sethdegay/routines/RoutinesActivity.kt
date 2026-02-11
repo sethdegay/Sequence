@@ -11,16 +11,16 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
-import dev.sethdegay.routines.core.di.RoutinesBackStackManager
-import dev.sethdegay.routines.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.designsystem.theme.SequenceTheme
+import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
+import dev.sethdegay.sequence.core.navigation.di.SequenceBackStackManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoutinesActivity : ComponentActivity() {
 
     @Inject
-    lateinit var backStackManager: RoutinesBackStackManager
+    lateinit var backStackManager: SequenceBackStackManager
 
     @Inject
     lateinit var entryProviderScopes: Set<@JvmSuppressWildcards NavKeyInstaller>

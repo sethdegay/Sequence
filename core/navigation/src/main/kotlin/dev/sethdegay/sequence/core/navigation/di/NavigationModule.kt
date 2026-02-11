@@ -1,4 +1,4 @@
-package dev.sethdegay.routines.core.di
+package dev.sethdegay.sequence.core.navigation.di
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.navigation3.runtime.NavKey
@@ -7,20 +7,19 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import dev.sethdegay.routines.core.navigation.HomeRoute
+import dev.sethdegay.sequence.core.navigation.HomeRoute
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object NavigationModule {
-
     @Provides
     @ActivityRetainedScoped
-    fun provideRoutinesBackStackManager(): RoutinesBackStackManager =
-        RoutinesBackStackManager(startDestination = HomeRoute)
+    fun provideSequenceBackStackManager(): SequenceBackStackManager =
+        SequenceBackStackManager(startDestination = HomeRoute)
 }
 
 @ActivityRetainedScoped
-class RoutinesBackStackManager(startDestination: NavKey) {
+class SequenceBackStackManager(startDestination: NavKey) {
     val backStack = mutableStateListOf(startDestination)
 
     fun navigate(destination: NavKey) {

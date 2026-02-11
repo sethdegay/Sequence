@@ -6,19 +6,18 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
-import dev.sethdegay.routines.core.di.RoutinesBackStackManager
-import dev.sethdegay.routines.core.navigation.NavKeyInstaller
-import dev.sethdegay.routines.core.navigation.TimerRoute
 import dev.sethdegay.routines.feature.timer.TimerScreen
 import dev.sethdegay.routines.feature.timer.TimerViewModel
+import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
+import dev.sethdegay.sequence.core.navigation.TimerRoute
+import dev.sethdegay.sequence.core.navigation.di.SequenceBackStackManager
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object TimerModule {
-
     @IntoSet
     @Provides
-    fun providesNavKeyInstaller(backStackManager: RoutinesBackStackManager): NavKeyInstaller = {
+    fun providesNavKeyInstaller(backStackManager: SequenceBackStackManager): NavKeyInstaller = {
         entry<TimerRoute> { key ->
             TimerScreen(
                 viewModel = hiltViewModel<TimerViewModel, TimerViewModel.Factory>(

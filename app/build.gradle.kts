@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sequence.hilt)
 }
 
@@ -56,13 +55,13 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
     implementation(projects.core.model)
+    implementation(projects.core.navigation)
     implementation(projects.core.timer)
     implementation(projects.core.ui)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.kotlinx.serialization.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
