@@ -21,15 +21,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.routines.R.string
-import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
-import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
-import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
-import dev.sethdegay.routines.core.designsystem.util.asComposableIcon
-import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.routines.core.ui.ReorderableCardGroup
-import dev.sethdegay.routines.core.ui.StepEditorSheet
+import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
+import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
+import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
+import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Step
+import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
+import dev.sethdegay.sequence.core.ui.StepEditorSheet
 
 @Composable
 fun EditorScreen(
@@ -42,7 +42,7 @@ fun EditorScreen(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = RoutinesIcons.NavigateUp.asComposableIconButton(
+                navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
                     onClick = dropUnlessResumed { navigateUp() },
                     contentDescription = stringResource(string.navigate_up_content_description),
                 ),
@@ -51,7 +51,7 @@ fun EditorScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.showStepEditor(null) },
-                content = RoutinesIcons.Add.asComposableIcon(),
+                content = SequenceIcons.Add.asComposableIcon(),
             )
         }
     ) { padding ->

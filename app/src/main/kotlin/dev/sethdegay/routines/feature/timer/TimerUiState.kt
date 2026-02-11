@@ -1,6 +1,6 @@
 package dev.sethdegay.routines.feature.timer
 
-import dev.sethdegay.routines.core.designsystem.component.ProgressIndicatorAmplitudeLevel
+import dev.sethdegay.sequence.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 

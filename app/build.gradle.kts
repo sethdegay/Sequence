@@ -53,17 +53,16 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.core.model)
     implementation(projects.core.data)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.model)
     implementation(projects.core.timer)
+    implementation(projects.core.ui)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.core)
-
-    implementation(libs.calendar.compose)
-    implementation(libs.reorderable)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)

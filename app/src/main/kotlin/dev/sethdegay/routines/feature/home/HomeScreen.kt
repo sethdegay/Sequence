@@ -29,17 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.routines.R.string
-import dev.sethdegay.routines.core.designsystem.component.Accordion
-import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
-import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
-import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
-import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.routines.core.ui.AccordionHeader
-import dev.sethdegay.routines.core.ui.CalendarEventsSheet
-import dev.sethdegay.routines.core.ui.HeatMapCalendar
+import dev.sethdegay.sequence.core.designsystem.component.Accordion
+import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
+import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
+import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.HeatMapLevel
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Step
+import dev.sethdegay.sequence.core.ui.AccordionHeader
+import dev.sethdegay.sequence.core.ui.CalendarEventsSheet
+import dev.sethdegay.sequence.core.ui.HeatMapCalendar
 import java.time.LocalDate
 
 @Composable
@@ -57,7 +57,7 @@ fun HomeScreen(
                     Text(text = stringResource(string.app_name))
                 },
                 actions = {
-                    RoutinesIcons.Settings.asComposableIconButton(
+                    SequenceIcons.Settings.asComposableIconButton(
                         onClick = navigateToSettings,
                         contentDescription = stringResource(string.home_navigate_to_settings_content_description),
                     ).invoke()

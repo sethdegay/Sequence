@@ -11,9 +11,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
-import dev.sethdegay.routines.core.designsystem.theme.RoutinesTheme
 import dev.sethdegay.routines.core.di.RoutinesBackStackManager
 import dev.sethdegay.routines.core.navigation.NavKeyInstaller
+import dev.sethdegay.sequence.core.designsystem.theme.SequenceTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,7 +36,7 @@ class RoutinesActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { viewModel.uiState.value.showSplashScreen() }
 
         setContent {
-            RoutinesTheme(
+            SequenceTheme(
                 darkTheme = themeConfig.darkTheme,
                 dynamicColor = themeConfig.dynamicColor,
             ) {

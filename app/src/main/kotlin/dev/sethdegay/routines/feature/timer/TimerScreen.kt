@@ -25,14 +25,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.routines.R.string
-import dev.sethdegay.routines.core.designsystem.component.CountdownDisplay
-import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
-import dev.sethdegay.routines.core.designsystem.component.ProgressIndicator
-import dev.sethdegay.routines.core.designsystem.component.TimerControls
-import dev.sethdegay.routines.core.designsystem.component.TimerControlsActions
-import dev.sethdegay.routines.core.designsystem.component.TimerControlsMode
-import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
-import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
+import dev.sethdegay.sequence.core.designsystem.component.ProgressIndicator
+import dev.sethdegay.sequence.core.designsystem.component.TimerControls
+import dev.sethdegay.sequence.core.designsystem.component.TimerControlsActions
+import dev.sethdegay.sequence.core.designsystem.component.TimerControlsMode
+import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
+import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 
 @Composable
 fun TimerScreen(
@@ -60,7 +60,7 @@ fun TimerScreen(
                 title = {
                     Text(text = "")
                 },
-                navigationIcon = RoutinesIcons.NavigateUp.asComposableIconButton(
+                navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
                     onClick = dropUnlessResumed { navigateUp() },
                     contentDescription = stringResource(string.navigate_up_content_description),
                 ),
@@ -118,8 +118,6 @@ private fun TimerScreen(
         ) {
             TimerControls(
                 mode = if (uiState.isTimerRunning) TimerControlsMode.RUNNING else TimerControlsMode.PAUSED,
-                startText = stringResource(string.timer_start_button_text),
-                pauseText = stringResource(string.timer_pause_button_text),
                 actions = actions,
                 canMovePrevious = uiState.canMovePrevious,
                 canMoveNext = uiState.canMoveNext,

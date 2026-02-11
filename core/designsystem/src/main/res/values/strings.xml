@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Timer controller -->
+    <string name="timer_pause_button_text">Pause</string>
+    <string name="timer_start_button_text">Start</string>
+</resources>

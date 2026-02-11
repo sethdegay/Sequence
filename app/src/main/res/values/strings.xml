@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Routines</string>
     <string name="navigate_up_content_description">Navigate up</string>
-    <string name="drag_handle_content_description">Drag handle</string>
 
     <!-- =====================
            Home screen
@@ -35,13 +34,4 @@
     <!-- =====================
            Timer screen
          ===================== -->
-    <!-- Timer controller -->
-    <string name="timer_pause_button_text">Pause</string>
-    <string name="timer_start_button_text">Start</string>
-
-    <!-- =====================
-           Heat map calendar
-         ===================== -->
-    <string name="heat_map_calendar_legend_less_text">Less</string>
-    <string name="heat_map_calendar_legend_more_text">More</string>
 </resources>

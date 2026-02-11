@@ -19,15 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.routines.R.string
-import dev.sethdegay.routines.core.designsystem.component.CardGroup
-import dev.sethdegay.routines.core.designsystem.component.LoadingScreen
-import dev.sethdegay.routines.core.designsystem.component.ToggleButtonOption
-import dev.sethdegay.routines.core.designsystem.component.ToggleButtonPosition
-import dev.sethdegay.routines.core.designsystem.icon.RoutinesIcons
-import dev.sethdegay.routines.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.routines.core.ui.BooleanPreference
-import dev.sethdegay.routines.core.ui.TogglePreference
+import dev.sethdegay.sequence.core.designsystem.component.CardGroup
+import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
+import dev.sethdegay.sequence.core.designsystem.component.ToggleButtonOption
+import dev.sethdegay.sequence.core.designsystem.component.ToggleButtonPosition
+import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
+import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.ThemeConfig
+import dev.sethdegay.sequence.core.ui.BooleanPreference
+import dev.sethdegay.sequence.core.ui.TogglePreference
 
 @Composable
 fun SettingsScreen(
@@ -45,7 +45,7 @@ fun SettingsScreen(
                 title = {
                     Text(text = stringResource(string.settings_top_app_bar_title))
                 },
-                navigationIcon = RoutinesIcons.NavigateUp.asComposableIconButton(
+                navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
                     onClick = dropUnlessResumed { navigateUp() },
                     contentDescription = stringResource(string.navigate_up_content_description),
                 ),
@@ -99,24 +99,24 @@ private fun SettingsScreen(
                             listOf(
                                 ToggleButtonOption(
                                     label = stringResource(string.settings_system_theme_title),
-                                    iconChecked = RoutinesIcons.SystemChecked,
-                                    iconUnchecked = RoutinesIcons.SystemUnchecked,
+                                    iconChecked = SequenceIcons.SystemChecked,
+                                    iconUnchecked = SequenceIcons.SystemUnchecked,
                                     value = ThemeConfig.FOLLOW_SYSTEM,
                                     onValueChanged = setThemeConfig,
                                     toggleButtonPosition = ToggleButtonPosition.LEADING,
                                 ),
                                 ToggleButtonOption(
                                     label = stringResource(string.settings_light_theme_title),
-                                    iconChecked = RoutinesIcons.LightModeChecked,
-                                    iconUnchecked = RoutinesIcons.LightModeUnchecked,
+                                    iconChecked = SequenceIcons.LightModeChecked,
+                                    iconUnchecked = SequenceIcons.LightModeUnchecked,
                                     value = ThemeConfig.LIGHT,
                                     onValueChanged = setThemeConfig,
                                     toggleButtonPosition = ToggleButtonPosition.MIDDLE,
                                 ),
                                 ToggleButtonOption(
                                     label = stringResource(string.settings_dark_theme_title),
-                                    iconChecked = RoutinesIcons.DarkModeChecked,
-                                    iconUnchecked = RoutinesIcons.DarkModeUnchecked,
+                                    iconChecked = SequenceIcons.DarkModeChecked,
+                                    iconUnchecked = SequenceIcons.DarkModeUnchecked,
                                     value = ThemeConfig.DARK,
                                     onValueChanged = setThemeConfig,
                                     toggleButtonPosition = ToggleButtonPosition.TRAILING,

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drag_handle_content_description">Drag handle</string>
+
+    <!-- =====================
+           Heat map calendar
+         ===================== -->
+    <string name="heat_map_calendar_legend_less_text">Less</string>
+    <string name="heat_map_calendar_legend_more_text">More</string>
+</resources>
