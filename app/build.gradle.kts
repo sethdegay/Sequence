@@ -40,28 +40,16 @@ android {
     }
 }
 
-kotlin {
-    compilerOptions {
-        optIn.addAll(
-            "androidx.compose.material3.ExperimentalMaterial3Api",
-            "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
-            "kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "kotlinx.coroutines.FlowPreview",
-        )
-    }
-}
-
 dependencies {
     implementation(projects.core.data)
-    implementation(projects.core.designsystem)
     implementation(projects.core.model)
-    implementation(projects.core.navigation)
-    implementation(projects.core.timer)
-    implementation(projects.core.ui)
+    implementation(projects.feature.editor)
+    implementation(projects.feature.home)
+    implementation(projects.feature.settings)
+    implementation(projects.feature.timer)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.kotlinx.datetime)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
@@ -81,18 +69,9 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
 
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.android)
-    testImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.kotlinx.coroutines.test)
-
-    // Hilt
-    implementation(libs.androidx.hilt.navigation.compose)
-
     // Navigation3
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
-
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
     // ViewModel

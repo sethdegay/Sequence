@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigate_up_content_description">Navigate up</string>
+    <string name="settings_top_app_bar_title">Settings</string>
+
+    <!-- User interface settings -->
+    <string name="settings_theme_title">App theme</string>
+    <string name="settings_theme_description">Choose between light, dark, or automatically follow your system theme.</string>
+    <string name="settings_system_theme_title">Auto</string>
+    <string name="settings_dark_theme_title">Dark</string>
+    <string name="settings_light_theme_title">Light</string>
+    <string name="settings_dynamic_color_title">Match system colors</string>
+    <string name="settings_dynamic_color_description">Apply your system\'s color palette to the app.</string>
+
+    <!-- Global audio settings -->
+    <string name="settings_mute_all_title">Mute all</string>
+    <string name="settings_tick_sound_title">Tick sound</string>
+    <string name="settings_tick_sound_description">Play a ticking sound when the countdown is almost done.</string>
+    <string name="settings_completion_sound_title">Completion sound</string>
+    <string name="settings_completion_sound_description">Play a bell sound when the countdown finishes.</string>
+    <string name="settings_speak_title_title">Speak title</string>
+    <string name="settings_speak_title_description">Read out task titles using text-to-speech.</string>
+</resources>
