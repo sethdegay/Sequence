@@ -1,7 +1,7 @@
-package dev.sethdegay.routines
+package dev.sethdegay.sequence
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class RoutinesApp : Application()
+class SequenceApp : Application()

@@ -28,8 +28,8 @@ class LocalUserPreferencesRepository @Inject constructor(
         dataSource.setDynamicColor(dynamicColor)
     }
 
-    override suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?) {
-        dataSource.setRoutinesAccordionExpandedId(routinesAccordionExpandedId)
+    override suspend fun setAccordionExpandedId(accordionExpandedId: String?) {
+        dataSource.setAccordionExpandedId(accordionExpandedId)
     }
 
     override suspend fun setMuteAll(muteAll: Boolean) {

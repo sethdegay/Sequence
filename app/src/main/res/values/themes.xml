@@ -1,4 +1,4 @@
 <resources>
 
-    <style name="Theme.Routines" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Sequence" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

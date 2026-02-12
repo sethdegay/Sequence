@@ -14,7 +14,7 @@ interface UserPreferencesRepository {
 
     suspend fun setDynamicColor(dynamicColor: Boolean)
 
-    suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?)
+    suspend fun setAccordionExpandedId(accordionExpandedId: String?)
 
     suspend fun setMuteAll(muteAll: Boolean)
 

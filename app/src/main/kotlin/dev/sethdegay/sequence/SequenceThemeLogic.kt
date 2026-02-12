@@ -1,4 +1,4 @@
-package dev.sethdegay.routines
+package dev.sethdegay.sequence
 
 import android.content.res.Configuration
 import android.graphics.Color
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 /*
  * Observes theme changes and applies edge-to-edge styling automatically.
  */
-internal fun RoutinesActivity.collectLocalThemeConfig(uiState: StateFlow<RoutinesUiState>): State<LocalThemeConfig> {
+internal fun SequenceActivity.collectLocalThemeConfig(uiState: StateFlow<SequenceUiState>): State<LocalThemeConfig> {
     val themeConfig = mutableStateOf(
         resolveLocalThemeConfig(
             isSystemInDarkTheme = resources.configuration.isSystemInDarkTheme,
@@ -49,13 +49,13 @@ internal fun RoutinesActivity.collectLocalThemeConfig(uiState: StateFlow<Routine
  */
 private fun resolveLocalThemeConfig(
     isSystemInDarkTheme: Boolean,
-    uiState: RoutinesUiState,
+    uiState: SequenceUiState,
 ): LocalThemeConfig = LocalThemeConfig(
     darkTheme = uiState.useDarkTheme(isSystemInDarkTheme),
     dynamicColor = uiState.useDynamicColor,
 )
 
-private fun Flow<RoutinesUiState>.mapToLocalThemeConfig(
+private fun Flow<SequenceUiState>.mapToLocalThemeConfig(
     isSystemInDarkThemeFlow: Flow<Boolean>,
 ): Flow<LocalThemeConfig> = combine(isSystemInDarkThemeFlow, this) { isSystemInDarkTheme, uiState ->
     resolveLocalThemeConfig(isSystemInDarkTheme, uiState)

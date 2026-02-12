@@ -1,4 +1,4 @@
-package dev.sethdegay.routines
+package dev.sethdegay.sequence
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,14 +11,14 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class RoutinesViewModel @Inject constructor(
+class SequenceViewModel @Inject constructor(
     userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<RoutinesUiState> = userPreferencesRepository.settings.map {
-        RoutinesUiState.Success(it)
+    val uiState: StateFlow<SequenceUiState> = userPreferencesRepository.settings.map {
+        SequenceUiState.Success(it)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = RoutinesUiState.Loading,
+        initialValue = SequenceUiState.Loading,
     )
 }

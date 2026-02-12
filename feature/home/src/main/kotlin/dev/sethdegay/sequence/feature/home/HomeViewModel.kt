@@ -75,10 +75,10 @@ class HomeViewModel @Inject constructor(
         ).map { it.toJavaHeatMapData() },
         showCalendarEventsSheet,
         activeCalendarEvents,
-    ) { routines, uiState, heatMapData, showCalendarEventsSheet, activeCalendarEvents ->
+    ) { sequences, uiState, heatMapData, showCalendarEventsSheet, activeCalendarEvents ->
         HomeUiState.Success(
-            sequences = routines,
-            routinesAccordionExpandedId = uiState.routinesAccordionExpandedId,
+            sequences = sequences,
+            accordionExpandedId = uiState.accordionExpandedId,
             heatMapData = heatMapData,
             heatMapCalendarStart = heatMapCalendarStart,
             heatMapCalendarEnd = heatMapCalendarEnd,
@@ -91,9 +91,9 @@ class HomeViewModel @Inject constructor(
         initialValue = HomeUiState.Loading,
     )
 
-    fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?) {
+    fun setAccordionExpandedId(accordionExpandedId: String?) {
         viewModelScope.launch {
-            userPreferencesRepository.setRoutinesAccordionExpandedId(routinesAccordionExpandedId)
+            userPreferencesRepository.setAccordionExpandedId(accordionExpandedId)
         }
     }
 

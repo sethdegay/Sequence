@@ -1,4 +1,4 @@
-package dev.sethdegay.routines
+package dev.sethdegay.sequence
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,7 +17,7 @@ import dev.sethdegay.sequence.core.navigation.di.SequenceBackStackManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RoutinesActivity : ComponentActivity() {
+class SequenceActivity : ComponentActivity() {
 
     @Inject
     lateinit var backStackManager: SequenceBackStackManager
@@ -25,7 +25,7 @@ class RoutinesActivity : ComponentActivity() {
     @Inject
     lateinit var entryProviderScopes: Set<@JvmSuppressWildcards NavKeyInstaller>
 
-    private val viewModel: RoutinesViewModel by viewModels()
+    private val viewModel: SequenceViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()

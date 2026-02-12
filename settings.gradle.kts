@@ -22,7 +22,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Routines"
+rootProject.name = "Sequence"
 include(":app")
 include(":core:data")
 include(":core:database")

@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "dev.sethdegay.routines"
+    namespace = "dev.sethdegay.sequence"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "dev.sethdegay.routines"
+        applicationId = "dev.sethdegay.sequence"
         minSdk = 31
         targetSdk = 36
         versionCode = 1

@@ -66,8 +66,8 @@ fun HomeScreen(
         },
         floatingActionButton = {
             HomeFab(
-                visible = !uiState.showLoadingScreen() && uiState.routinesAccordionExpandedId == null,
-                text = stringResource(string.home_add_routine_button_text),
+                visible = !uiState.showLoadingScreen() && uiState.accordionExpandedId == null,
+                text = stringResource(string.home_add_sequence_button_text),
                 onClick = { navigateToEditor(null) },
             )
         },
@@ -80,8 +80,8 @@ fun HomeScreen(
                 scaffoldPadding = padding,
                 navigateToEditor = navigateToEditor,
                 navigateToTimer = navigateToTimer,
-                setRoutinesAccordionExpandedId = { viewModel.setRoutinesAccordionExpandedId(it) },
-                isExpanded = { it == uiState.routinesAccordionExpandedId },
+                setAccordionExpandedId = { viewModel.setAccordionExpandedId(it) },
+                isExpanded = { it == uiState.accordionExpandedId },
                 sequences = uiState.sequences,
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
@@ -104,7 +104,7 @@ private fun HomeScreen(
     scaffoldPadding: PaddingValues,
     navigateToEditor: (String?) -> Unit,
     navigateToTimer: (String) -> Unit,
-    setRoutinesAccordionExpandedId: (String?) -> Unit,
+    setAccordionExpandedId: (String?) -> Unit,
     isExpanded: (String) -> Boolean,
     sequences: List<Sequence>,
     heatMapData: Map<LocalDate, HeatMapLevel>,
@@ -137,7 +137,7 @@ private fun HomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         isExpanded = isExpanded,
                         onClick = { isExpanded ->
-                            setRoutinesAccordionExpandedId(
+                            setAccordionExpandedId(
                                 if (isExpanded) {
                                     sequence.id
                                 } else {

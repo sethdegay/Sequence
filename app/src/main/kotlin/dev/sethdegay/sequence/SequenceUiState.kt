@@ -1,12 +1,12 @@
-package dev.sethdegay.routines
+package dev.sethdegay.sequence
 
 import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.ThemeConfig
 
-sealed interface RoutinesUiState {
-    data object Loading : RoutinesUiState
+sealed interface SequenceUiState {
+    data object Loading : SequenceUiState
 
-    data class Success(val settings: Settings) : RoutinesUiState {
+    data class Success(val settings: Settings) : SequenceUiState {
         override fun useDarkTheme(isSystemInDarkTheme: Boolean): Boolean =
             when (settings.themeConfig) {
                 ThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme

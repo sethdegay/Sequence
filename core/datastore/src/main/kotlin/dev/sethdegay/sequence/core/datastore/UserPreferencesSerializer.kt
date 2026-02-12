@@ -18,7 +18,7 @@ class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferenc
             speakTitle = true
         }
         uiState = uiState {
-            routinesAccordionExpandedId = ""
+            accordionExpandedId = ""
         }
     }
 

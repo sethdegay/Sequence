@@ -31,8 +31,8 @@ class UserPreferencesDataSource @Inject constructor(
                 speakTitle = userPreferences.settings.speakTitle,
             ),
             uiState = UiState(
-                routinesAccordionExpandedId = userPreferences.uiState.routinesAccordionExpandedId
-                    .takeIf { userPreferences.uiState.hasRoutinesAccordionExpandedId() && it.isNotEmpty() },
+                accordionExpandedId = userPreferences.uiState.accordionExpandedId
+                    .takeIf { userPreferences.uiState.hasAccordionExpandedId() && it.isNotEmpty() },
             )
         )
     }
@@ -61,13 +61,13 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setRoutinesAccordionExpandedId(routinesAccordionExpandedId: String?) {
+    suspend fun setAccordionExpandedId(accordionExpandedId: String?) {
         _userPreferences.updateData { current ->
             val uiStateBuilder = current.uiState.toBuilder()
-            if (routinesAccordionExpandedId == null) {
-                uiStateBuilder.clearRoutinesAccordionExpandedId()
+            if (accordionExpandedId == null) {
+                uiStateBuilder.clearAccordionExpandedId()
             } else {
-                uiStateBuilder.setRoutinesAccordionExpandedId(routinesAccordionExpandedId)
+                uiStateBuilder.setAccordionExpandedId(accordionExpandedId)
             }
             current.toBuilder().setUiState(uiStateBuilder).build()
         }

@@ -10,7 +10,7 @@ sealed interface HomeUiState {
 
     data class Success(
         override val sequences: List<Sequence>,
-        override val routinesAccordionExpandedId: String?,
+        override val accordionExpandedId: String?,
         override val heatMapData: Map<LocalDate, HeatMapLevel>,
         override val heatMapCalendarStart: LocalDate,
         override val heatMapCalendarEnd: LocalDate,
@@ -24,7 +24,7 @@ sealed interface HomeUiState {
 
     val sequences: List<Sequence> get() = emptyList()
 
-    val routinesAccordionExpandedId: String? get() = null
+    val accordionExpandedId: String? get() = null
 
     val heatMapCalendarStart: LocalDate get() = LocalDate.now()
 
