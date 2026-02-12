@@ -6,3 +6,9 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.room) apply false
 }
+
+tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
+    languageVersion = JavaLanguageVersion.of(21)
+    vendor = JvmVendorSpec.JETBRAINS
+    toolchainDownloadUrls.empty()
+}
