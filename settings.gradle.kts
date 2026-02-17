@@ -24,6 +24,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "Sequence"
 include(":app")
+include(":core:audio")
 include(":core:data")
 include(":core:database")
 include(":core:datastore")
