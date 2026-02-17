@@ -11,5 +11,6 @@ kotlin {
 }
 
 dependencies {
+    implementation(projects.core.audio)
     implementation(projects.core.timer)
 }

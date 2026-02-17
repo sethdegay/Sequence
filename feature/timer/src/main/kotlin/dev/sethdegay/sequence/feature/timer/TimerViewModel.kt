@@ -6,12 +6,16 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sethdegay.sequence.core.audio.SfxManager
+import dev.sethdegay.sequence.core.audio.TtsManager
 import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
+import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.sequence.core.designsystem.component.TimerControlsActions
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.Sequence
+import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.Step
 import dev.sethdegay.sequence.core.timer.SequentialTimer
 import dev.sethdegay.sequence.core.timer.SequentialTimerState
@@ -20,6 +24,9 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -32,10 +39,12 @@ import kotlin.time.Instant
 class TimerViewModel @AssistedInject constructor(
     @Assisted private val id: String,
     private val timer: SequentialTimer<Step>,
+    private val ttsManager: TtsManager,
+    private val sfxManager: SfxManager,
     private val sequenceRepository: SequenceRepository,
     private val calendarEventRepository: CalendarEventRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel(), TimerControlsActions {
-
     @AssistedFactory
     interface Factory {
         fun create(id: String): TimerViewModel
@@ -51,13 +60,33 @@ class TimerViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
+            val (tickSound, completionSound, speakTitle) = userPreferencesRepository
+                .settings
+                .first()
+                .asAudioSettings()
             timer.state.collectLatest { state ->
-                _uiState.update { state.asTimerUiState() }
+                _uiState.update {
+                    state.asTimerUiState(
+                        speakTitle = { if (speakTitle) ttsManager.speak(it) },
+                        playOddTickSound = { if (tickSound) sfxManager.playTickOdd() },
+                        playEvenTickSound = { if (tickSound) sfxManager.playTickEven() },
+                        playCompletionSound = { if (completionSound) sfxManager.playBell() },
+                    )
+                }
             }
         }
         viewModelScope.launch {
-            timer.start(sequenceRepository.getSequence(id).also { sequence = it }.steps)
-            start = Clock.System.now()
+            combine(
+                ttsManager.initialize(),
+                sfxManager.initialize(),
+            ) { tts, sfx -> tts && sfx }
+                .distinctUntilChanged()
+                .first()
+                .apply {
+                    if (!this) return@apply
+                    timer.start(sequenceRepository.getSequence(id).also { sequence = it }.steps)
+                    start = Clock.System.now()
+                }
         }
     }
 
@@ -73,7 +102,12 @@ class TimerViewModel @AssistedInject constructor(
     override fun onPrevious() = timer.movePrevious()
     override fun onNext() = timer.moveNext()
 
-    private fun SequentialTimerState.asTimerUiState(): TimerUiState {
+    private fun SequentialTimerState.asTimerUiState(
+        speakTitle: (String) -> Unit,
+        playOddTickSound: () -> Unit,
+        playEvenTickSound: () -> Unit,
+        playCompletionSound: () -> Unit,
+    ): TimerUiState {
         if (this is SequentialTimerState.Idle || this is SequentialTimerState.Error) {
             return TimerUiState.Loading
         }
@@ -109,6 +143,17 @@ class TimerViewModel @AssistedInject constructor(
         }
 
         val isTimerRunning = this is SequentialTimerState.Running<*>
+
+        if (isTimerRunning) {
+            if (steps[index].duration == time) {
+                speakTitle(steps[index].title)
+            }
+            when (time) {
+                5.seconds, 3.seconds, 1.seconds -> playOddTickSound()
+                4.seconds, 2.seconds -> playEvenTickSound()
+                0.seconds -> playCompletionSound()
+            }
+        }
 
         return TimerUiState.Success(
             currentStep = currentStep,
@@ -150,6 +195,8 @@ class TimerViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
+        ttsManager.release()
+        sfxManager.release()
         if (::saveCalendarEventJob.isInitialized) {
             saveCalendarEventJob.cancel()
         }
@@ -162,4 +209,16 @@ private data class SequentialTimerStateData(
     val currentItemIndex: Int,
     val timeLeft: Duration,
     val accumulatedDuration: Duration,
+)
+
+private data class AudioSettings(
+    val tickSound: Boolean,
+    val completionSound: Boolean,
+    val speakTitle: Boolean,
+)
+
+private fun Settings.asAudioSettings() = AudioSettings(
+    tickSound = !muteAll && tickSound,
+    completionSound = !muteAll && completionSound,
+    speakTitle = !muteAll && speakTitle,
 )
