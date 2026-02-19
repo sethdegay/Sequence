@@ -1,6 +1,7 @@
 package dev.sethdegay.sequence.core.audio
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
 import android.speech.tts.TextToSpeech
 import android.util.Log
@@ -20,39 +21,55 @@ class TtsManager @Inject constructor(@param:ApplicationContext private val conte
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build()
         }
+
+        fun hasTtsEngineInstalled(context: Context): Boolean {
+            val intent = Intent(TextToSpeech.Engine.INTENT_ACTION_TTS_SERVICE)
+            val resolveInfo = context.packageManager.queryIntentServices(intent, 0)
+            return resolveInfo.isNotEmpty()
+        }
     }
 
-    private lateinit var tts: TextToSpeech
+    private var tts: TextToSpeech? = null
 
     fun initialize(): Flow<Boolean> = callbackFlow {
-        tts = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                tts.setSpeechRate(1f)
-                tts.setPitch(1f)
-                tts.setAudioAttributes(attributes)
-                trySend(true)
-            } else {
-                trySend(false)
+        val hasTtsEngineInstalled = hasTtsEngineInstalled(context)
+        if (hasTtsEngineInstalled) {
+            tts = TextToSpeech(context) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    tts?.apply {
+                        setSpeechRate(1f)
+                        setPitch(1f)
+                        setAudioAttributes(attributes)
+                    }
+                    trySend(true)
+                } else {
+                    trySend(false)
+                }
+                channel.close()
             }
+        } else {
+            trySend(true)
             channel.close()
         }
+
         awaitClose {
-            Log.d("TTS", "Flow collection cancelled, but engine stays alive")
+            Log.d(
+                "TTS",
+                "Flow collection cancelled" + if (hasTtsEngineInstalled && tts != null && tts!!.engines.isNotEmpty()) ", but engine stays alive" else ""
+            )
         }
     }
 
     fun speak(text: String, queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
-        tts.speak(text, queueMode, null, UTTERANCE_ID)
+        tts?.speak(text, queueMode, null, UTTERANCE_ID)
     }
 
     fun stop() {
-        tts.stop()
+        tts?.stop()
     }
 
     fun release() {
-        if (::tts.isInitialized) {
-            stop()
-            tts.shutdown()
-        }
+        stop()
+        tts?.shutdown()
     }
 }
