@@ -3,6 +3,7 @@ package dev.sethdegay.sequence.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
@@ -17,6 +18,7 @@ import kotlin.time.Duration
             onDelete = ForeignKey.CASCADE,
         ),
     ],
+    indices = [Index(value = ["sequence_id"])],
 )
 data class StepEntity(
     @PrimaryKey

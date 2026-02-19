@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ac06cb7274f0f5bd72d642b49f80a4ec",
+    "identityHash": "aab640c29f0878e559837bae6a77a089",
     "entities": [
       {
         "tableName": "calendar_event",
@@ -45,6 +45,17 @@
             "id"
           ]
         },
+        "indices": [
+          {
+            "name": "index_calendar_event_sequence_id",
+            "unique": false,
+            "columnNames": [
+              "sequence_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_calendar_event_sequence_id` ON `${TABLE_NAME}` (`sequence_id`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "sequence",
@@ -148,6 +159,17 @@
             "id"
           ]
         },
+        "indices": [
+          {
+            "name": "index_step_sequence_id",
+            "unique": false,
+            "columnNames": [
+              "sequence_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_step_sequence_id` ON `${TABLE_NAME}` (`sequence_id`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "sequence",
@@ -165,7 +187,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac06cb7274f0f5bd72d642b49f80a4ec')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aab640c29f0878e559837bae6a77a089')"
     ]
   }
 }

@@ -3,6 +3,7 @@ package dev.sethdegay.sequence.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.Sequence
@@ -19,6 +20,7 @@ import kotlin.time.Instant
             onDelete = ForeignKey.CASCADE,
         ),
     ],
+    indices = [Index(value = ["sequence_id"])],
 )
 data class CalendarEventEntity(
     @PrimaryKey
