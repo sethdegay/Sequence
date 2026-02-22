@@ -1,5 +1,6 @@
 package dev.sethdegay.sequence.core.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,6 +28,7 @@ fun BooleanPreference(
     modifier: Modifier = Modifier,
     title: String,
     description: String? = null,
+    preferenceError: PreferenceError? = null,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     isEnabled: Boolean = true,
@@ -43,7 +45,14 @@ fun BooleanPreference(
             )
             .alpha(if (isEnabled) 1f else 0.38f),
         headlineContent = { Text(title) },
-        supportingContent = description?.let { { Text(it) } },
+        supportingContent = {
+            Column {
+                description?.let { Text(it) }
+                AnimatedVisibility(preferenceError != null) {
+                    preferenceError?.let { PreferenceError(it) }
+                }
+            }
+        },
         leadingContent = icon,
         trailingContent = {
             Switch(
@@ -120,4 +129,20 @@ private fun BooleanPreferenceInteractivePreview() {
             isEnabled = isEnabled,
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BooleanPreferenceErrorPreview() {
+    BooleanPreference(
+        title = "Enable Text-to-Speech",
+        description = "Read out messages automatically",
+        checked = true,
+        onCheckedChange = {},
+        preferenceError = PreferenceError(
+            message = "No TTS engine found.",
+            linkText = "Download from Play Store",
+            actionUri = "market://search?q=text to speech",
+        ),
+    )
 }

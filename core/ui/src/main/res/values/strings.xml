@@ -7,4 +7,9 @@
          ===================== -->
     <string name="heat_map_calendar_legend_less_text">Less</string>
     <string name="heat_map_calendar_legend_more_text">More</string>
+
+    <!-- =====================
+           Preference error
+         ===================== -->
+    <string name="preference_error_cannot_open_uri">Error: Could not open link</string>
 </resources>
