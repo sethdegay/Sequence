@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
@@ -26,6 +27,7 @@ import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.ThemeConfig
 import dev.sethdegay.sequence.core.ui.BooleanPreference
+import dev.sethdegay.sequence.core.ui.PreferenceError
 import dev.sethdegay.sequence.core.ui.TogglePreference
 import dev.sethdegay.sequence.feature.settings.R.string
 
@@ -37,6 +39,11 @@ fun SettingsScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.updateHasTtsEngineInstalled()
+        onPauseOrDispose {}
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -168,9 +175,18 @@ private fun SettingsScreen(
                     BooleanPreference(
                         title = stringResource(string.settings_speak_title_title),
                         description = stringResource(string.settings_speak_title_description),
-                        checked = uiState.speakTitle,
+                        checked = uiState.speakTitle && uiState.hasTtsEngineInstalled,
                         onCheckedChange = setSpeakTitle,
-                        isEnabled = !uiState.muteAll,
+                        isEnabled = !uiState.muteAll && uiState.hasTtsEngineInstalled,
+                        preferenceError = if (!uiState.hasTtsEngineInstalled) {
+                            PreferenceError(
+                                message = stringResource(string.settings_no_tts_engine_found_error_message),
+//                                linkText = stringResource(string.settings_download_from_play_store_error_link_text),
+//                                actionUri = "market://search?q=text to speech",
+                            )
+                        } else {
+                            null
+                        },
                     )
                 }
             }

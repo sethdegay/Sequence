@@ -6,7 +6,10 @@ import dev.sethdegay.sequence.core.model.ThemeConfig
 sealed interface SettingsUiState {
     data object Loading : SettingsUiState
 
-    data class Success(val settings: Settings) : SettingsUiState {
+    data class Success(
+        val settings: Settings,
+        override val hasTtsEngineInstalled: Boolean,
+    ) : SettingsUiState {
         override val themeConfig: ThemeConfig = settings.themeConfig
         override val dynamicColor: Boolean = settings.dynamicColor
         override val muteAll: Boolean = settings.muteAll
@@ -33,5 +36,8 @@ sealed interface SettingsUiState {
         get() = true
 
     val speakTitle: Boolean
+        get() = true
+
+    val hasTtsEngineInstalled: Boolean
         get() = true
 }
