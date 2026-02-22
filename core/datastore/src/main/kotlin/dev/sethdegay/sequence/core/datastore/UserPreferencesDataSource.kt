@@ -9,6 +9,11 @@ import javax.inject.Inject
 import dev.sethdegay.sequence.core.model.ThemeConfig as ModelThemeConfig
 import dev.sethdegay.sequence.core.model.UserPreferences as ModelUserPreferences
 
+private val UUID_REGEX =
+    "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$".toRegex()
+
+private fun String.isValidV4Uuid(): Boolean = matches(UUID_REGEX)
+
 class UserPreferencesDataSource @Inject constructor(
     private val _userPreferences: DataStore<UserPreferences>,
 ) {
@@ -32,7 +37,7 @@ class UserPreferencesDataSource @Inject constructor(
             ),
             uiState = UiState(
                 accordionExpandedId = userPreferences.uiState.accordionExpandedId
-                    .takeIf { userPreferences.uiState.hasAccordionExpandedId() && it.isNotEmpty() },
+                    .takeIf { userPreferences.uiState.hasAccordionExpandedId() && it.isValidV4Uuid() },
             )
         )
     }
