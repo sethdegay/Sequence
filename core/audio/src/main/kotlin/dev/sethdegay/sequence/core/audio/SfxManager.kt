@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.SoundPool
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
@@ -30,15 +31,27 @@ class SfxManager @Inject constructor(@param:ApplicationContext private val conte
     private val soundPool = buildSoundPoolInstance()
 
     fun initialize(): Flow<Boolean> = callbackFlow {
+        var loadedCount = 0
+        soundPool.setOnLoadCompleteListener { _, _, status ->
+            if (status == 0) {
+                loadedCount++
+                if (loadedCount == SfxResource.entries.size) {
+                    trySend(true)
+                    channel.close()
+                }
+            } else {
+                trySend(false)
+                channel.close()
+            }
+        }
+
         SfxResource.entries.forEach { key ->
             ids[key] = soundPool.load(context, key.id, 1)
         }
-        if (ids.size == SfxResource.entries.size) {
-            trySend(true)
-        } else {
-            trySend(false)
+
+        awaitClose {
+            soundPool.setOnLoadCompleteListener(null)
         }
-        channel.close()
     }
 
     private fun play(
