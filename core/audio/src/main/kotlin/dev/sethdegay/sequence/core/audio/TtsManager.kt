@@ -53,10 +53,10 @@ class TtsManager @Inject constructor(@param:ApplicationContext private val conte
         }
 
         awaitClose {
-            Log.d(
-                "TTS",
-                "Flow collection cancelled" + if (hasTtsEngineInstalled && tts != null && tts!!.engines.isNotEmpty()) ", but engine stays alive" else ""
-            )
+            val statusSuffix = ", but engine stays alive"
+                .takeIf { hasTtsEngineInstalled && tts?.engines?.isNotEmpty() == true }
+                .orEmpty()
+            Log.d("TTS", "Flow collection cancelled$statusSuffix")
         }
     }
 
