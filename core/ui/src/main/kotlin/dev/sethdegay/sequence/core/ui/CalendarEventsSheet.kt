@@ -1,13 +1,22 @@
 package dev.sethdegay.sequence.core.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -15,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
@@ -35,58 +45,112 @@ import kotlin.time.toJavaInstant
 fun CalendarEventsSheet(
     calendarEvents: List<CalendarEvent>?,
     onDismissRequest: () -> Unit,
-    showLoadingIndicator: Boolean = calendarEvents == null,
 ) {
     ModalBottomSheet(onDismissRequest = onDismissRequest) {
-        if (showLoadingIndicator) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp),
-            ) {
-                LoadingIndicator(
+        when {
+            calendarEvents == null -> {
+                Box(
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(64.dp),
-                )
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                ) {
+                    LoadingIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(64.dp),
+                    )
+                }
             }
-        } else {
-            Column(modifier = Modifier.padding(16.dp)) {
-                CalendarEventsSheetContent(calendarEvents)
+
+            calendarEvents.isEmpty() -> {
+                onDismissRequest()
             }
+
+            else -> CalendarEventList(calendarEvents)
         }
     }
 }
 
 @Composable
-private fun CalendarEventsSheetContent(calendarEvents: List<CalendarEvent>?) {
-    calendarEvents?.forEachIndexed { i, calendarEvent ->
-        val start = calendarEvent.start.toShortTimeString()
-        val end = calendarEvent.end.toShortTimeString()
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = "$start - $end",
-                    style = MaterialTheme.typography.labelSmall,
-                )
-                DurationDisplay(
-                    duration = calendarEvent.duration,
-                    style = MaterialTheme.typography.labelSmall,
-                )
-            }
-            Text(
-                text = calendarEvent.sequence.title,
-                style = MaterialTheme.typography.bodyMediumEmphasized,
+private fun CalendarEventList(events: List<CalendarEvent>) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+    ) {
+        itemsIndexed(events) { index, event ->
+            val isFirst = index == 0
+            val isLast = index == events.lastIndex
+            TimelineItem(
+                event = event,
+                showTopLine = !isFirst,
+                showBottomLine = !isLast,
             )
         }
-        if (i != calendarEvents.lastIndex) {
-            Spacer(modifier = Modifier.size(16.dp))
+    }
+}
+
+@Composable
+private fun CalendarEventRow(event: CalendarEvent) {
+    Column(
+        modifier = Modifier
+            .padding(12.dp)
+            .fillMaxWidth(),
+    ) {
+        Text(
+            text = event.sequence.title,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                text = "${event.start.toShortTimeString()} - ${event.end.toShortTimeString()}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text("•", style = MaterialTheme.typography.bodySmall)
+            DurationDisplay(
+                duration = event.duration,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
         }
     }
+}
+
+@Composable
+private fun TimelineItem(
+    event: CalendarEvent,
+    showTopLine: Boolean,
+    showBottomLine: Boolean
+) {
+    Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .width(24.dp)
+                .fillMaxHeight(),
+        ) {
+            TimelineConnector(modifier = Modifier.weight(1f), isVisible = showTopLine)
+            Box(
+                Modifier
+                    .size(10.dp)
+                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+            )
+            TimelineConnector(modifier = Modifier.weight(1f), isVisible = showBottomLine)
+        }
+        CalendarEventRow(event)
+    }
+}
+
+@Composable
+private fun TimelineConnector(modifier: Modifier = Modifier, isVisible: Boolean) {
+    Spacer(
+        modifier
+            .width(2.dp)
+            .background(if (isVisible) MaterialTheme.colorScheme.outlineVariant else Color.Transparent),
+    )
 }
 
 private fun Instant.toShortTimeString(): String {
@@ -130,6 +194,5 @@ private fun CalendarEventsSheetPreview() {
             ),
         ),
         onDismissRequest = { },
-        showLoadingIndicator = false,
     )
 }
