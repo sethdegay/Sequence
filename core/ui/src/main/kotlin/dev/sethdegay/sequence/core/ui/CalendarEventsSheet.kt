@@ -26,8 +26,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.sethdegay.sequence.core.designsystem.R.string
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.Sequence
@@ -118,7 +120,7 @@ private fun CalendarEventRow(event: CalendarEvent) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Text("•", style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(string.dot_separator), style = MaterialTheme.typography.bodySmall)
             DurationDisplay(
                 duration = event.duration,
                 style = MaterialTheme.typography.bodySmall,
