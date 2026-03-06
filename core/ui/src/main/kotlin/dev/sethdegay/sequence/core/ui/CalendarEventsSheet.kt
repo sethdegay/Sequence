@@ -28,9 +28,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.R.string
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
+import dev.sethdegay.sequence.core.designsystem.theme.SequenceTheme
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.Sequence
 import java.time.ZoneId
@@ -40,7 +43,6 @@ import java.util.Locale
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlin.time.toJavaInstant
 
@@ -65,6 +67,7 @@ fun CalendarEventsSheet(
                 }
             }
 
+            // TODO prevent showing sheet if empty in viewmodel
             calendarEvents.isEmpty() -> {
                 LaunchedEffect(Unit) {
                     onDismissRequest()
@@ -182,38 +185,39 @@ private fun Instant.toShortTimeString(): String {
     return formatter.format(this.toJavaInstant())
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun CalendarEventsSheetPreview() {
-    CalendarEventsSheet(
-        calendarEvents = listOf(
-            CalendarEvent(
-                start = Clock.System.now().minus(10.minutes),
-                end = Clock.System.now(),
-                duration = 10.minutes,
-                sequence = Sequence(
-                    title = "Sequence A",
-                    description = "This is a sequence",
-                    dateCreated = Clock.System.now(),
-                    dateModified = Clock.System.now(),
-                    steps = emptyList(),
-                    totalDuration = Duration.ZERO,
-                )
-            ),
-            CalendarEvent(
-                start = Clock.System.now().minus(5.minutes + 40.seconds),
-                end = Clock.System.now(),
-                duration = 5.minutes + 40.seconds,
-                sequence = Sequence(
-                    title = "Sequence B",
-                    description = "This is another sequence",
-                    dateCreated = Clock.System.now(),
-                    dateModified = Clock.System.now(),
-                    steps = emptyList(),
-                    totalDuration = Duration.ZERO,
-                )
-            ),
-        ),
-        onDismissRequest = { },
+private fun CalendarEventsSheetPreview(
+    @PreviewParameter(CalendarStateProvider::class) events: List<CalendarEvent>,
+) {
+    SequenceTheme {
+        CalendarEventsSheet(calendarEvents = events, onDismissRequest = {})
+    }
+}
+
+private fun createMockEvent(
+    title: String,
+    startTime: Instant,
+    duration: Duration
+) = CalendarEvent(
+    start = startTime,
+    end = startTime.plus(duration),
+    duration = duration,
+    sequence = Sequence(
+        title = title,
+        description = "This is a sequence description for $title",
+        dateCreated = Clock.System.now(),
+        dateModified = Clock.System.now(),
+        steps = emptyList(),
+        totalDuration = duration,
+    )
+)
+
+class CalendarStateProvider : PreviewParameterProvider<List<CalendarEvent>?> {
+    override val values = sequenceOf(
+        null,
+        emptyList(),
+        listOf(createMockEvent("Single Event", Clock.System.now(), 15.minutes)),
+        (1..10).map { createMockEvent("Event $it", Clock.System.now(), 10.minutes) },
     )
 }
