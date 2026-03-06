@@ -22,9 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
@@ -63,7 +64,9 @@ fun CalendarEventsSheet(
             }
 
             calendarEvents.isEmpty() -> {
-                onDismissRequest()
+                LaunchedEffect(Unit) {
+                    onDismissRequest()
+                }
             }
 
             else -> CalendarEventList(calendarEvents)
@@ -76,7 +79,10 @@ private fun CalendarEventList(events: List<CalendarEvent>) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
     ) {
-        itemsIndexed(events) { index, event ->
+        itemsIndexed(
+            items = events,
+            key = { _, event -> event.id },
+        ) { index, event ->
             val isFirst = index == 0
             val isLast = index == events.lastIndex
             TimelineItem(
@@ -90,6 +96,9 @@ private fun CalendarEventList(events: List<CalendarEvent>) {
 
 @Composable
 private fun CalendarEventRow(event: CalendarEvent) {
+    val timeRange = remember(event.start, event.end) {
+        "${event.start.toShortTimeString()} - ${event.end.toShortTimeString()}"
+    }
     Column(
         modifier = Modifier
             .padding(12.dp)
@@ -105,7 +114,7 @@ private fun CalendarEventRow(event: CalendarEvent) {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = "${event.start.toShortTimeString()} - ${event.end.toShortTimeString()}",
+                text = timeRange,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -129,27 +138,37 @@ private fun TimelineItem(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .width(24.dp)
+                .width(32.dp)
                 .fillMaxHeight(),
         ) {
-            TimelineConnector(modifier = Modifier.weight(1f), isVisible = showTopLine)
+            if (showTopLine) {
+                TimelineConnector(modifier = Modifier.weight(1f))
+            } else {
+                Spacer(Modifier.weight(1f))
+            }
+
             Box(
                 Modifier
                     .size(10.dp)
                     .background(MaterialTheme.colorScheme.primary, CircleShape)
             )
-            TimelineConnector(modifier = Modifier.weight(1f), isVisible = showBottomLine)
+
+            if (showBottomLine) {
+                TimelineConnector(modifier = Modifier.weight(1f))
+            } else {
+                Spacer(Modifier.weight(1f))
+            }
         }
         CalendarEventRow(event)
     }
 }
 
 @Composable
-private fun TimelineConnector(modifier: Modifier = Modifier, isVisible: Boolean) {
+private fun TimelineConnector(modifier: Modifier = Modifier) {
     Spacer(
         modifier
             .width(2.dp)
-            .background(if (isVisible) MaterialTheme.colorScheme.outlineVariant else Color.Transparent),
+            .background(MaterialTheme.colorScheme.outlineVariant),
     )
 }
 
