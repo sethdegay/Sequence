@@ -86,13 +86,13 @@ fun HomeScreen(
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
                 heatMapCalendarEnd = uiState.heatMapCalendarEnd,
-                onDateClicked = viewModel::showCalendarEventsSheet,
+                onDateClicked = viewModel::onCalendarDateSelected,
             )
 
             if (uiState.showCalendarEventsSheet) {
                 CalendarEventsSheet(
                     calendarEvents = uiState.activeCalendarEvents,
-                    onDismissRequest = { viewModel.showCalendarEventsSheet(null) },
+                    onDismissRequest = { viewModel.onCalendarDateSelected(null) },
                 )
             }
         }

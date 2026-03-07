@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -72,7 +73,8 @@ class HomeViewModel @Inject constructor(
         calendarEventRepository.getHeatMapData(
             start = firstDayOfTheYear,
             end = endOfCurrentDay,
-        ).map { it.toJavaHeatMapData() },
+        ).map { it.toJavaHeatMapData() }
+            .distinctUntilChanged(),
         showCalendarEventsSheet,
         activeCalendarEvents,
     ) { sequences, uiState, heatMapData, showCalendarEventsSheet, activeCalendarEvents ->
@@ -97,7 +99,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun showCalendarEventsSheet(date: JavaLocalDate?) {
+    fun onCalendarDateSelected(date: JavaLocalDate?) {
         if (date != null) {
             showCalendarEventsSheet.value = true
             activeCalendarEventsRange.value = date.toKotlinLocalDate()
