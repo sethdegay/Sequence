@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,14 +65,6 @@ fun CalendarEventsSheet(
                     )
                 }
             }
-
-            // TODO prevent showing sheet if empty in viewmodel
-            calendarEvents.isEmpty() -> {
-                LaunchedEffect(Unit) {
-                    onDismissRequest()
-                }
-            }
-
             else -> CalendarEventList(calendarEvents)
         }
     }

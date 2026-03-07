@@ -84,7 +84,7 @@ class HomeViewModel @Inject constructor(
             heatMapData = heatMapData,
             heatMapCalendarStart = heatMapCalendarStart,
             heatMapCalendarEnd = heatMapCalendarEnd,
-            showCalendarEventsSheet = showCalendarEventsSheet,
+            showCalendarEventsSheet = showCalendarEventsSheet && !activeCalendarEvents.isNullOrEmpty(),
             activeCalendarEvents = activeCalendarEvents,
         )
     }.stateIn(
