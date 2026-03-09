@@ -3,7 +3,7 @@ package dev.sethdegay.sequence.core.database.util
 import androidx.room.TypeConverter
 import kotlin.time.Instant
 
-internal class InstantConverter {
+internal class InstantLongConverter {
     @TypeConverter
     fun longToInstant(value: Long): Instant = Instant.fromEpochSeconds(value)
 

@@ -10,9 +10,9 @@ import dev.sethdegay.sequence.core.database.model.CalendarEventEntity
 import dev.sethdegay.sequence.core.database.model.SequenceEntity
 import dev.sethdegay.sequence.core.database.model.StepEntity
 import dev.sethdegay.sequence.core.database.model.WorkspaceEntity
-import dev.sethdegay.sequence.core.database.util.DurationConverter
-import dev.sethdegay.sequence.core.database.util.InstantConverter
-import dev.sethdegay.sequence.core.database.util.LocalDateConverter
+import dev.sethdegay.sequence.core.database.util.DurationLongConverter
+import dev.sethdegay.sequence.core.database.util.InstantLongConverter
+import dev.sethdegay.sequence.core.database.util.LocalDateStringConverter
 
 @Database(
     entities = [
@@ -26,9 +26,9 @@ import dev.sethdegay.sequence.core.database.util.LocalDateConverter
 )
 @TypeConverters(
     value = [
-        DurationConverter::class,
-        InstantConverter::class,
-        LocalDateConverter::class,
+        DurationLongConverter::class,
+        InstantLongConverter::class,
+        LocalDateStringConverter::class,
     ],
 )
 abstract class SequenceDatabase : RoomDatabase() {

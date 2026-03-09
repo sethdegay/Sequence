@@ -7,7 +7,7 @@ import kotlin.time.toDuration
 
 private val DURATION_UNIT = DurationUnit.SECONDS
 
-internal class DurationConverter {
+internal class DurationLongConverter {
     @TypeConverter
     fun longToDuration(value: Long?): Duration? = value?.toDuration(DURATION_UNIT)
 

@@ -3,7 +3,7 @@ package dev.sethdegay.sequence.core.database.util
 import androidx.room.TypeConverter
 import kotlinx.datetime.LocalDate
 
-internal class LocalDateConverter {
+internal class LocalDateStringConverter {
     @TypeConverter
     fun stringToLocalDate(value: String): LocalDate = LocalDate.parse(value)
 }
