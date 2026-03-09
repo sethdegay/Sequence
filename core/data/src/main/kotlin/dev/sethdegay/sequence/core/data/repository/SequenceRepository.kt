@@ -8,7 +8,7 @@ interface SequenceRepository {
 
     fun getSequences(): Flow<List<Sequence>>
 
-    suspend fun saveSequence(sequence: Sequence)
+    suspend fun saveSequence(sequence: Sequence, workspaceId: String)
 
-    suspend fun delete(sequence: Sequence)
+    suspend fun delete(sequence: Sequence, workspaceId: String)
 }

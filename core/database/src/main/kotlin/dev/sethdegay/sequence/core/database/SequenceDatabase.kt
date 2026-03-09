@@ -5,9 +5,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.sethdegay.sequence.core.database.dao.CalendarEventDao
 import dev.sethdegay.sequence.core.database.dao.SequenceDao
+import dev.sethdegay.sequence.core.database.dao.WorkspaceDao
 import dev.sethdegay.sequence.core.database.model.CalendarEventEntity
 import dev.sethdegay.sequence.core.database.model.SequenceEntity
 import dev.sethdegay.sequence.core.database.model.StepEntity
+import dev.sethdegay.sequence.core.database.model.WorkspaceEntity
 import dev.sethdegay.sequence.core.database.util.DurationConverter
 import dev.sethdegay.sequence.core.database.util.InstantConverter
 import dev.sethdegay.sequence.core.database.util.LocalDateConverter
@@ -17,6 +19,7 @@ import dev.sethdegay.sequence.core.database.util.LocalDateConverter
         CalendarEventEntity::class,
         SequenceEntity::class,
         StepEntity::class,
+        WorkspaceEntity::class,
     ],
     version = 1,
     exportSchema = true,
@@ -31,4 +34,5 @@ import dev.sethdegay.sequence.core.database.util.LocalDateConverter
 abstract class SequenceDatabase : RoomDatabase() {
     abstract fun calendarEventDao(): CalendarEventDao
     abstract fun sequenceDao(): SequenceDao
+    abstract fun workspaceDao(): WorkspaceDao
 }

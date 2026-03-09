@@ -2,13 +2,26 @@ package dev.sethdegay.sequence.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 import kotlin.time.Instant
 
-@Entity(tableName = "sequence")
+@Entity(
+    tableName = "sequence",
+    foreignKeys = [
+        ForeignKey(
+            entity = WorkspaceEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["workspace_id"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
+    indices = [Index(value = ["workspace_id"])],
+)
 data class SequenceEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
@@ -28,6 +41,9 @@ data class SequenceEntity(
 
     @ColumnInfo(name = "total_duration")
     val totalDuration: Duration,
+
+    @ColumnInfo(name = "workspace_id")
+    val workspaceId: String,
 )
 
 fun SequenceEntity.asExternalModel(steps: List<Step>): Sequence = Sequence(

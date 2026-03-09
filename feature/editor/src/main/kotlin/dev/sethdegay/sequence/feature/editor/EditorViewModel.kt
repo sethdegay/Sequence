@@ -139,6 +139,6 @@ class EditorViewModel @AssistedInject constructor(
             it?.copy(sequence = updatedSequence)
         }
 
-        sequenceRepository.saveSequence(updatedSequence)
+        sequenceRepository.saveSequence(updatedSequence, "")
     }
 }

@@ -17,14 +17,14 @@ class LocalSequenceRepository @Inject constructor(
     override fun getSequences(): Flow<List<Sequence>> = sequenceDao.getSequences()
         .map { sequences -> sequences.map { it.asExternalModel() } }
 
-    override suspend fun saveSequence(sequence: Sequence) {
+    override suspend fun saveSequence(sequence: Sequence, workspaceId: String) {
         sequenceDao.upsertSequenceWithSteps(
-            sequenceEntity = sequence.asEntity(),
+            sequenceEntity = sequence.asEntity(workspaceId),
             stepEntities = sequence.steps.map { it.asEntity(sequenceId = sequence.id) },
         )
     }
 
-    override suspend fun delete(sequence: Sequence) {
-        sequenceDao.delete(sequence.asEntity())
+    override suspend fun delete(sequence: Sequence, workspaceId: String) {
+        sequenceDao.delete(sequence.asEntity(workspaceId))
     }
 }
