@@ -46,7 +46,7 @@ import kotlin.uuid.Uuid
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    navigateToEditor: (Uuid?) -> Unit,
+    navigateToEditor: (Uuid?, Uuid) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToTimer: (Uuid) -> Unit,
 ) {
@@ -69,7 +69,7 @@ fun HomeScreen(
             HomeFab(
                 visible = !uiState.showLoadingScreen() && uiState.accordionExpandedId == null,
                 text = stringResource(string.home_add_sequence_button_text),
-                onClick = { navigateToEditor(null) },
+                onClick = { navigateToEditor(null, viewModel.workspaceId) },
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -79,7 +79,7 @@ fun HomeScreen(
         } else {
             HomeScreen(
                 scaffoldPadding = padding,
-                navigateToEditor = navigateToEditor,
+                navigateToEditor = { navigateToEditor(it, viewModel.workspaceId) },
                 navigateToTimer = navigateToTimer,
                 setAccordionExpandedId = { viewModel.setAccordionExpandedId(it) },
                 isExpanded = { it == uiState.accordionExpandedId },

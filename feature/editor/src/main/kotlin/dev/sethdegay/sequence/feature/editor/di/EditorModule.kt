@@ -21,7 +21,7 @@ object EditorModule {
         entry<EditorRoute> { key ->
             EditorScreen(
                 viewModel = hiltViewModel<EditorViewModel, EditorViewModel.Factory>(
-                    creationCallback = { factory -> factory.create(key.id) }
+                    creationCallback = { factory -> factory.create(key.id, key.workspaceId) }
                 ),
                 navigateUp = backStackManager::navigateUp,
             )

@@ -23,7 +23,9 @@ object HomeModule {
         entry<HomeRoute> {
             HomeScreen(
                 viewModel = hiltViewModel(),
-                navigateToEditor = { id -> backStackManager.navigate(EditorRoute(id)) },
+                navigateToEditor = { id, workspaceId ->
+                    backStackManager.navigate(EditorRoute(id, workspaceId))
+                },
                 navigateToSettings = { backStackManager.navigate(SettingsRoute) },
                 navigateToTimer = { id -> backStackManager.navigate(TimerRoute(id)) },
             )

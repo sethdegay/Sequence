@@ -29,13 +29,17 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 @HiltViewModel(assistedFactory = EditorViewModel.Factory::class)
 class EditorViewModel @AssistedInject constructor(
-    @Assisted private val id: Uuid?,
+    @Assisted("sequence") private val id: Uuid?,
+    @Assisted("workspace") private val workspaceId: Uuid,
     private val sequenceRepository: SequenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
-        fun create(id: Uuid?): EditorViewModel
+        fun create(
+            @Assisted("sequence") id: Uuid?,
+            @Assisted("workspace") workspaceId: Uuid,
+        ): EditorViewModel
     }
 
     private val emptySequence = with(Clock.System.now()) {
@@ -142,6 +146,6 @@ class EditorViewModel @AssistedInject constructor(
             it?.copy(sequence = updatedSequence)
         }
 
-        sequenceRepository.saveSequence(updatedSequence, Uuid.random()) // TODO
+        sequenceRepository.saveSequence(updatedSequence, workspaceId)
     }
 }

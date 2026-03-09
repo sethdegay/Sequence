@@ -8,7 +8,7 @@ import kotlin.uuid.Uuid
 typealias NavKeyInstaller = EntryProviderScope<NavKey>.() -> Unit
 
 @Serializable
-data class EditorRoute(val id: Uuid?) : NavKey
+data class EditorRoute(val id: Uuid?, val workspaceId: Uuid) : NavKey
 
 @Serializable
 data object HomeRoute : NavKey

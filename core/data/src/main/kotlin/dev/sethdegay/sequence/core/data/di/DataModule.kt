@@ -8,8 +8,10 @@ import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
 import dev.sethdegay.sequence.core.data.repository.LocalCalendarEventRepository
 import dev.sethdegay.sequence.core.data.repository.LocalSequenceRepository
 import dev.sethdegay.sequence.core.data.repository.LocalUserPreferencesRepository
+import dev.sethdegay.sequence.core.data.repository.LocalWorkspaceRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
+import dev.sethdegay.sequence.core.data.repository.WorkspaceRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -28,4 +30,9 @@ abstract class DataModule {
     abstract fun bindUserPreferencesRepository(
         userPreferencesRepository: LocalUserPreferencesRepository
     ): UserPreferencesRepository
+
+    @Binds
+    abstract fun bindWorkspaceRepository(
+        workspaceRepository: LocalWorkspaceRepository
+    ): WorkspaceRepository
 }

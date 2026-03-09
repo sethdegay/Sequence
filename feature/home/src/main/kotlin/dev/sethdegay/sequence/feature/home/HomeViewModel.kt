@@ -6,8 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
+import dev.sethdegay.sequence.core.data.repository.WorkspaceRepository
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.HeatMapLevel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,6 +32,7 @@ import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.datetime.LocalDate as KotlinLocalDate
@@ -40,7 +43,10 @@ class HomeViewModel @Inject constructor(
     sequenceRepository: SequenceRepository,
     calendarEventRepository: CalendarEventRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val workspaceRepository: WorkspaceRepository,
 ) : ViewModel() {
+
+    lateinit var workspaceId: Uuid
 
     private val timeZone = TimeZone.currentSystemDefault()
 
@@ -108,6 +114,14 @@ class HomeViewModel @Inject constructor(
         } else {
             showCalendarEventsSheet.value = false
             activeCalendarEventsRange.value = null
+        }
+    }
+
+    init {
+        // TODO
+        viewModelScope.launch {
+            delay(3.seconds)
+            workspaceId = workspaceRepository.getWorkspaces().first().id
         }
     }
 }
