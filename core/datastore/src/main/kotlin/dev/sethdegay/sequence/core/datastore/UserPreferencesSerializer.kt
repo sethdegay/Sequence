@@ -17,9 +17,6 @@ class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferenc
             completionSound = true
             speakTitle = true
         }
-        uiState = uiState {
-            accordionExpandedId = ""
-        }
     }
 
     override suspend fun readFrom(input: InputStream): UserPreferences {

@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
+import kotlin.uuid.Uuid
 
 @Entity(
     tableName = "step",
@@ -23,7 +24,7 @@ import kotlin.time.Duration
 data class StepEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: Uuid,
 
     @ColumnInfo(name = "title")
     val title: String,
@@ -35,7 +36,7 @@ data class StepEntity(
     val order: Int = 0,
 
     @ColumnInfo(name = "sequence_id")
-    val sequenceId: String,
+    val sequenceId: Uuid,
 )
 
 fun StepEntity.asExternalModel(): Step = Step(

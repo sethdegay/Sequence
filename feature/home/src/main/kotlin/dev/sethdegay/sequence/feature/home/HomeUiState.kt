@@ -4,13 +4,14 @@ import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.HeatMapLevel
 import dev.sethdegay.sequence.core.model.Sequence
 import java.time.LocalDate
+import kotlin.uuid.Uuid
 
 sealed interface HomeUiState {
     data object Loading : HomeUiState
 
     data class Success(
         override val sequences: List<Sequence>,
-        override val accordionExpandedId: String?,
+        override val accordionExpandedId: Uuid?,
         override val heatMapData: Map<LocalDate, HeatMapLevel>,
         override val heatMapCalendarStart: LocalDate,
         override val heatMapCalendarEnd: LocalDate,
@@ -24,7 +25,7 @@ sealed interface HomeUiState {
 
     val sequences: List<Sequence> get() = emptyList()
 
-    val accordionExpandedId: String? get() = null
+    val accordionExpandedId: Uuid? get() = null
 
     val heatMapCalendarStart: LocalDate get() = LocalDate.now()
 

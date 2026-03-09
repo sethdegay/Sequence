@@ -41,13 +41,14 @@ import dev.sethdegay.sequence.core.ui.CalendarEventsSheet
 import dev.sethdegay.sequence.core.ui.HeatMapCalendar
 import dev.sethdegay.sequence.feature.home.R.string
 import java.time.LocalDate
+import kotlin.uuid.Uuid
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    navigateToEditor: (String?) -> Unit,
+    navigateToEditor: (Uuid?) -> Unit,
     navigateToSettings: () -> Unit,
-    navigateToTimer: (String) -> Unit,
+    navigateToTimer: (Uuid) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
@@ -102,10 +103,10 @@ fun HomeScreen(
 @Composable
 private fun HomeScreen(
     scaffoldPadding: PaddingValues,
-    navigateToEditor: (String?) -> Unit,
-    navigateToTimer: (String) -> Unit,
-    setAccordionExpandedId: (String?) -> Unit,
-    isExpanded: (String) -> Boolean,
+    navigateToEditor: (Uuid?) -> Unit,
+    navigateToTimer: (Uuid) -> Unit,
+    setAccordionExpandedId: (Uuid?) -> Unit,
+    isExpanded: (Uuid) -> Boolean,
     sequences: List<Sequence>,
     heatMapData: Map<LocalDate, HeatMapLevel>,
     heatMapCalendarStart: LocalDate,

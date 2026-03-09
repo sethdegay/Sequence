@@ -11,6 +11,7 @@ kotlin {
         optIn.addAll(
             "androidx.compose.material3.ExperimentalMaterial3Api",
             "kotlinx.coroutines.FlowPreview",
+            "kotlin.uuid.ExperimentalUuidApi",
         )
     }
 }

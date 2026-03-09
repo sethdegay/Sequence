@@ -30,7 +30,7 @@ class WorkspacePreloadCallback(
                     if (dao.getCount() == 0) {
                         val now = Clock.System.now()
                         val workspace = WorkspaceEntity(
-                            id = Uuid.random().toHexDashString(),
+                            id = Uuid.random(),
                             title = "Default",
                             description = "The default workspace",
                             dateCreated = now,

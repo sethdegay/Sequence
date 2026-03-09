@@ -6,12 +6,13 @@ import androidx.room.PrimaryKey
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Workspace
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 @Entity(tableName = "workspace")
 data class WorkspaceEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: Uuid,
 
     @ColumnInfo(name = "title")
     val title: String,

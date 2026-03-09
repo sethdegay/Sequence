@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.uuid.Uuid
 
 class LocalUserPreferencesRepository @Inject constructor(
     private val dataSource: UserPreferencesDataSource,
@@ -28,7 +29,7 @@ class LocalUserPreferencesRepository @Inject constructor(
         dataSource.setDynamicColor(dynamicColor)
     }
 
-    override suspend fun setAccordionExpandedId(accordionExpandedId: String?) {
+    override suspend fun setAccordionExpandedId(accordionExpandedId: Uuid?) {
         dataSource.setAccordionExpandedId(accordionExpandedId)
     }
 

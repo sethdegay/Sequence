@@ -9,6 +9,7 @@ import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 @Entity(
     tableName = "sequence",
@@ -25,7 +26,7 @@ import kotlin.time.Instant
 data class SequenceEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: Uuid,
 
     @ColumnInfo(name = "title")
     val title: String,
@@ -43,7 +44,7 @@ data class SequenceEntity(
     val totalDuration: Duration,
 
     @ColumnInfo(name = "workspace_id")
-    val workspaceId: String,
+    val workspaceId: Uuid,
 )
 
 fun SequenceEntity.asExternalModel(steps: List<Step>): Sequence = Sequence(

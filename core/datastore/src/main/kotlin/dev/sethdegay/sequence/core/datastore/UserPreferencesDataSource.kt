@@ -1,11 +1,16 @@
+@file:OptIn(ExperimentalUuidApi::class)
+
 package dev.sethdegay.sequence.core.datastore
 
 import androidx.datastore.core.DataStore
+import com.google.protobuf.ByteString
 import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import dev.sethdegay.sequence.core.model.ThemeConfig as ExtThemeConfig
 import dev.sethdegay.sequence.core.model.UserPreferences as ExtUserPreferences
 
@@ -51,14 +56,15 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setAccordionExpandedId(accordionExpandedId: String?) {
+    suspend fun setAccordionExpandedId(accordionExpandedId: Uuid?) {
         _userPreferences.updateData { current ->
             current.copy {
                 this.uiState = this.uiState.copy {
                     if (accordionExpandedId == null) {
                         clearAccordionExpandedId()
                     } else {
-                        this.accordionExpandedId = accordionExpandedId
+                        this.accordionExpandedId =
+                            ByteString.copyFrom(accordionExpandedId.toByteArray())
                     }
                 }
             }
@@ -77,8 +83,10 @@ private fun UserPreferences.asExternalModel(): ExtUserPreferences {
             speakTitle = settings.speakTitle,
         ),
         uiState = UiState(
-            accordionExpandedId = uiState.accordionExpandedId.takeIf {
-                uiState.hasAccordionExpandedId() && it.isValidV4Uuid()
+            accordionExpandedId = try {
+                Uuid.fromByteArray(uiState.accordionExpandedId.toByteArray())
+            } catch (_: IllegalArgumentException) {
+                null
             },
         ),
     )
@@ -95,8 +103,3 @@ private fun ExtThemeConfig.asProto(): ThemeConfig = when (this) {
     ExtThemeConfig.LIGHT -> ThemeConfig.LIGHT
     ExtThemeConfig.DARK -> ThemeConfig.DARK
 }
-
-private val V4_UUID_REGEX =
-    "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$".toRegex()
-
-private fun String.isValidV4Uuid(): Boolean = matches(V4_UUID_REGEX)

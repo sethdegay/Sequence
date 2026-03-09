@@ -12,6 +12,7 @@ kotlin {
             "androidx.compose.material3.ExperimentalMaterial3Api",
             "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
             "kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "kotlin.uuid.ExperimentalUuidApi",
         )
     }
 }

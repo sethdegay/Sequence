@@ -210,7 +210,6 @@ private fun TimeInputField(
 private fun StepEditorPreview() {
     StepEditorSheet(
         step = Step(
-            id = "",
             title = "Step 1",
             duration = 30.days + 4.hours + 58.minutes + 15.seconds,
             order = 0,

@@ -10,14 +10,15 @@ import dev.sethdegay.sequence.core.database.model.SequenceWithSteps
 import dev.sethdegay.sequence.core.database.model.StepEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.uuid.Uuid
 
 @Suppress("FunctionName")
 @Dao
 interface SequenceDao {
     @Query("SELECT * FROM sequence WHERE id = :id")
-    suspend fun _getSequence(id: String): SequenceEntity
+    suspend fun _getSequence(id: Uuid): SequenceEntity
 
-    suspend fun getSequence(id: String): SequenceWithSteps = SequenceWithSteps(
+    suspend fun getSequence(id: Uuid): SequenceWithSteps = SequenceWithSteps(
         sequenceEntity = _getSequence(id),
         stepEntities = _getSequenceSteps(id),
     )
@@ -26,7 +27,7 @@ interface SequenceDao {
     fun _getSequences(): Flow<List<SequenceEntity>>
 
     @Query("SELECT * FROM step WHERE sequence_id = :id ORDER BY list_order ASC")
-    suspend fun _getSequenceSteps(id: String): List<StepEntity>
+    suspend fun _getSequenceSteps(id: Uuid): List<StepEntity>
 
     fun getSequences(): Flow<List<SequenceWithSteps>> = _getSequences().map { entities ->
         entities.map { entity ->

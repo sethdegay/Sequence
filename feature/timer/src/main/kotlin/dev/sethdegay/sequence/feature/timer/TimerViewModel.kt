@@ -34,10 +34,13 @@ import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @HiltViewModel(assistedFactory = TimerViewModel.Factory::class)
 class TimerViewModel @AssistedInject constructor(
-    @Assisted private val id: String,
+    @Assisted private val id: Uuid,
     private val timer: SequentialTimer<Step>,
     private val ttsManager: TtsManager,
     private val sfxManager: SfxManager,
@@ -47,7 +50,7 @@ class TimerViewModel @AssistedInject constructor(
 ) : ViewModel(), TimerControlsActions {
     @AssistedFactory
     interface Factory {
-        fun create(id: String): TimerViewModel
+        fun create(id: Uuid): TimerViewModel
     }
 
     private lateinit var sequence: Sequence

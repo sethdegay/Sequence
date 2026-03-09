@@ -4,6 +4,7 @@ import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.ThemeConfig
 import dev.sethdegay.sequence.core.model.UiState
 import kotlinx.coroutines.flow.Flow
+import kotlin.uuid.Uuid
 
 interface UserPreferencesRepository {
     val settings: Flow<Settings>
@@ -14,7 +15,7 @@ interface UserPreferencesRepository {
 
     suspend fun setDynamicColor(dynamicColor: Boolean)
 
-    suspend fun setAccordionExpandedId(accordionExpandedId: String?)
+    suspend fun setAccordionExpandedId(accordionExpandedId: Uuid?)
 
     suspend fun setMuteAll(muteAll: Boolean)
 

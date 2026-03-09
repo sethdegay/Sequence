@@ -5,7 +5,7 @@ import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 data class Sequence(
-    val id: String = Uuid.random().toHexDashString(),
+    val id: Uuid = Uuid.random(),
     val title: String,
     val description: String,
     val dateCreated: Instant,

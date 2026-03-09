@@ -8,6 +8,10 @@ android {
     namespace = "dev.sethdegay.sequence.core.navigation"
 }
 
+kotlin {
+    compilerOptions { optIn.add("kotlin.uuid.ExperimentalUuidApi") }
+}
+
 dependencies {
     api(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)

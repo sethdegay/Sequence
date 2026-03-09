@@ -9,6 +9,7 @@ import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.Sequence
 import kotlin.time.Duration
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 @Entity(
     tableName = "calendar_event",
@@ -25,7 +26,7 @@ import kotlin.time.Instant
 data class CalendarEventEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: Uuid,
 
     @ColumnInfo(name = "start_timestamp")
     val start: Instant,
@@ -37,7 +38,7 @@ data class CalendarEventEntity(
     val duration: Duration,
 
     @ColumnInfo(name = "sequence_id")
-    val sequenceId: String,
+    val sequenceId: Uuid,
 )
 
 fun CalendarEventEntity.asExternalModel(sequence: Sequence): CalendarEvent = CalendarEvent(

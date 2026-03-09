@@ -23,16 +23,19 @@ import kotlinx.coroutines.launch
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @HiltViewModel(assistedFactory = EditorViewModel.Factory::class)
 class EditorViewModel @AssistedInject constructor(
-    @Assisted private val id: String?,
+    @Assisted private val id: Uuid?,
     private val sequenceRepository: SequenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
-        fun create(id: String?): EditorViewModel
+        fun create(id: Uuid?): EditorViewModel
     }
 
     private val emptySequence = with(Clock.System.now()) {
@@ -139,6 +142,6 @@ class EditorViewModel @AssistedInject constructor(
             it?.copy(sequence = updatedSequence)
         }
 
-        sequenceRepository.saveSequence(updatedSequence, "")
+        sequenceRepository.saveSequence(updatedSequence, Uuid.random()) // TODO
     }
 }

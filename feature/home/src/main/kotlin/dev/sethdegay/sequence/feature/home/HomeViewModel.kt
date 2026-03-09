@@ -31,6 +31,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 import kotlinx.datetime.LocalDate as KotlinLocalDate
 import java.time.LocalDate as JavaLocalDate
 
@@ -93,7 +94,7 @@ class HomeViewModel @Inject constructor(
         initialValue = HomeUiState.Loading,
     )
 
-    fun setAccordionExpandedId(accordionExpandedId: String?) {
+    fun setAccordionExpandedId(accordionExpandedId: Uuid?) {
         viewModelScope.launch {
             userPreferencesRepository.setAccordionExpandedId(accordionExpandedId)
         }

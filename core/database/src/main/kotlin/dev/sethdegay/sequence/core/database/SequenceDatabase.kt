@@ -13,6 +13,7 @@ import dev.sethdegay.sequence.core.database.model.WorkspaceEntity
 import dev.sethdegay.sequence.core.database.util.DurationLongConverter
 import dev.sethdegay.sequence.core.database.util.InstantLongConverter
 import dev.sethdegay.sequence.core.database.util.LocalDateStringConverter
+import dev.sethdegay.sequence.core.database.util.UuidByteConverter
 
 @Database(
     entities = [
@@ -29,6 +30,7 @@ import dev.sethdegay.sequence.core.database.util.LocalDateStringConverter
         DurationLongConverter::class,
         InstantLongConverter::class,
         LocalDateStringConverter::class,
+        UuidByteConverter::class,
     ],
 )
 abstract class SequenceDatabase : RoomDatabase() {

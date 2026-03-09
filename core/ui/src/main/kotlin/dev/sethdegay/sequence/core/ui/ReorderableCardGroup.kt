@@ -32,6 +32,7 @@ import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import kotlin.time.Duration.Companion.seconds
+import kotlin.uuid.Uuid
 
 @Composable
 fun ReorderableCardGroup(
@@ -104,9 +105,9 @@ private fun ReorderableCardGroupPreview() {
     var steps by remember {
         mutableStateOf(
             listOf(
-                Step(id = "a", title = "Step 1", duration = 30.seconds),
-                Step(id = "b", title = "Step 2", duration = 20.seconds),
-                Step(id = "c", title = "Step 3", duration = 10.seconds),
+                Step(id = Uuid.random(), title = "Step 1", duration = 30.seconds),
+                Step(id = Uuid.random(), title = "Step 2", duration = 20.seconds),
+                Step(id = Uuid.random(), title = "Step 3", duration = 10.seconds),
             )
         )
     }

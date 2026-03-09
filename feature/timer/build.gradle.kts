@@ -7,7 +7,12 @@ android {
 }
 
 kotlin {
-    compilerOptions { optIn.add("androidx.compose.material3.ExperimentalMaterial3Api") }
+    compilerOptions {
+        optIn.addAll(
+            "androidx.compose.material3.ExperimentalMaterial3Api",
+            "kotlin.uuid.ExperimentalUuidApi",
+        )
+    }
 }
 
 dependencies {

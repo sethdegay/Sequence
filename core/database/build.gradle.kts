@@ -8,6 +8,10 @@ android {
     namespace = "dev.sethdegay.sequence.core.database"
 }
 
+kotlin {
+    compilerOptions { optIn.add("kotlin.uuid.ExperimentalUuidApi") }
+}
+
 dependencies {
     api(projects.core.common)
     api(projects.core.model)

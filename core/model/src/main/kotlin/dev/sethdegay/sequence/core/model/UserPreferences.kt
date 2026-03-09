@@ -1,5 +1,7 @@
 package dev.sethdegay.sequence.core.model
 
+import kotlin.uuid.Uuid
+
 data class UserPreferences(
     val settings: Settings,
     val uiState: UiState,
@@ -15,7 +17,7 @@ data class Settings(
 )
 
 data class UiState(
-    val accordionExpandedId: String?,
+    val accordionExpandedId: Uuid?,
 )
 
 enum class ThemeConfig { FOLLOW_SYSTEM, LIGHT, DARK; }

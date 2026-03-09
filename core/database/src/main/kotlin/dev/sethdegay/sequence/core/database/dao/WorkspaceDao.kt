@@ -8,6 +8,7 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import dev.sethdegay.sequence.core.database.model.WorkspaceEntity
 import dev.sethdegay.sequence.core.database.model.WorkspaceWithSequences
+import kotlin.uuid.Uuid
 
 @Dao
 interface WorkspaceDao {
@@ -16,7 +17,7 @@ interface WorkspaceDao {
 
     @Transaction
     @Query("SELECT * FROM workspace WHERE id = :id")
-    suspend fun getWorkspace(id: String): WorkspaceWithSequences
+    suspend fun getWorkspace(id: Uuid): WorkspaceWithSequences
 
     @Insert
     suspend fun insert(workspaceEntity: WorkspaceEntity)
