@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.sequence.feature)
+    alias(libs.plugins.sequence.feature.impl)
 }
 
 android {

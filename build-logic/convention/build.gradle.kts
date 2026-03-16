@@ -37,9 +37,13 @@ gradlePlugin {
             id = libs.plugins.sequence.compose.library.get().pluginId
             implementationClass = "SequenceComposeLibraryConventionPlugin"
         }
-        register("sequenceFeature") {
-            id = libs.plugins.sequence.feature.get().pluginId
-            implementationClass = "SequenceFeatureConventionPlugin"
+        register("sequenceFeatureApi") {
+            id = libs.plugins.sequence.feature.api.get().pluginId
+            implementationClass = "SequenceFeatureApiConventionPlugin"
+        }
+        register("sequenceFeatureImpl") {
+            id = libs.plugins.sequence.feature.impl.get().pluginId
+            implementationClass = "SequenceFeatureImplConventionPlugin"
         }
         register("sequenceHilt") {
             id = libs.plugins.sequence.hilt.get().pluginId

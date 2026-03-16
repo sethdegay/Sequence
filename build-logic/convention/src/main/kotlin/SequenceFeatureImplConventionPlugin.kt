@@ -5,7 +5,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 
-class SequenceFeatureConventionPlugin : Plugin<Project> {
+class SequenceFeatureImplConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         applyPlugins(project)
         applyDependencies(project)
