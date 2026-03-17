@@ -1,0 +1,18 @@
+plugins {
+    alias(libs.plugins.sequence.feature.impl)
+}
+
+android {
+    namespace = "dev.sethdegay.sequence.feature.home.impl"
+}
+
+kotlin {
+    compilerOptions {
+        optIn.addAll(
+            "androidx.compose.material3.ExperimentalMaterial3Api",
+            "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
+            "kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "kotlin.uuid.ExperimentalUuidApi",
+        )
+    }
+}
