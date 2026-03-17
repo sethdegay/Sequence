@@ -15,3 +15,7 @@ kotlin {
         )
     }
 }
+
+dependencies {
+    implementation(projects.feature.editor.api)
+}

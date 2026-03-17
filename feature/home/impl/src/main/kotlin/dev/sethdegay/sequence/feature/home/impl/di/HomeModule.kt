@@ -6,28 +6,28 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
-import dev.sethdegay.sequence.core.navigation.EditorRoute
-import dev.sethdegay.sequence.core.navigation.HomeRoute
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
-import dev.sethdegay.sequence.core.navigation.SettingsRoute
-import dev.sethdegay.sequence.core.navigation.TimerRoute
-import dev.sethdegay.sequence.core.navigation.di.SequenceBackStackManager
+import dev.sethdegay.sequence.core.navigation.SequenceNavigator
+import dev.sethdegay.sequence.feature.editor.api.EditorNavKey
+import dev.sethdegay.sequence.feature.home.api.HomeNavKey
 import dev.sethdegay.sequence.feature.home.impl.HomeScreen
+import dev.sethdegay.sequence.feature.settings.api.SettingsNavKey
+import dev.sethdegay.sequence.feature.timer.api.TimerNavKey
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object HomeModule {
     @IntoSet
     @Provides
-    fun provideNavKeyInstaller(backStackManager: SequenceBackStackManager): NavKeyInstaller = {
-        entry<HomeRoute> {
+    fun provideNavKeyInstaller(navigator: SequenceNavigator): NavKeyInstaller = {
+        entry<HomeNavKey> {
             HomeScreen(
                 viewModel = hiltViewModel(),
                 navigateToEditor = { id, workspaceId ->
-                    backStackManager.navigate(EditorRoute(id, workspaceId))
+                    navigator.navigate(EditorNavKey(id, workspaceId))
                 },
-                navigateToSettings = { backStackManager.navigate(SettingsRoute) },
-                navigateToTimer = { id -> backStackManager.navigate(TimerRoute(id)) },
+                navigateToSettings = { navigator.navigate(SettingsNavKey) },
+                navigateToTimer = { id -> navigator.navigate(TimerNavKey(id)) },
             )
         }
     }

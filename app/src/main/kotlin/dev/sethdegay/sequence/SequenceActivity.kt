@@ -13,14 +13,14 @@ import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sethdegay.sequence.core.designsystem.theme.SequenceTheme
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
-import dev.sethdegay.sequence.core.navigation.di.SequenceBackStackManager
+import dev.sethdegay.sequence.core.navigation.SequenceNavigator
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SequenceActivity : ComponentActivity() {
 
     @Inject
-    lateinit var backStackManager: SequenceBackStackManager
+    lateinit var navigator: SequenceNavigator
 
     @Inject
     lateinit var entryProviderScopes: Set<@JvmSuppressWildcards NavKeyInstaller>
@@ -41,8 +41,8 @@ class SequenceActivity : ComponentActivity() {
                 dynamicColor = themeConfig.dynamicColor,
             ) {
                 NavDisplay(
-                    backStack = backStackManager.backStack,
-                    onBack = backStackManager::navigateUp,
+                    backStack = navigator.backStack,
+                    onBack = navigator::navigateUp,
                     entryDecorators = listOf(
                         rememberSaveableStateHolderNavEntryDecorator(),
                         rememberViewModelStoreNavEntryDecorator(),

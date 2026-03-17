@@ -11,5 +11,6 @@ kotlin {
 }
 
 dependencies {
+    implementation(projects.feature.settings.api)
     implementation(projects.core.audio)
 }

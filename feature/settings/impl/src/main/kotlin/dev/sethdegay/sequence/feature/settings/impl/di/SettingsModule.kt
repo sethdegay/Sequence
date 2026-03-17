@@ -7,8 +7,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
-import dev.sethdegay.sequence.core.navigation.SettingsRoute
-import dev.sethdegay.sequence.core.navigation.di.SequenceBackStackManager
+import dev.sethdegay.sequence.core.navigation.SequenceNavigator
+import dev.sethdegay.sequence.feature.settings.api.SettingsNavKey
 import dev.sethdegay.sequence.feature.settings.impl.SettingsScreen
 
 @Module
@@ -16,11 +16,11 @@ import dev.sethdegay.sequence.feature.settings.impl.SettingsScreen
 object SettingsModule {
     @IntoSet
     @Provides
-    fun provideNavKeyInstaller(backStackManager: SequenceBackStackManager): NavKeyInstaller = {
-        entry<SettingsRoute> {
+    fun provideNavKeyInstaller(navigator: SequenceNavigator): NavKeyInstaller = {
+        entry<SettingsNavKey> {
             SettingsScreen(
                 viewModel = hiltViewModel(),
-                navigateUp = backStackManager::navigateUp,
+                navigateUp = navigator::navigateUp,
             )
         }
     }

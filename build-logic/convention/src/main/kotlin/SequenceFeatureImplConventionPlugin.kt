@@ -24,7 +24,6 @@ class SequenceFeatureImplConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(project(":core:data"))
                 "api"(project(":core:designsystem"))
-                "api"(project(":core:navigation"))
                 "implementation"(project(":core:ui"))
 
                 // Coroutines
