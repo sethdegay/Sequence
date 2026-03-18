@@ -1,3 +1,4 @@
+import dev.sethdegay.buildlogic.library
 import dev.sethdegay.buildlogic.pluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -21,6 +22,7 @@ class SequenceFeatureApiConventionPlugin : Plugin<Project> {
         with(project) {
             dependencies {
                 "api"(project(":core:navigation"))
+                "implementation"(library("kotlinx-serialization-core"))
             }
         }
     }
