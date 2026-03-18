@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.sequence.library)
-    alias(libs.plugins.sequence.compose.library)
+    alias(libs.plugins.sequence.compose)
 }
 
 android {

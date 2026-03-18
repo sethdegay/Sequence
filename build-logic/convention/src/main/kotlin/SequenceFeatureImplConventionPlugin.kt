@@ -15,7 +15,7 @@ class SequenceFeatureImplConventionPlugin : Plugin<Project> {
         with(project) {
             apply(plugin = project.pluginId("sequence-library"))
             apply(plugin = project.pluginId("sequence-hilt"))
-            apply(plugin = project.pluginId("sequence-compose-library"))
+            apply(plugin = project.pluginId("sequence-compose"))
         }
     }
 

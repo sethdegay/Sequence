@@ -1,4 +1,4 @@
-import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.dsl.CommonExtension
 import dev.sethdegay.buildlogic.library
 import dev.sethdegay.buildlogic.pluginId
 import org.gradle.api.Plugin
@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
-class SequenceComposeLibraryConventionPlugin : Plugin<Project> {
+class SequenceComposeConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         applyPlugins(project)
         applyComposeConfig(project)
@@ -22,7 +22,7 @@ class SequenceComposeLibraryConventionPlugin : Plugin<Project> {
 
     private fun applyComposeConfig(project: Project) {
         with(project) {
-            extensions.configure<LibraryExtension> {
+            extensions.configure<CommonExtension> {
                 buildFeatures.compose = true
             }
         }

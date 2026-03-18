@@ -33,9 +33,9 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("sequenceComposeLibrary") {
-            id = libs.plugins.sequence.compose.library.get().pluginId
-            implementationClass = "SequenceComposeLibraryConventionPlugin"
+        register("sequenceCompose") {
+            id = libs.plugins.sequence.compose.get().pluginId
+            implementationClass = "SequenceComposeConventionPlugin"
         }
         register("sequenceFeatureApi") {
             id = libs.plugins.sequence.feature.api.get().pluginId
