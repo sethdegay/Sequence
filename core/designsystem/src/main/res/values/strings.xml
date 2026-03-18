@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="navigate_up_content_description">Navigate up</string>
     <string name="dot_separator">•</string>
 
     <!-- Timer controller -->

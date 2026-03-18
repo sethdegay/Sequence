@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
+import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
@@ -29,7 +30,6 @@ import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Step
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
 import dev.sethdegay.sequence.core.ui.StepEditorSheet
-import dev.sethdegay.sequence.feature.editor.impl.R.string
 
 @Composable
 fun EditorScreen(
@@ -44,7 +44,7 @@ fun EditorScreen(
                 title = {},
                 navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
                     onClick = dropUnlessResumed { navigateUp() },
-                    contentDescription = stringResource(string.navigate_up_content_description),
+                    contentDescription = stringResource(navigate_up_content_description),
                 ),
             )
         },

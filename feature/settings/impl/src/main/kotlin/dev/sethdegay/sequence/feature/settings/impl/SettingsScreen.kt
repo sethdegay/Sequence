@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.dropUnlessResumed
+import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.component.ToggleButtonOption
@@ -54,7 +55,7 @@ fun SettingsScreen(
                 },
                 navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
                     onClick = dropUnlessResumed { navigateUp() },
-                    contentDescription = stringResource(string.navigate_up_content_description),
+                    contentDescription = stringResource(navigate_up_content_description),
                 ),
                 scrollBehavior = scrollBehavior,
             )

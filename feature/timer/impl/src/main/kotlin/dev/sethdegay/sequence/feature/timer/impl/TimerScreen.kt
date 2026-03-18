@@ -25,6 +25,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
+import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.component.ProgressIndicator
@@ -33,7 +34,6 @@ import dev.sethdegay.sequence.core.designsystem.component.TimerControlsActions
 import dev.sethdegay.sequence.core.designsystem.component.TimerControlsMode
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.sequence.feature.timer.impl.R.string
 
 @Composable
 fun TimerScreen(
@@ -63,7 +63,7 @@ fun TimerScreen(
                 },
                 navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
                     onClick = dropUnlessResumed { navigateUp() },
-                    contentDescription = stringResource(string.navigate_up_content_description),
+                    contentDescription = stringResource(navigate_up_content_description),
                 ),
                 scrollBehavior = scrollBehavior,
                 colors = TopAppBarDefaults.topAppBarColors(

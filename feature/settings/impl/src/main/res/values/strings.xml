@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="navigate_up_content_description">Navigate up</string>
     <string name="settings_top_app_bar_title">Settings</string>
 
     <!-- User interface settings -->
