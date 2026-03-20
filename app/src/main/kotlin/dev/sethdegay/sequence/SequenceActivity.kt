@@ -29,7 +29,7 @@ class SequenceActivity : ComponentActivity() {
     lateinit var entryProviderScopes: Set<@JvmSuppressWildcards NavKeyInstaller>
 
     @Inject
-    lateinit var bottomSheetStrategy: BottomSheetSceneStrategy<NavKey>
+    lateinit var bottomSheetSceneStrategy: BottomSheetSceneStrategy<NavKey>
 
     private val viewModel: SequenceViewModel by viewModels()
 
@@ -56,7 +56,10 @@ class SequenceActivity : ComponentActivity() {
                     entryProvider = entryProvider {
                         entryProviderScopes.forEach { builder -> this.builder() }
                     },
-                    sceneStrategy = bottomSheetStrategy then SinglePaneSceneStrategy(),
+                    sceneStrategies = listOf(
+                        bottomSheetSceneStrategy,
+                        SinglePaneSceneStrategy(),
+                    ),
                 )
             }
         }
