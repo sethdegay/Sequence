@@ -7,17 +7,12 @@ import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.data.repository.WorkspaceRepository
-import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.HeatMapLevel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -65,15 +60,6 @@ class HomeViewModel @Inject constructor(
         .date
         .toJavaLocalDate()
 
-    private val showCalendarEventsSheet = MutableStateFlow(false)
-
-    private val activeCalendarEventsRange = MutableStateFlow<Pair<Instant, Instant>?>(null)
-    private val activeCalendarEvents: Flow<List<CalendarEvent>?> =
-        activeCalendarEventsRange.flatMapLatest { range ->
-            range?.let { calendarEventRepository.getCalendarEvents(it.first, it.second) }
-                ?: flowOf(null)
-        }
-
     val uiState: StateFlow<HomeUiState> = combine(
         sequenceRepository.getSequences(),
         userPreferencesRepository.uiState,
@@ -82,17 +68,13 @@ class HomeViewModel @Inject constructor(
             end = endOfCurrentDay,
         ).map { it.toJavaHeatMapData() }
             .distinctUntilChanged(),
-        showCalendarEventsSheet,
-        activeCalendarEvents,
-    ) { sequences, uiState, heatMapData, showCalendarEventsSheet, activeCalendarEvents ->
+    ) { sequences, uiState, heatMapData ->
         HomeUiState.Success(
             sequences = sequences,
             accordionExpandedId = uiState.accordionExpandedId,
             heatMapData = heatMapData,
             heatMapCalendarStart = heatMapCalendarStart,
             heatMapCalendarEnd = heatMapCalendarEnd,
-            showCalendarEventsSheet = showCalendarEventsSheet && !activeCalendarEvents.isNullOrEmpty(),
-            activeCalendarEvents = activeCalendarEvents,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -106,15 +88,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onCalendarDateSelected(date: JavaLocalDate?) {
-        if (date != null) {
-            showCalendarEventsSheet.value = true
-            activeCalendarEventsRange.value = date.toKotlinLocalDate()
-                .let { Pair(it.atStartOfDayIn(timeZone), it.atEndOfDayIn(timeZone)) }
-        } else {
-            showCalendarEventsSheet.value = false
-            activeCalendarEventsRange.value = null
-        }
+    fun onCalendarDateSelected(date: JavaLocalDate): ClosedRange<Instant> {
+        return date.toKotlinLocalDate()
+            .let { it.atStartOfDayIn(timeZone)..it.atEndOfDayIn(timeZone) }
     }
 
     init {

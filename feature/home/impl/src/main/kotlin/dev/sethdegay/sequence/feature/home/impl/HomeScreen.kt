@@ -19,7 +19,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumExtendedFloatingActionButton
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,11 +40,13 @@ import dev.sethdegay.sequence.core.ui.AccordionHeader
 import dev.sethdegay.sequence.core.ui.HeatMapCalendar
 import dev.sethdegay.sequence.feature.home.impl.R.string
 import java.time.LocalDate
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
+    navigateToEventSheet: (ClosedRange<Instant>) -> Unit,
     navigateToEditor: (Uuid?, Uuid) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToTimer: (Uuid) -> Unit,
@@ -87,14 +88,8 @@ fun HomeScreen(
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
                 heatMapCalendarEnd = uiState.heatMapCalendarEnd,
-                onDateClicked = viewModel::onCalendarDateSelected,
+                onDateClicked = { navigateToEventSheet(viewModel.onCalendarDateSelected(it)) },
             )
-
-            if (uiState.showCalendarEventsSheet) {
-                ModalBottomSheet(onDismissRequest = { viewModel.onCalendarDateSelected(null) }) {
-                    EventSheetContainer(events = uiState.activeCalendarEvents)
-                }
-            }
         }
     }
 }

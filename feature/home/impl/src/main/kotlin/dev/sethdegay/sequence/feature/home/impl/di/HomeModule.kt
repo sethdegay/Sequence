@@ -6,10 +6,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
+import dev.sethdegay.sequence.core.navigation.BottomSheetSceneStrategy
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
 import dev.sethdegay.sequence.feature.editor.api.EditorNavKey
+import dev.sethdegay.sequence.feature.home.api.EventSheetNavKey
 import dev.sethdegay.sequence.feature.home.api.HomeNavKey
+import dev.sethdegay.sequence.feature.home.impl.EventSheetContainer
+import dev.sethdegay.sequence.feature.home.impl.EventSheetViewModel
 import dev.sethdegay.sequence.feature.home.impl.HomeScreen
 import dev.sethdegay.sequence.feature.settings.api.SettingsNavKey
 import dev.sethdegay.sequence.feature.timer.api.TimerNavKey
@@ -23,11 +27,19 @@ object HomeModule {
         entry<HomeNavKey> {
             HomeScreen(
                 viewModel = hiltViewModel(),
+                navigateToEventSheet = { navigator.navigate(EventSheetNavKey(it)) },
                 navigateToEditor = { id, workspaceId ->
                     navigator.navigate(EditorNavKey(id, workspaceId))
                 },
                 navigateToSettings = { navigator.navigate(SettingsNavKey) },
                 navigateToTimer = { id -> navigator.navigate(TimerNavKey(id)) },
+            )
+        }
+        entry<EventSheetNavKey>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) {
+            EventSheetContainer(
+                viewModel = hiltViewModel<EventSheetViewModel, EventSheetViewModel.Factory>(
+                    creationCallback = { factory -> factory.create(it.range) },
+                ),
             )
         }
     }

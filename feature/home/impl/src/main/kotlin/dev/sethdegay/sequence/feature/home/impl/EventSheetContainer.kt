@@ -6,16 +6,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.ui.CalendarEventList
 
 @Composable
-fun EventSheetContainer(events: List<CalendarEvent>?) {
+fun EventSheetContainer(viewModel: EventSheetViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
     when {
-        events == null -> {
+        uiState.showLoadingIndicator() || uiState.events.isEmpty() -> {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -29,6 +31,6 @@ fun EventSheetContainer(events: List<CalendarEvent>?) {
             }
         }
 
-        else -> CalendarEventList(events)
+        else -> CalendarEventList(uiState.events)
     }
 }
