@@ -19,6 +19,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumExtendedFloatingActionButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +38,6 @@ import dev.sethdegay.sequence.core.model.HeatMapLevel
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Step
 import dev.sethdegay.sequence.core.ui.AccordionHeader
-import dev.sethdegay.sequence.core.ui.CalendarEventsSheet
 import dev.sethdegay.sequence.core.ui.HeatMapCalendar
 import dev.sethdegay.sequence.feature.home.impl.R.string
 import java.time.LocalDate
@@ -91,10 +91,9 @@ fun HomeScreen(
             )
 
             if (uiState.showCalendarEventsSheet) {
-                CalendarEventsSheet(
-                    calendarEvents = uiState.activeCalendarEvents,
-                    onDismissRequest = { viewModel.onCalendarDateSelected(null) },
-                )
+                ModalBottomSheet(onDismissRequest = { viewModel.onCalendarDateSelected(null) }) {
+                    EventSheetContainer(events = uiState.activeCalendarEvents)
+                }
             }
         }
     }

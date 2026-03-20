@@ -17,9 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -46,32 +44,7 @@ import kotlin.time.Instant
 import kotlin.time.toJavaInstant
 
 @Composable
-fun CalendarEventsSheet(
-    calendarEvents: List<CalendarEvent>?,
-    onDismissRequest: () -> Unit,
-) {
-    ModalBottomSheet(onDismissRequest = onDismissRequest) {
-        when {
-            calendarEvents == null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp),
-                ) {
-                    LoadingIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(64.dp),
-                    )
-                }
-            }
-            else -> CalendarEventList(calendarEvents)
-        }
-    }
-}
-
-@Composable
-private fun CalendarEventList(events: List<CalendarEvent>) {
+fun CalendarEventList(events: List<CalendarEvent>) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
     ) {
@@ -182,7 +155,7 @@ private fun CalendarEventsSheetPreview(
     @PreviewParameter(CalendarStateProvider::class) events: List<CalendarEvent>,
 ) {
     SequenceTheme {
-        CalendarEventsSheet(calendarEvents = events, onDismissRequest = {})
+        CalendarEventList(events)
     }
 }
 
@@ -206,7 +179,6 @@ private fun createMockEvent(
 
 class CalendarStateProvider : PreviewParameterProvider<List<CalendarEvent>?> {
     override val values = sequenceOf(
-        null,
         emptyList(),
         listOf(createMockEvent("Single Event", Clock.System.now(), 15.minutes)),
         (1..10).map { createMockEvent("Event $it", Clock.System.now(), 10.minutes) },
