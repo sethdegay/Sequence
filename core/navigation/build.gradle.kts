@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.sequence.library)
+    alias(libs.plugins.sequence.compose)
     alias(libs.plugins.sequence.hilt)
-    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -14,4 +14,5 @@ kotlin {
 
 dependencies {
     api(libs.androidx.navigation3.runtime)
+    api(libs.androidx.navigation3.ui)
 }

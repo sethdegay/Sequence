@@ -7,11 +7,14 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.scene.SinglePaneSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sethdegay.sequence.core.designsystem.theme.SequenceTheme
+import dev.sethdegay.sequence.core.navigation.BottomSheetSceneStrategy
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
 import javax.inject.Inject
@@ -24,6 +27,9 @@ class SequenceActivity : ComponentActivity() {
 
     @Inject
     lateinit var entryProviderScopes: Set<@JvmSuppressWildcards NavKeyInstaller>
+
+    @Inject
+    lateinit var bottomSheetStrategy: BottomSheetSceneStrategy<NavKey>
 
     private val viewModel: SequenceViewModel by viewModels()
 
@@ -50,6 +56,7 @@ class SequenceActivity : ComponentActivity() {
                     entryProvider = entryProvider {
                         entryProviderScopes.forEach { builder -> this.builder() }
                     },
+                    sceneStrategy = bottomSheetStrategy then SinglePaneSceneStrategy(),
                 )
             }
         }

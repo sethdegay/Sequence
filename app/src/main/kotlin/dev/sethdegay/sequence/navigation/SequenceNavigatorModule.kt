@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence
+package dev.sethdegay.sequence.navigation
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.navigation3.runtime.NavKey
