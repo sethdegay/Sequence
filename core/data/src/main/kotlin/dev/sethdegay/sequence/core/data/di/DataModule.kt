@@ -6,9 +6,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
 import dev.sethdegay.sequence.core.data.repository.LocalCalendarEventRepository
+import dev.sethdegay.sequence.core.data.repository.LocalSegmentRepository
 import dev.sethdegay.sequence.core.data.repository.LocalSequenceRepository
 import dev.sethdegay.sequence.core.data.repository.LocalUserPreferencesRepository
 import dev.sethdegay.sequence.core.data.repository.LocalWorkspaceRepository
+import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.data.repository.WorkspaceRepository
@@ -20,6 +22,11 @@ abstract class DataModule {
     abstract fun bindCalendarEventRepository(
         calendarEventRepository: LocalCalendarEventRepository
     ): CalendarEventRepository
+
+    @Binds
+    abstract fun bindSegmentRepository(
+        segmentRepository: LocalSegmentRepository
+    ): SegmentRepository
 
     @Binds
     abstract fun bindSequenceRepository(

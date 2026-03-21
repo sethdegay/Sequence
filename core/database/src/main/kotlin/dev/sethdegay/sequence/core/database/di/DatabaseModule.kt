@@ -11,6 +11,7 @@ import dev.sethdegay.sequence.core.common.di.ApplicationScope
 import dev.sethdegay.sequence.core.database.SequenceDatabase
 import dev.sethdegay.sequence.core.database.WorkspacePreloadCallback
 import dev.sethdegay.sequence.core.database.dao.CalendarEventDao
+import dev.sethdegay.sequence.core.database.dao.SegmentDao
 import dev.sethdegay.sequence.core.database.dao.SequenceDao
 import dev.sethdegay.sequence.core.database.dao.WorkspaceDao
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +38,10 @@ object DatabaseModule {
     @Provides
     fun provideCalendarEventDao(database: SequenceDatabase): CalendarEventDao =
         database.calendarEventDao()
+
+    @Provides
+    fun provideSegmentDao(database: SequenceDatabase): SegmentDao =
+        database.segmentDao()
 
     @Provides
     fun provideSequenceDao(database: SequenceDatabase): SequenceDao =

@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.sethdegay.sequence.core.database.dao.CalendarEventDao
+import dev.sethdegay.sequence.core.database.dao.SegmentDao
 import dev.sethdegay.sequence.core.database.dao.SequenceDao
 import dev.sethdegay.sequence.core.database.dao.WorkspaceDao
 import dev.sethdegay.sequence.core.database.model.CalendarEventEntity
@@ -35,6 +36,7 @@ import dev.sethdegay.sequence.core.database.util.UuidByteConverter
 )
 abstract class SequenceDatabase : RoomDatabase() {
     abstract fun calendarEventDao(): CalendarEventDao
+    abstract fun segmentDao(): SegmentDao
     abstract fun sequenceDao(): SequenceDao
     abstract fun workspaceDao(): WorkspaceDao
 }
