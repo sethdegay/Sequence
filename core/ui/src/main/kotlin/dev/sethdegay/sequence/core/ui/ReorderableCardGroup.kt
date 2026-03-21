@@ -13,10 +13,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -89,7 +87,7 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
             }
             SequenceIcons.DragHandle.asComposableIconButton(
                 modifier = with(this@ReorderableCardGroupItem) {
-                    Modifier.Companion.draggableHandle()
+                    Modifier.draggableHandle()
                 },
                 onClick = {},
                 contentDescription = stringResource(string.drag_handle_content_description),
@@ -102,7 +100,7 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
 @Preview(showBackground = true)
 @Composable
 private fun ReorderableCardGroupPreview() {
-    var segments by remember {
+    val (segments, onSegmentOrderChanged) = remember {
         mutableStateOf(
             listOf(
                 Segment(id = Uuid.random(), title = "Segment 1", duration = 30.seconds),
@@ -114,7 +112,7 @@ private fun ReorderableCardGroupPreview() {
     ReorderableCardGroup(
         modifier = Modifier,
         segments = segments,
-        onSegmentOrderChanged = { segments = it },
+        onSegmentOrderChanged = onSegmentOrderChanged,
         onSegmentClick = {},
         headerContent = {},
     )
