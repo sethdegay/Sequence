@@ -3,7 +3,7 @@ package dev.sethdegay.sequence.core.model
 import kotlin.time.Duration
 import kotlin.uuid.Uuid
 
-data class Step(
+data class Segment(
     val id: Uuid = Uuid.random(),
     val title: String,
     val duration: Duration,

@@ -10,6 +10,6 @@ data class Sequence(
     val description: String,
     val dateCreated: Instant,
     val dateModified: Instant,
-    val steps: List<Step>,
+    val segments: List<Segment>,
     val totalDuration: Duration,
 )

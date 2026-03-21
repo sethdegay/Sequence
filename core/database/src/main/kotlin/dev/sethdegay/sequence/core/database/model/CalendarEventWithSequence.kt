@@ -16,4 +16,4 @@ data class CalendarEventWithSequence(
 )
 
 fun CalendarEventWithSequence.asExternalModel(): CalendarEvent =
-    calendarEventEntity.asExternalModel(sequenceEntity.asExternalModel(steps = emptyList()))
+    calendarEventEntity.asExternalModel(sequenceEntity.asExternalModel(segments = emptyList()))

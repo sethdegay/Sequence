@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.sethdegay.sequence.core.model.Step
+import dev.sethdegay.sequence.core.model.Segment
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -28,8 +28,8 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @Stable
-private class StepEditorState(private val initialStep: Step?) {
-    val titleState = TextFieldState(initialText = initialStep?.title ?: "")
+private class SegmentEditorState(private val initialSegment: Segment?) {
+    val titleState = TextFieldState(initialText = initialSegment?.title ?: "")
 
     var daysInput by mutableStateOf("0")
     var hoursInput by mutableStateOf("0")
@@ -37,7 +37,7 @@ private class StepEditorState(private val initialStep: Step?) {
     var secondsInput by mutableStateOf("0")
 
     init {
-        initialStep?.duration?.toComponents { days, hours, minutes, seconds, _ ->
+        initialSegment?.duration?.toComponents { days, hours, minutes, seconds, _ ->
             daysInput = days.toString()
             hoursInput = hours.toString()
             minutesInput = minutes.toString()
@@ -45,20 +45,20 @@ private class StepEditorState(private val initialStep: Step?) {
         }
     }
 
-    fun toStep(): Step {
+    fun toSegment(): Segment {
         val newDuration = calculateDuration()
         val newTitle = titleState.text.toString()
 
-        return initialStep?.copy(
+        return initialSegment?.copy(
             title = newTitle,
             duration = newDuration,
-        ) ?: Step(
+        ) ?: Segment(
             title = newTitle,
             duration = newDuration,
         )
     }
 
-    fun isEmpty(): Boolean = initialStep == null &&
+    fun isEmpty(): Boolean = initialSegment == null &&
             titleState.text.isEmpty() &&
             daysInput == "0" &&
             hoursInput == "0" &&
@@ -76,44 +76,44 @@ private class StepEditorState(private val initialStep: Step?) {
 }
 
 private fun handleOnDismissRequest(
-    state: StepEditorState,
-    step: Step?,
-    onStepSave: (Step) -> Unit,
+    state: SegmentEditorState,
+    segment: Segment?,
+    onSegmentSave: (Segment) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     if (state.isEmpty()) {
         onDismissRequest()
         return
     }
-    when (val updatedStep = state.toStep()) {
-        step -> onDismissRequest()
-        else -> onStepSave(updatedStep)
+    when (val updatedSegment = state.toSegment()) {
+        segment -> onDismissRequest()
+        else -> onSegmentSave(updatedSegment)
     }
 }
 
 @Composable
-fun StepEditorSheet(
-    step: Step?,
-    onStepSave: (Step) -> Unit,
+fun SegmentEditorSheet(
+    segment: Segment?,
+    onSegmentSave: (Segment) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val state = remember(step) { StepEditorState(step) }
+    val state = remember(segment) { SegmentEditorState(segment) }
     ModalBottomSheet(
         onDismissRequest = {
             handleOnDismissRequest(
                 state = state,
-                step = step,
-                onStepSave = onStepSave,
+                segment = segment,
+                onSegmentSave = onSegmentSave,
                 onDismissRequest = onDismissRequest,
             )
         },
     ) {
-        StepEditorSheetContent(state)
+        SegmentEditorSheetContent(state)
     }
 }
 
 @Composable
-private fun StepEditorSheetContent(state: StepEditorState) {
+private fun SegmentEditorSheetContent(state: SegmentEditorState) {
     Column(
         modifier = Modifier.padding(
             start = 16.dp,
@@ -207,14 +207,14 @@ private fun TimeInputField(
 
 @Preview
 @Composable
-private fun StepEditorPreview() {
-    StepEditorSheet(
-        step = Step(
-            title = "Step 1",
+private fun SegmentEditorPreview() {
+    SegmentEditorSheet(
+        segment = Segment(
+            title = "Segment 1",
             duration = 30.days + 4.hours + 58.minutes + 15.seconds,
             order = 0,
         ),
-        onStepSave = {},
+        onSegmentSave = {},
         onDismissRequest = {},
     )
 }

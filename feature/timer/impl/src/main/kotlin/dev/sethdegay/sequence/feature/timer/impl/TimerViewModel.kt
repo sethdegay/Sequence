@@ -14,9 +14,9 @@ import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.designsystem.component.ProgressIndicatorAmplitudeLevel
 import dev.sethdegay.sequence.core.designsystem.component.TimerControlsActions
 import dev.sethdegay.sequence.core.model.CalendarEvent
+import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Settings
-import dev.sethdegay.sequence.core.model.Step
 import dev.sethdegay.sequence.core.timer.SequentialTimer
 import dev.sethdegay.sequence.core.timer.SequentialTimerState
 import kotlinx.coroutines.Job
@@ -41,7 +41,7 @@ import kotlin.uuid.Uuid
 @HiltViewModel(assistedFactory = TimerViewModel.Factory::class)
 class TimerViewModel @AssistedInject constructor(
     @Assisted private val id: Uuid,
-    private val timer: SequentialTimer<Step>,
+    private val timer: SequentialTimer<Segment>,
     private val ttsManager: TtsManager,
     private val sfxManager: SfxManager,
     private val sequenceRepository: SequenceRepository,
@@ -87,7 +87,7 @@ class TimerViewModel @AssistedInject constructor(
                 .first()
                 .apply {
                     if (!this) return@apply
-                    timer.start(sequenceRepository.getSequence(id).also { sequence = it }.steps)
+                    timer.start(sequenceRepository.getSequence(id).also { sequence = it }.segments)
                     start = Clock.System.now()
                 }
         }
@@ -119,25 +119,25 @@ class TimerViewModel @AssistedInject constructor(
             return TimerUiState.Loading
         }
 
-        val (steps, index, time, accumulatedDuration) =
+        val (segments, index, time, accumulatedDuration) =
             @Suppress("UNCHECKED_CAST")
             when (this) {
                 is SequentialTimerState.Running<*> -> SequentialTimerStateData(
-                    items as List<Step>,
+                    items as List<Segment>,
                     currentItemIndex,
                     timeLeft,
                     accumulatedDuration,
                 )
 
                 is SequentialTimerState.Paused<*> -> SequentialTimerStateData(
-                    items as List<Step>,
+                    items as List<Segment>,
                     currentItemIndex,
                     timeLeft,
                     accumulatedDuration,
                 )
             }
 
-        val currentStep = steps[index]
+        val currentSegment = segments[index]
 
         val progress = if (sequence.totalDuration > Duration.ZERO) {
             (accumulatedDuration / sequence.totalDuration).toFloat()
@@ -148,8 +148,8 @@ class TimerViewModel @AssistedInject constructor(
         val isTimerRunning = this is SequentialTimerState.Running<*>
 
         if (isTimerRunning) {
-            if (steps[index].duration == time) {
-                speakTitle(steps[index].title)
+            if (segments[index].duration == time) {
+                speakTitle(segments[index].title)
             }
             when (time) {
                 5.seconds, 3.seconds, 1.seconds -> playOddTickSound()
@@ -159,11 +159,11 @@ class TimerViewModel @AssistedInject constructor(
         }
 
         return TimerUiState.Success(
-            currentStep = currentStep,
+            currentSegment = currentSegment,
             remainingTime = time,
             isTimerRunning = isTimerRunning,
             canMovePrevious = index > 0,
-            canMoveNext = index < steps.lastIndex,
+            canMoveNext = index < segments.lastIndex,
             progress = progress,
             amplitudeLevel = if (isTimerRunning) {
                 ProgressIndicatorAmplitudeLevel.MAXIMUM
@@ -208,7 +208,7 @@ class TimerViewModel @AssistedInject constructor(
 }
 
 private data class SequentialTimerStateData(
-    val items: List<Step>,
+    val items: List<Segment>,
     val currentItemIndex: Int,
     val timeLeft: Duration,
     val accumulatedDuration: Duration,

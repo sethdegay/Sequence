@@ -13,7 +13,7 @@ data class WorkspaceWithSequences(
         parentColumn = "id",
         entityColumn = "workspace_id",
     )
-    val sequenceEntities: List<SequenceWithSteps>,
+    val sequenceEntities: List<SequenceWithSegments>,
 )
 
 fun WorkspaceWithSequences.asExternalModel(): Workspace =

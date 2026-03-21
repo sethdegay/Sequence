@@ -26,7 +26,7 @@ import dev.sethdegay.sequence.core.designsystem.component.CardGroupItem
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
-import dev.sethdegay.sequence.core.model.Step
+import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.ui.R.string
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
@@ -37,15 +37,15 @@ import kotlin.uuid.Uuid
 @Composable
 fun ReorderableCardGroup(
     modifier: Modifier = Modifier,
-    steps: List<Step>,
-    onStepOrderChanged: (List<Step>) -> Unit,
-    onStepClick: (Step) -> Unit,
+    segments: List<Segment>,
+    onSegmentOrderChanged: (List<Segment>) -> Unit,
+    onSegmentClick: (Segment) -> Unit,
     headerContent: @Composable LazyItemScope.() -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        onStepOrderChanged(
-            steps.toMutableList().apply { add(to.index - 1, removeAt(from.index - 1)) })
+        onSegmentOrderChanged(
+            segments.toMutableList().apply { add(to.index - 1, removeAt(from.index - 1)) })
     }
     LazyColumn(
         modifier = modifier,
@@ -54,9 +54,9 @@ fun ReorderableCardGroup(
         state = lazyListState,
     ) {
         item(content = headerContent)
-        items(items = steps, key = { it.id }) { step ->
-            ReorderableItem(reorderableLazyListState, key = step.id) {
-                ReorderableCardGroupItem(step, onStepClick)
+        items(items = segments, key = { it.id }) { segment ->
+            ReorderableItem(reorderableLazyListState, key = segment.id) {
+                ReorderableCardGroupItem(segment, onSegmentClick)
             }
         }
     }
@@ -64,13 +64,13 @@ fun ReorderableCardGroup(
 
 @Composable
 internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
-    step: Step,
-    onStepClick: (Step) -> Unit,
+    segment: Segment,
+    onSegmentClick: (Segment) -> Unit,
 ) {
     CardGroupItem {
         Row(
             modifier = Modifier
-                .clickable(onClick = { onStepClick(step) })
+                .clickable(onClick = { onSegmentClick(segment) })
                 .fillMaxWidth()
                 .padding(vertical = 10.dp, horizontal = 0.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -81,9 +81,9 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(modifier = Modifier.padding(start = 16.dp), text = step.title)
+                Text(modifier = Modifier.padding(start = 16.dp), text = segment.title)
                 CountdownDisplay(
-                    duration = step.duration,
+                    duration = segment.duration,
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
@@ -102,20 +102,20 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
 @Preview(showBackground = true)
 @Composable
 private fun ReorderableCardGroupPreview() {
-    var steps by remember {
+    var segments by remember {
         mutableStateOf(
             listOf(
-                Step(id = Uuid.random(), title = "Step 1", duration = 30.seconds),
-                Step(id = Uuid.random(), title = "Step 2", duration = 20.seconds),
-                Step(id = Uuid.random(), title = "Step 3", duration = 10.seconds),
+                Segment(id = Uuid.random(), title = "Segment 1", duration = 30.seconds),
+                Segment(id = Uuid.random(), title = "Segment 2", duration = 20.seconds),
+                Segment(id = Uuid.random(), title = "Segment 3", duration = 10.seconds),
             )
         )
     }
     ReorderableCardGroup(
         modifier = Modifier,
-        steps = steps,
-        onStepOrderChanged = { steps = it },
-        onStepClick = {},
+        segments = segments,
+        onSegmentOrderChanged = { segments = it },
+        onSegmentClick = {},
         headerContent = {},
     )
 }

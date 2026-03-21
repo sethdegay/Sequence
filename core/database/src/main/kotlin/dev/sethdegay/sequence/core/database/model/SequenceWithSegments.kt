@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import dev.sethdegay.sequence.core.model.Sequence
 
-data class SequenceWithSteps(
+data class SequenceWithSegments(
     @Embedded
     val sequenceEntity: SequenceEntity,
 
@@ -12,8 +12,8 @@ data class SequenceWithSteps(
         parentColumn = "id",
         entityColumn = "sequence_id",
     )
-    val stepEntities: List<StepEntity>,
+    val segmentEntities: List<SegmentEntity>,
 )
 
-fun SequenceWithSteps.asExternalModel(): Sequence =
-    sequenceEntity.asExternalModel(stepEntities.map { it.asExternalModel() })
+fun SequenceWithSegments.asExternalModel(): Sequence =
+    sequenceEntity.asExternalModel(segmentEntities.map { it.asExternalModel() })

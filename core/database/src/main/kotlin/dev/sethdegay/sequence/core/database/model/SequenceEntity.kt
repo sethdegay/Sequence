@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
-import dev.sethdegay.sequence.core.model.Step
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
@@ -47,12 +47,12 @@ data class SequenceEntity(
     val workspaceId: Uuid,
 )
 
-fun SequenceEntity.asExternalModel(steps: List<Step>): Sequence = Sequence(
+fun SequenceEntity.asExternalModel(segments: List<Segment>): Sequence = Sequence(
     id = id,
     title = title,
     description = description,
     dateCreated = dateCreated,
     dateModified = dateModified,
-    steps = steps,
+    segments = segments,
     totalDuration = totalDuration,
 )

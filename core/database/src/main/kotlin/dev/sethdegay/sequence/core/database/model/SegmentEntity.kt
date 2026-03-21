@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import dev.sethdegay.sequence.core.model.Step
+import dev.sethdegay.sequence.core.model.Segment
 import kotlin.time.Duration
 import kotlin.uuid.Uuid
 
 @Entity(
-    tableName = "step",
+    tableName = "segment",
     foreignKeys = [
         ForeignKey(
             entity = SequenceEntity::class,
@@ -21,7 +21,7 @@ import kotlin.uuid.Uuid
     ],
     indices = [Index(value = ["sequence_id"])],
 )
-data class StepEntity(
+data class SegmentEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Uuid,
@@ -39,7 +39,7 @@ data class StepEntity(
     val sequenceId: Uuid,
 )
 
-fun StepEntity.asExternalModel(): Step = Step(
+fun SegmentEntity.asExternalModel(): Segment = Segment(
     id = id,
     title = title,
     duration = duration,

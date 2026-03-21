@@ -34,8 +34,8 @@ import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.HeatMapLevel
+import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
-import dev.sethdegay.sequence.core.model.Step
 import dev.sethdegay.sequence.core.ui.AccordionHeader
 import dev.sethdegay.sequence.core.ui.HeatMapCalendar
 import dev.sethdegay.sequence.feature.home.impl.R.string
@@ -149,13 +149,13 @@ private fun HomeScreen(
                     )
                 }
             ) {
-                sequence.steps.forEach { step ->
+                sequence.segments.forEach { segment ->
                     item { contentPadding ->
-                        SequenceStep(
+                        SequenceSegment(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(contentPadding),
-                            step,
+                            segment,
                         )
                     }
                 }
@@ -189,15 +189,15 @@ private fun HomeFab(
 }
 
 @Composable
-private fun SequenceStep(modifier: Modifier, step: Step) {
+private fun SequenceSegment(modifier: Modifier, segment: Segment) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(text = step.title)
+        Text(text = segment.title)
         CountdownDisplay(
-            duration = step.duration,
+            duration = segment.duration,
             style = MaterialTheme.typography.bodyMedium,
         )
     }

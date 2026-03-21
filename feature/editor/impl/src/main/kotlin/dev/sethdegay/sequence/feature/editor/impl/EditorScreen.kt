@@ -26,10 +26,10 @@ import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
-import dev.sethdegay.sequence.core.model.Step
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
-import dev.sethdegay.sequence.core.ui.StepEditorSheet
+import dev.sethdegay.sequence.core.ui.SegmentEditorSheet
 
 @Composable
 fun EditorScreen(
@@ -50,7 +50,7 @@ fun EditorScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.showStepEditor(null) },
+                onClick = { viewModel.showSegmentEditor(null) },
                 content = SequenceIcons.Add.asComposableIcon(),
             )
         }
@@ -65,15 +65,15 @@ fun EditorScreen(
                         sequence = uiState.sequence!!,
                         onTitleSave = viewModel::onTitleSave,
                         onDescriptionSave = viewModel::onDescriptionSave,
-                        onStepOrderChanged = viewModel::onStepsSave,
-                        onStepClick = viewModel::showStepEditor,
+                        onSegmentOrderChanged = viewModel::onSegmentsSave,
+                        onSegmentClick = viewModel::showSegmentEditor,
                     )
 
-                    if (uiState.showStepEditorSheet) {
-                        StepEditorSheet(
-                            step = uiState.activeStep,
-                            onStepSave = viewModel::onStepSave,
-                            onDismissRequest = viewModel::hideStepEditor,
+                    if (uiState.showSegmentEditorSheet) {
+                        SegmentEditorSheet(
+                            segment = uiState.activeSegment,
+                            onSegmentSave = viewModel::onSegmentSave,
+                            onDismissRequest = viewModel::hideSegmentEditor,
                         )
                     }
                 }
@@ -93,17 +93,17 @@ private fun EditorScreen(
     sequence: Sequence,
     onTitleSave: (String) -> Unit,
     onDescriptionSave: (String) -> Unit,
-    onStepOrderChanged: (List<Step>) -> Unit,
-    onStepClick: (Step) -> Unit,
+    onSegmentOrderChanged: (List<Segment>) -> Unit,
+    onSegmentClick: (Segment) -> Unit,
 ) {
     ReorderableCardGroup(
         modifier = Modifier
             .consumeWindowInsets(scaffoldPadding)
             .padding(scaffoldPadding)
             .fillMaxWidth(),
-        steps = sequence.steps,
-        onStepOrderChanged = onStepOrderChanged,
-        onStepClick = onStepClick,
+        segments = sequence.segments,
+        onSegmentOrderChanged = onSegmentOrderChanged,
+        onSegmentClick = onSegmentClick,
     ) {
         Column {
             OutlinedTextField(

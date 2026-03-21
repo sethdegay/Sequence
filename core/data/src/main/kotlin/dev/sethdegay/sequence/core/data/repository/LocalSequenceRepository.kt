@@ -19,9 +19,9 @@ class LocalSequenceRepository @Inject constructor(
         .map { sequences -> sequences.map { it.asExternalModel() } }
 
     override suspend fun saveSequence(sequence: Sequence, workspaceId: Uuid) {
-        sequenceDao.upsertSequenceWithSteps(
+        sequenceDao.upsertSequenceWithSegments(
             sequenceEntity = sequence.asEntity(workspaceId),
-            stepEntities = sequence.steps.map { it.asEntity(sequenceId = sequence.id) },
+            segmentEntities = sequence.segments.map { it.asEntity(sequenceId = sequence.id) },
         )
     }
 

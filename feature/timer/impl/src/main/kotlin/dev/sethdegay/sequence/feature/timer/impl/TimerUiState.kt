@@ -1,7 +1,7 @@
 package dev.sethdegay.sequence.feature.timer.impl
 
 import dev.sethdegay.sequence.core.designsystem.component.ProgressIndicatorAmplitudeLevel
-import dev.sethdegay.sequence.core.model.Step
+import dev.sethdegay.sequence.core.model.Segment
 import kotlin.time.Duration
 
 sealed interface TimerUiState {
@@ -10,7 +10,7 @@ sealed interface TimerUiState {
     data object Finished : TimerUiState
 
     data class Success(
-        val currentStep: Step,
+        val currentSegment: Segment,
         val remainingTime: Duration,
         val progress: Float,
         val isTimerRunning: Boolean,

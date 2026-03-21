@@ -172,7 +172,7 @@ private fun createMockEvent(
         description = "This is a sequence description for $title",
         dateCreated = Clock.System.now(),
         dateModified = Clock.System.now(),
-        steps = emptyList(),
+        segments = emptyList(),
         totalDuration = duration,
     )
 )

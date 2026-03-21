@@ -1,22 +1,22 @@
 package dev.sethdegay.sequence.feature.editor.impl
 
+import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
-import dev.sethdegay.sequence.core.model.Step
 
 sealed interface EditorUiState {
     data object Loading : EditorUiState
 
     data class Success(
         override val sequence: Sequence,
-        override val showStepEditorSheet: Boolean = false,
-        override val activeStep: Step? = null,
+        override val showSegmentEditorSheet: Boolean = false,
+        override val activeSegment: Segment? = null,
     ) : EditorUiState
 
     fun showLoadingScreen(): Boolean = this is Loading
 
     val sequence: Sequence? get() = null
 
-    val showStepEditorSheet: Boolean get() = false
+    val showSegmentEditorSheet: Boolean get() = false
 
-    val activeStep: Step? get() = null
+    val activeSegment: Segment? get() = null
 }

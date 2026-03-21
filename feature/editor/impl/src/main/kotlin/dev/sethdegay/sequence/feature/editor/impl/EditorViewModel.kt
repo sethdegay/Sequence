@@ -7,8 +7,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
+import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
-import dev.sethdegay.sequence.core.model.Step
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -48,7 +48,7 @@ class EditorViewModel @AssistedInject constructor(
             description = "",
             dateCreated = this,
             dateModified = this,
-            steps = emptyList(),
+            segments = emptyList(),
             totalDuration = Duration.ZERO,
         )
     }
@@ -71,40 +71,40 @@ class EditorViewModel @AssistedInject constructor(
         _editableUiState.update { it?.copy(sequence = it.sequence.copy(description = description)) }
     }
 
-    fun showStepEditor(step: Step?) {
-        _editableUiState.update { it?.copy(showStepEditorSheet = true, activeStep = step) }
+    fun showSegmentEditor(segment: Segment?) {
+        _editableUiState.update { it?.copy(showSegmentEditorSheet = true, activeSegment = segment) }
     }
 
-    fun hideStepEditor() {
-        _editableUiState.update { it?.copy(showStepEditorSheet = false, activeStep = null) }
+    fun hideSegmentEditor() {
+        _editableUiState.update { it?.copy(showSegmentEditorSheet = false, activeSegment = null) }
     }
 
-    fun onStepsSave(steps: List<Step>) {
+    fun onSegmentsSave(segments: List<Segment>) {
         _editableUiState.update {
             it?.copy(
                 sequence = it.sequence.copy(
-                    steps = steps,
+                    segments = segments,
                     dateModified = Clock.System.now(),
                 )
             )
         }
     }
 
-    fun onStepSave(step: Step) {
+    fun onSegmentSave(segment: Segment) {
         _editableUiState.update { state ->
             if (state == null) return@update state
-            val updatedSteps = if (state.activeStep == null) {
-                state.sequence.steps + step
+            val updatedSegments = if (state.activeSegment == null) {
+                state.sequence.segments + segment
             } else {
-                state.sequence.steps.map { if (state.activeStep.id == it.id) step else it }
+                state.sequence.segments.map { if (state.activeSegment.id == it.id) segment else it }
             }
             EditorUiState.Success(
                 sequence = state.sequence.copy(
-                    steps = updatedSteps,
+                    segments = updatedSegments,
                     dateModified = Clock.System.now(),
                 ),
-                showStepEditorSheet = false,
-                activeStep = null,
+                showSegmentEditorSheet = false,
+                activeSegment = null,
             )
         }
     }
@@ -129,16 +129,16 @@ class EditorViewModel @AssistedInject constructor(
     }
 
     private suspend fun updateAndSaveSequence(sequence: Sequence) {
-        val reorderedSteps = sequence.steps.mapIndexed { i, step ->
-            step.copy(order = i + 1)
+        val reorderedSegments = sequence.segments.mapIndexed { i, segment ->
+            segment.copy(order = i + 1)
         }
 
-        val totalDuration = reorderedSteps.fold(Duration.ZERO) { acc, task ->
+        val totalDuration = reorderedSegments.fold(Duration.ZERO) { acc, task ->
             acc + task.duration
         }
 
         val updatedSequence = sequence.copy(
-            steps = reorderedSteps,
+            segments = reorderedSegments,
             totalDuration = totalDuration,
         )
 
