@@ -29,7 +29,7 @@ import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
-import dev.sethdegay.sequence.core.ui.SegmentEditorSheet
+import dev.sethdegay.sequence.core.ui.SegmentEditor
 
 @Composable
 fun EditorScreen(
@@ -70,7 +70,7 @@ fun EditorScreen(
                     )
 
                     if (uiState.showSegmentEditorSheet) {
-                        SegmentEditorSheet(
+                        SegmentEditor(
                             segment = uiState.activeSegment,
                             onSegmentSave = viewModel::onSegmentSave,
                             onDismissRequest = viewModel::hideSegmentEditor,

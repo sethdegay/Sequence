@@ -92,7 +92,7 @@ private fun handleOnDismissRequest(
 }
 
 @Composable
-fun SegmentEditorSheet(
+fun SegmentEditor(
     segment: Segment?,
     onSegmentSave: (Segment) -> Unit,
     onDismissRequest: () -> Unit,
@@ -108,12 +108,12 @@ fun SegmentEditorSheet(
             )
         },
     ) {
-        SegmentEditorSheetContent(state)
+        SegmentEditor(state)
     }
 }
 
 @Composable
-private fun SegmentEditorSheetContent(state: SegmentEditorState) {
+private fun SegmentEditor(state: SegmentEditorState) {
     Column(
         modifier = Modifier.padding(
             start = 16.dp,
@@ -208,7 +208,7 @@ private fun TimeInputField(
 @Preview
 @Composable
 private fun SegmentEditorPreview() {
-    SegmentEditorSheet(
+    SegmentEditor(
         segment = Segment(
             title = "Segment 1",
             duration = 30.days + 4.hours + 58.minutes + 15.seconds,
