@@ -8,7 +8,6 @@ import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.data.repository.WorkspaceRepository
 import dev.sethdegay.sequence.core.model.HeatMapLevel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -27,7 +26,6 @@ import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.nanoseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.datetime.LocalDate as KotlinLocalDate
@@ -96,7 +94,6 @@ class HomeViewModel @Inject constructor(
     init {
         // TODO
         viewModelScope.launch {
-            delay(3.seconds)
             workspaceId = workspaceRepository.getWorkspaces().first().id
         }
     }
