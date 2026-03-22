@@ -9,17 +9,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.ExpressiveButton
 import dev.sethdegay.sequence.core.model.Segment
 import kotlin.time.Duration
@@ -56,27 +59,50 @@ fun SegmentEditor(
     var durationInputIsError by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.padding(
-            start = 16.dp,
+            start = 0.dp,
             top = 0.dp,
-            end = 16.dp,
+            end = 0.dp,
             bottom = 16.dp,
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            state = titleState,
-            label = { Text("Title") },
-        )
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            state = durationState,
-            label = { Text("Duration") },
-            placeholder = { Text("e.g. 10m 30s") },
-            isError = durationInputIsError,
-        )
+        CardGroup {
+            item {
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = titleState,
+                    label = { Text("Title") },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    contentPadding = it,
+                )
+            }
+            item {
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = durationState,
+                    label = { Text("Duration") },
+                    isError = durationInputIsError,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    contentPadding = it,
+                )
+            }
+        }
         ExpressiveButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             onClick = {
                 val newTitle = titleState.text.toString()
                 val newDuration = parseDuration(durationState.text.toString())
