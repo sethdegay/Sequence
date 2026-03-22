@@ -21,7 +21,9 @@ object EditorModule {
         entry<EditorNavKey> { key ->
             EditorScreen(
                 viewModel = hiltViewModel<EditorViewModel, EditorViewModel.Factory>(
-                    creationCallback = { factory -> factory.create(key.id, key.workspaceId) },
+                    creationCallback = { factory ->
+                        factory.create(key.sequenceId, key.workspaceId)
+                    },
                 ),
                 navigateUp = navigator::navigateUp,
             )

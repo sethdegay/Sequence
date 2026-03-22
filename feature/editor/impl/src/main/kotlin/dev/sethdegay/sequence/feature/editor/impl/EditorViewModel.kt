@@ -29,16 +29,16 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 @HiltViewModel(assistedFactory = EditorViewModel.Factory::class)
 class EditorViewModel @AssistedInject constructor(
-    @Assisted("sequence") private val id: Uuid?,
-    @Assisted("workspace") private val workspaceId: Uuid,
+    @Assisted("sequenceId") private val sequenceId: Uuid?,
+    @Assisted("workspaceId") private val workspaceId: Uuid,
     private val sequenceRepository: SequenceRepository,
 ) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
         fun create(
-            @Assisted("sequence") id: Uuid?,
-            @Assisted("workspace") workspaceId: Uuid,
+            @Assisted("sequenceId") sequenceId: Uuid?,
+            @Assisted("workspaceId") workspaceId: Uuid,
         ): EditorViewModel
     }
 
@@ -119,9 +119,10 @@ class EditorViewModel @AssistedInject constructor(
                 .collect { updateAndSaveSequence(it) }
         }
 
-        if (id != null) {
+        if (sequenceId != null) {
             viewModelScope.launch {
-                _editableUiState.value = EditorUiState.Success(sequenceRepository.getSequence(id))
+                _editableUiState.value =
+                    EditorUiState.Success(sequenceRepository.getSequence(sequenceId))
             }
         } else {
             _editableUiState.value = EditorUiState.Success(emptySequence)
