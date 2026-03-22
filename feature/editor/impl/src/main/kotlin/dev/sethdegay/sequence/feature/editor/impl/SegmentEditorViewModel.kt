@@ -9,12 +9,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.model.Segment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -43,6 +45,9 @@ class SegmentEditorViewModel @AssistedInject constructor(
         order = lastSegmentPosition?.plus(1) ?: 0,
     )
 
+    private val _effects = Channel<SegmentEditorEffect>(Channel.BUFFERED)
+    val effects = _effects.receiveAsFlow()
+
     private val _uiState = MutableStateFlow(segmentId)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -60,14 +65,18 @@ class SegmentEditorViewModel @AssistedInject constructor(
 
     fun onSegmentUpdate(segment: Segment) {
         viewModelScope.launch {
+            _uiState.value = null
             segmentRepository.saveSegment(segment, sequenceId)
-            _uiState.update { segment.id }
+            _effects.send(SegmentEditorEffect.Finished)
         }
     }
 
     init {
         if (_uiState.value == null) {
-            onSegmentUpdate(emptySegment)
+            viewModelScope.launch {
+                segmentRepository.saveSegment(emptySegment, sequenceId)
+                _uiState.update { emptySegment.id }
+            }
         }
     }
 }

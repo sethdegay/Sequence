@@ -44,6 +44,7 @@ object EditorModule {
                         )
                     },
                 ),
+                navigateUp = navigator::navigateUp,
             )
         }
         entry<SegmentNav.Edit>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) { key ->
@@ -57,6 +58,7 @@ object EditorModule {
                         )
                     },
                 ),
+                navigateUp = navigator::navigateUp,
             )
         }
     }
