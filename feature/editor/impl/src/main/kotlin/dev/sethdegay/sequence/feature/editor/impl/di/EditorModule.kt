@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
+import dev.sethdegay.sequence.core.navigation.BottomSheetSceneStrategy
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
 import dev.sethdegay.sequence.feature.editor.api.EditorNavKey
@@ -28,10 +29,11 @@ object EditorModule {
                         factory.create(key.sequenceId, key.workspaceId)
                     },
                 ),
+                navigateToSegmentEditor = navigator::navigate,
                 navigateUp = navigator::navigateUp,
             )
         }
-        entry<SegmentNav.Create> { key ->
+        entry<SegmentNav.Create>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) { key ->
             SegmentEditorContainer(
                 viewModel = hiltViewModel<SegmentEditorViewModel, SegmentEditorViewModel.Factory>(
                     creationCallback = { factory ->
@@ -44,7 +46,7 @@ object EditorModule {
                 ),
             )
         }
-        entry<SegmentNav.Edit> { key ->
+        entry<SegmentNav.Edit>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) { key ->
             SegmentEditorContainer(
                 viewModel = hiltViewModel<SegmentEditorViewModel, SegmentEditorViewModel.Factory>(
                     creationCallback = { factory ->

@@ -29,11 +29,12 @@ import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
-import dev.sethdegay.sequence.core.ui.SegmentEditor
+import dev.sethdegay.sequence.feature.editor.api.SegmentNav
 
 @Composable
 fun EditorScreen(
     viewModel: EditorViewModel,
+    navigateToSegmentEditor: (SegmentNav) -> Unit,
     navigateUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -50,7 +51,20 @@ fun EditorScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.showSegmentEditor(null) },
+                onClick = {
+                    uiState.sequence?.let {
+                        navigateToSegmentEditor(
+                            SegmentNav.Create(
+                                sequenceId = it.id,
+                                lastSegmentPosition = if (it.segments.isNotEmpty()) {
+                                    it.segments.last().order
+                                } else {
+                                    0
+                                },
+                            )
+                        )
+                    }
+                },
                 content = SequenceIcons.Add.asComposableIcon(),
             )
         }
@@ -66,16 +80,15 @@ fun EditorScreen(
                         onTitleSave = viewModel::onTitleSave,
                         onDescriptionSave = viewModel::onDescriptionSave,
                         onSegmentOrderChanged = viewModel::onSegmentsSave,
-                        onSegmentClick = viewModel::showSegmentEditor,
+                        onSegmentClick = {
+                            navigateToSegmentEditor(
+                                SegmentNav.Edit(
+                                    segmentId = it.id,
+                                    sequenceId = uiState.sequence!!.id,
+                                )
+                            )
+                        },
                     )
-
-                    if (uiState.showSegmentEditorSheet) {
-                        SegmentEditor(
-                            segment = uiState.activeSegment,
-                            onSegmentSave = viewModel::onSegmentSave,
-                            onDismissRequest = viewModel::hideSegmentEditor,
-                        )
-                    }
                 }
 
                 else -> Text(

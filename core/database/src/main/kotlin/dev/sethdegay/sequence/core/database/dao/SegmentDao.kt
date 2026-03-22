@@ -14,7 +14,7 @@ interface SegmentDao {
     fun getSegments(sequenceId: Uuid): Flow<List<SegmentEntity>>
 
     @Query("SELECT * FROM segment WHERE id = :id")
-    suspend fun getSegment(id: Uuid): SegmentEntity
+    fun getSegment(id: Uuid): Flow<SegmentEntity>
 
     @Upsert
     suspend fun upsertSegment(segment: SegmentEntity)

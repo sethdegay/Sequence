@@ -71,14 +71,6 @@ class EditorViewModel @AssistedInject constructor(
         _editableUiState.update { it?.copy(sequence = it.sequence.copy(description = description)) }
     }
 
-    fun showSegmentEditor(segment: Segment?) {
-        _editableUiState.update { it?.copy(showSegmentEditorSheet = true, activeSegment = segment) }
-    }
-
-    fun hideSegmentEditor() {
-        _editableUiState.update { it?.copy(showSegmentEditorSheet = false, activeSegment = null) }
-    }
-
     fun onSegmentsSave(segments: List<Segment>) {
         _editableUiState.update {
             it?.copy(
@@ -86,25 +78,6 @@ class EditorViewModel @AssistedInject constructor(
                     segments = segments,
                     dateModified = Clock.System.now(),
                 )
-            )
-        }
-    }
-
-    fun onSegmentSave(segment: Segment) {
-        _editableUiState.update { state ->
-            if (state == null) return@update state
-            val updatedSegments = if (state.activeSegment == null) {
-                state.sequence.segments + segment
-            } else {
-                state.sequence.segments.map { if (state.activeSegment.id == it.id) segment else it }
-            }
-            EditorUiState.Success(
-                sequence = state.sequence.copy(
-                    segments = updatedSegments,
-                    dateModified = Clock.System.now(),
-                ),
-                showSegmentEditorSheet = false,
-                activeSegment = null,
             )
         }
     }

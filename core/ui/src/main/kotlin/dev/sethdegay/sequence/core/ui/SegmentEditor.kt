@@ -1,23 +1,23 @@
 package dev.sethdegay.sequence.core.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.model.Segment
@@ -27,93 +27,32 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-@Stable
-private class SegmentEditorState(private val initialSegment: Segment?) {
-    val titleState = TextFieldState(initialText = initialSegment?.title ?: "")
+private val regex = Regex(
+    """(?:(?<days>\d+)\s*d\w*)?\s*(?:(?<hours>\d+)\s*h\w*)?\s*(?:(?<minutes>\d+)\s*m\w*)?\s*(?:(?<seconds>\d+)\s*s\w*)?""",
+    RegexOption.IGNORE_CASE,
+)
 
-    var daysInput by mutableStateOf("0")
-    var hoursInput by mutableStateOf("0")
-    var minutesInput by mutableStateOf("0")
-    var secondsInput by mutableStateOf("0")
-
-    init {
-        initialSegment?.duration?.toComponents { days, hours, minutes, seconds, _ ->
-            daysInput = days.toString()
-            hoursInput = hours.toString()
-            minutesInput = minutes.toString()
-            secondsInput = seconds.toString()
+fun parseDuration(input: String): Duration? {
+    return regex.find(input)
+        ?.takeIf { it.value.isNotBlank() }
+        ?.let { match ->
+            val days = match.groups["days"]?.value?.toInt() ?: 0
+            val hours = match.groups["hours"]?.value?.toInt() ?: 0
+            val minutes = match.groups["minutes"]?.value?.toInt() ?: 0
+            val seconds = match.groups["seconds"]?.value?.toInt() ?: 0
+            (days.days + hours.hours + minutes.minutes + seconds.seconds)
+                .takeIf { it != Duration.ZERO }
         }
-    }
-
-    fun toSegment(): Segment {
-        val newDuration = calculateDuration()
-        val newTitle = titleState.text.toString()
-
-        return initialSegment?.copy(
-            title = newTitle,
-            duration = newDuration,
-        ) ?: Segment(
-            title = newTitle,
-            duration = newDuration,
-        )
-    }
-
-    fun isEmpty(): Boolean = initialSegment == null &&
-            titleState.text.isEmpty() &&
-            daysInput == "0" &&
-            hoursInput == "0" &&
-            minutesInput == "0" &&
-            secondsInput == "0"
-
-    private fun calculateDuration(): Duration {
-        return daysInput.toLongOrZero().days +
-                hoursInput.toLongOrZero().hours +
-                minutesInput.toLongOrZero().minutes +
-                secondsInput.toLongOrZero().seconds
-    }
-
-    private fun String.toLongOrZero(): Long = this.toLongOrNull() ?: 0L
-}
-
-private fun handleOnDismissRequest(
-    state: SegmentEditorState,
-    segment: Segment?,
-    onSegmentSave: (Segment) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    if (state.isEmpty()) {
-        onDismissRequest()
-        return
-    }
-    when (val updatedSegment = state.toSegment()) {
-        segment -> onDismissRequest()
-        else -> onSegmentSave(updatedSegment)
-    }
 }
 
 @Composable
 fun SegmentEditor(
-    segment: Segment?,
-    onSegmentSave: (Segment) -> Unit,
-    onDismissRequest: () -> Unit,
+    segment: Segment,
+    onSegmentUpdate: (Segment) -> Unit,
 ) {
-    val state = remember(segment) { SegmentEditorState(segment) }
-    ModalBottomSheet(
-        onDismissRequest = {
-            handleOnDismissRequest(
-                state = state,
-                segment = segment,
-                onSegmentSave = onSegmentSave,
-                onDismissRequest = onDismissRequest,
-            )
-        },
-    ) {
-        SegmentEditor(state)
-    }
-}
-
-@Composable
-private fun SegmentEditor(state: SegmentEditorState) {
+    val titleState = rememberTextFieldState(segment.title)
+    val durationState = rememberTextFieldState(segment.duration.toString())
+    var durationInputIsError by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.padding(
             start = 16.dp,
@@ -125,96 +64,58 @@ private fun SegmentEditor(state: SegmentEditorState) {
     ) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            state = state.titleState,
+            state = titleState,
             label = { Text("Title") },
         )
-        DurationInputRow(
-            days = state.daysInput,
-            onDaysChange = { state.daysInput = it },
-            hours = state.hoursInput,
-            onHoursChange = { state.hoursInput = it },
-            minutes = state.minutesInput,
-            onMinutesChange = { state.minutesInput = it },
-            seconds = state.secondsInput,
-            onSecondsChange = { state.secondsInput = it }
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            state = durationState,
+            label = { Text("Duration") },
+            placeholder = { Text("e.g. 10m 30s") },
+            isError = durationInputIsError,
         )
+        Button(
+            onClick = {
+                val newTitle = titleState.text.toString()
+                val newDuration = parseDuration(durationState.text.toString())
+                if (newDuration == null) {
+                    durationInputIsError = true
+                } else {
+                    durationInputIsError = false
+                    onSegmentUpdate(segment.copy(title = newTitle, duration = newDuration))
+                }
+            },
+        ) {
+            Text(stringResource(android.R.string.ok))
+        }
     }
-}
-
-@Composable
-private fun DurationInputRow(
-    days: String,
-    onDaysChange: (String) -> Unit,
-    hours: String,
-    onHoursChange: (String) -> Unit,
-    minutes: String,
-    onMinutesChange: (String) -> Unit,
-    seconds: String,
-    onSecondsChange: (String) -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        val inputModifier = Modifier.weight(1f)
-        TimeInputField(
-            modifier = inputModifier,
-            label = "Days",
-            value = days,
-            onValueChange = onDaysChange
-        )
-        TimeInputField(
-            modifier = inputModifier,
-            label = "Hours",
-            value = hours,
-            onValueChange = onHoursChange
-        )
-        TimeInputField(
-            modifier = inputModifier,
-            label = "Minutes",
-            value = minutes,
-            onValueChange = onMinutesChange
-        )
-        TimeInputField(
-            modifier = inputModifier,
-            label = "Seconds",
-            value = seconds,
-            onValueChange = onSecondsChange
-        )
-    }
-}
-
-@Composable
-private fun TimeInputField(
-    modifier: Modifier = Modifier,
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-) {
-    OutlinedTextField(
-        modifier = modifier,
-        value = value,
-        onValueChange = { newValue ->
-            if (newValue.isEmpty() || newValue.all { it.isDigit() }) {
-                onValueChange(newValue)
-            }
-        },
-        label = { Text(label, maxLines = 1) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        singleLine = true,
-    )
 }
 
 @Preview
 @Composable
 private fun SegmentEditorPreview() {
-    SegmentEditor(
-        segment = Segment(
-            title = "Segment 1",
-            duration = 30.days + 4.hours + 58.minutes + 15.seconds,
-            order = 0,
-        ),
-        onSegmentSave = {},
-        onDismissRequest = {},
-    )
+    val (segment, onSegmentUpdate) = remember {
+        mutableStateOf(
+            Segment(
+                title = "Segment 1",
+                duration = 30.days + 4.hours + 58.minutes + 15.seconds,
+                order = 0,
+            ),
+        )
+    }
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Box(
+            modifier =
+                Modifier
+                    .background(color = MaterialTheme.colorScheme.tertiary)
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+        ) {
+            Text(text = segment.toString(), color = MaterialTheme.colorScheme.onTertiary)
+        }
+        SegmentEditor(
+            segment = segment,
+            onSegmentUpdate = onSegmentUpdate,
+        )
+    }
 }
