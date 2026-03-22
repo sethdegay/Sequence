@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.sethdegay.sequence.core.designsystem.component.ExpressiveButton
 import dev.sethdegay.sequence.core.model.Segment
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -74,7 +75,8 @@ fun SegmentEditor(
             placeholder = { Text("e.g. 10m 30s") },
             isError = durationInputIsError,
         )
-        Button(
+        ExpressiveButton(
+            modifier = Modifier.fillMaxWidth(),
             onClick = {
                 val newTitle = titleState.text.toString()
                 val newDuration = parseDuration(durationState.text.toString())
@@ -85,13 +87,17 @@ fun SegmentEditor(
                     onSegmentUpdate(segment.copy(title = newTitle, duration = newDuration))
                 }
             },
+            size = ButtonDefaults.MediumContainerHeight,
         ) {
-            Text(stringResource(android.R.string.ok))
+            Text(
+                text = stringResource(android.R.string.ok),
+                style = ButtonDefaults.textStyleFor(ButtonDefaults.MediumContainerHeight),
+            )
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun SegmentEditorPreview() {
     val (segment, onSegmentUpdate) = remember {
