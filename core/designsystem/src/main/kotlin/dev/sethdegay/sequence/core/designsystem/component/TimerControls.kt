@@ -10,10 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -106,18 +104,19 @@ fun TimerControls(
 @Preview(showBackground = true)
 @Composable
 private fun TimerControlsPreview() {
-    var mode by remember { mutableStateOf(TimerControlsMode.PAUSED) }
+    val (mode, setMode) = remember { mutableStateOf(TimerControlsMode.PAUSED) }
     TimerControls(
         mode = mode,
         startText = stringResource(string.timer_start_button_text),
         pauseText = stringResource(string.timer_pause_button_text),
         actions = object : TimerControlsActions {
             override fun onToggleTimer() {
-                mode = if (mode == TimerControlsMode.RUNNING) {
+                val mode = if (mode == TimerControlsMode.RUNNING) {
                     TimerControlsMode.PAUSED
                 } else {
                     TimerControlsMode.RUNNING
                 }
+                setMode(mode)
             }
 
             override fun onNext() {}
