@@ -2,12 +2,9 @@ package dev.sethdegay.sequence.core.designsystem.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -43,35 +40,28 @@ fun TimerControls(
         horizontalArrangement = Arrangement.spacedBy(ButtonDefaults.iconSpacingFor(mediumButtonSize)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        OutlinedButton(
-            modifier = Modifier
-                .heightIn(mediumButtonSize)
-                .weight(1f),
+        ExpressiveOutlinedButton(
+            modifier = Modifier.weight(1f),
             onClick = actions::onPrevious,
             enabled = canMovePrevious,
-            contentPadding = ButtonDefaults.contentPaddingFor(mediumButtonSize),
-            shapes = ButtonDefaults.shapes(),
+            size = mediumButtonSize,
         ) {
             SequenceIcons.Previous.asComposableIcon(
                 modifier = Modifier.size(ButtonDefaults.iconSizeFor(largeButtonSize))
             ).invoke()
         }
-        Button(
-            modifier = Modifier
-                .heightIn(largeButtonSize)
-                .weight(2f),
+        ExpressiveButton(
+            modifier = Modifier.weight(2f),
             onClick = actions::onToggleTimer,
-            contentPadding = ButtonDefaults.contentPaddingFor(largeButtonSize),
-            shapes = ButtonDefaults.shapes(),
-            colors =
-                when (mode) {
-                    TimerControlsMode.RUNNING -> ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    )
+            colors = when (mode) {
+                TimerControlsMode.RUNNING -> ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
 
-                    TimerControlsMode.PAUSED -> ButtonDefaults.buttonColors()
-                }
+                TimerControlsMode.PAUSED -> ButtonDefaults.buttonColors()
+            },
+            size = largeButtonSize,
         ) {
             when (mode) {
                 TimerControlsMode.RUNNING -> Text(
@@ -85,14 +75,11 @@ fun TimerControls(
                 )
             }
         }
-        OutlinedButton(
-            modifier = Modifier
-                .heightIn(mediumButtonSize)
-                .weight(1f),
+        ExpressiveOutlinedButton(
+            modifier = Modifier.weight(1f),
             onClick = actions::onNext,
             enabled = canMoveNext,
-            contentPadding = ButtonDefaults.contentPaddingFor(mediumButtonSize),
-            shapes = ButtonDefaults.shapes(),
+            size = mediumButtonSize,
         ) {
             SequenceIcons.Next.asComposableIcon(
                 modifier = Modifier.size(ButtonDefaults.iconSizeFor(largeButtonSize))
