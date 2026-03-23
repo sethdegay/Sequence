@@ -10,12 +10,15 @@ import dev.sethdegay.sequence.core.ui.SegmentEditor
 @Composable
 fun SegmentEditorContainer(viewModel: SegmentEditorViewModel, navigateUp: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
-    when {
-        uiState.showLoadingIndicator() || uiState.segment == null -> LoadingSection()
-        else -> SegmentEditor(
-            segment = uiState.segment!!,
-            onSegmentUpdate = viewModel::saveSegment,
-        )
+    uiState.segment.let { segment ->
+        when {
+            segment != null -> SegmentEditor(
+                segment = segment,
+                onSegmentUpdate = viewModel::saveSegment,
+            )
+
+            else -> LoadingSection()
+        }
     }
     LaunchedEffect(viewModel.effects) {
         viewModel.effects.collect {

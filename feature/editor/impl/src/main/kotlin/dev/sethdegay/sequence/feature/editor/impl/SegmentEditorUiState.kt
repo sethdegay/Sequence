@@ -7,8 +7,6 @@ sealed interface SegmentEditorUiState {
 
     data class Success(override val segment: Segment) : SegmentEditorUiState
 
-    fun showLoadingIndicator(): Boolean = this is Loading
-
     val segment: Segment?
         get() = null
 }

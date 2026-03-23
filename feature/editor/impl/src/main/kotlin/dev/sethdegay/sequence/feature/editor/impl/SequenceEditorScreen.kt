@@ -52,49 +52,43 @@ fun SequenceEditorScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    uiState.sequence?.let {
-                        navigateToSegmentEditor(
-                            SegmentEditorNav.Create(
-                                sequenceId = it.id,
-                                lastSegmentPosition = if (it.segments.isNotEmpty()) {
-                                    it.segments.last().order
-                                } else {
-                                    0
-                                },
-                            )
+                    val key = uiState.sequence?.let { sequence ->
+                        val segments = sequence.segments
+                        SegmentEditorNav.Create(
+                            sequenceId = sequence.id,
+                            lastSegmentPosition =
+                                if (segments.isNotEmpty()) segments.last().order else 0,
                         )
                     }
+                    if (key != null) navigateToSegmentEditor(key) // TODO handle null
                 },
                 content = SequenceIcons.Add.asComposableIcon(),
             )
         }
     ) { padding ->
-        if (uiState.showLoadingScreen()) {
-            LoadingScreen(modifier = Modifier.padding(padding))
-        } else {
+        uiState.let { uiState ->
             when (uiState) {
+                is SequenceEditorUiState.Loading ->
+                    LoadingScreen(modifier = Modifier.padding(padding))
+
                 is SequenceEditorUiState.Success -> {
                     SequenceEditorScreen(
                         scaffoldPadding = padding,
-                        sequence = uiState.sequence!!,
+                        sequence = uiState.sequence,
                         onTitleSave = viewModel::onTitleSave,
                         onDescriptionSave = viewModel::onDescriptionSave,
                         onSegmentOrderChanged = viewModel::onSegmentsSave,
-                        onSegmentClick = {
-                            navigateToSegmentEditor(
+                        onSegmentClick = { segment ->
+                            val key = uiState.sequence.let { sequence ->
                                 SegmentEditorNav.Edit(
-                                    segmentId = it.id,
-                                    sequenceId = uiState.sequence!!.id,
+                                    segmentId = segment.id,
+                                    sequenceId = sequence.id,
                                 )
-                            )
+                            }
+                            navigateToSegmentEditor(key)
                         },
                     )
                 }
-
-                else -> Text(
-                    modifier = Modifier.padding(padding),
-                    text = uiState.toString(),
-                )
             }
         }
     }

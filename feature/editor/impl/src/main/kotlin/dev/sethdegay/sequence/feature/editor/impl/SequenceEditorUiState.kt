@@ -7,7 +7,5 @@ sealed interface SequenceEditorUiState {
 
     data class Success(override val sequence: Sequence) : SequenceEditorUiState
 
-    fun showLoadingScreen(): Boolean = this is Loading
-
     val sequence: Sequence? get() = null
 }
