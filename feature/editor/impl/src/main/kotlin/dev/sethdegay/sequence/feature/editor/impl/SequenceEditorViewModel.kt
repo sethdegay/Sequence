@@ -23,10 +23,8 @@ import kotlinx.coroutines.launch
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalUuidApi::class)
 @HiltViewModel(assistedFactory = SequenceEditorViewModel.Factory::class)
 class SequenceEditorViewModel @AssistedInject constructor(
     @Assisted("sequenceId") private val sequenceId: Uuid?,
