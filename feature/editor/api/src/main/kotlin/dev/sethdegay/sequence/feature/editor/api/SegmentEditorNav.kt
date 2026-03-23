@@ -5,16 +5,16 @@ import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
 
 @Serializable
-sealed class SegmentNav : NavKey {
+sealed class SegmentEditorNav : NavKey {
     @Serializable
     data class Create(
         val sequenceId: Uuid,
         val lastSegmentPosition: Int,
-    ) : SegmentNav()
+    ) : SegmentEditorNav()
 
     @Serializable
     data class Edit(
         val segmentId: Uuid,
         val sequenceId: Uuid,
-    ) : SegmentNav()
+    ) : SegmentEditorNav()
 }

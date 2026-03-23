@@ -2,10 +2,10 @@ package dev.sethdegay.sequence.feature.editor.impl
 
 import dev.sethdegay.sequence.core.model.Sequence
 
-sealed interface EditorUiState {
-    data object Loading : EditorUiState
+sealed interface SequenceEditorUiState {
+    data object Loading : SequenceEditorUiState
 
-    data class Success(override val sequence: Sequence) : EditorUiState
+    data class Success(override val sequence: Sequence) : SequenceEditorUiState
 
     fun showLoadingScreen(): Boolean = this is Loading
 

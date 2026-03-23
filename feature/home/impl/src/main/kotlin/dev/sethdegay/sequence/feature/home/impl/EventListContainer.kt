@@ -7,7 +7,7 @@ import dev.sethdegay.sequence.core.designsystem.component.LoadingSection
 import dev.sethdegay.sequence.core.ui.CalendarEventList
 
 @Composable
-fun EventSheetContainer(viewModel: EventSheetViewModel) {
+fun EventListContainer(viewModel: EventListViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     when {
         uiState.showLoadingIndicator() || uiState.events.isEmpty() -> LoadingSection()

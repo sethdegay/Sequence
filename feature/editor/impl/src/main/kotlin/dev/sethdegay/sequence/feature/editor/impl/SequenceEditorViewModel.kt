@@ -27,8 +27,8 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
-@HiltViewModel(assistedFactory = EditorViewModel.Factory::class)
-class EditorViewModel @AssistedInject constructor(
+@HiltViewModel(assistedFactory = SequenceEditorViewModel.Factory::class)
+class SequenceEditorViewModel @AssistedInject constructor(
     @Assisted("sequenceId") private val sequenceId: Uuid?,
     @Assisted("workspaceId") private val workspaceId: Uuid,
     private val sequenceRepository: SequenceRepository,
@@ -39,7 +39,7 @@ class EditorViewModel @AssistedInject constructor(
         fun create(
             @Assisted("sequenceId") sequenceId: Uuid?,
             @Assisted("workspaceId") workspaceId: Uuid,
-        ): EditorViewModel
+        ): SequenceEditorViewModel
     }
 
     private val emptySequence = with(Clock.System.now()) {
@@ -53,14 +53,14 @@ class EditorViewModel @AssistedInject constructor(
         )
     }
 
-    private val _editableUiState = MutableStateFlow<EditorUiState.Success?>(null)
+    private val _editableUiState = MutableStateFlow<SequenceEditorUiState.Success?>(null)
 
-    val uiState: StateFlow<EditorUiState> = _editableUiState
+    val uiState: StateFlow<SequenceEditorUiState> = _editableUiState
         .filterNotNull()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = EditorUiState.Loading,
+            initialValue = SequenceEditorUiState.Loading,
         )
 
     fun onTitleSave(title: String) {
@@ -95,10 +95,10 @@ class EditorViewModel @AssistedInject constructor(
         if (sequenceId != null) {
             viewModelScope.launch {
                 _editableUiState.value =
-                    EditorUiState.Success(sequenceRepository.getSequence(sequenceId))
+                    SequenceEditorUiState.Success(sequenceRepository.getSequence(sequenceId))
             }
         } else {
-            _editableUiState.value = EditorUiState.Success(emptySequence)
+            _editableUiState.value = SequenceEditorUiState.Success(emptySequence)
         }
     }
 

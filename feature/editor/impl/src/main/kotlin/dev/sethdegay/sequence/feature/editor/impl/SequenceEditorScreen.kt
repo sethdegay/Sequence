@@ -29,12 +29,12 @@ import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
-import dev.sethdegay.sequence.feature.editor.api.SegmentNav
+import dev.sethdegay.sequence.feature.editor.api.SegmentEditorNav
 
 @Composable
-fun EditorScreen(
-    viewModel: EditorViewModel,
-    navigateToSegmentEditor: (SegmentNav) -> Unit,
+fun SequenceEditorScreen(
+    viewModel: SequenceEditorViewModel,
+    navigateToSegmentEditor: (SegmentEditorNav) -> Unit,
     navigateUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -54,7 +54,7 @@ fun EditorScreen(
                 onClick = {
                     uiState.sequence?.let {
                         navigateToSegmentEditor(
-                            SegmentNav.Create(
+                            SegmentEditorNav.Create(
                                 sequenceId = it.id,
                                 lastSegmentPosition = if (it.segments.isNotEmpty()) {
                                     it.segments.last().order
@@ -73,8 +73,8 @@ fun EditorScreen(
             LoadingScreen(modifier = Modifier.padding(padding))
         } else {
             when (uiState) {
-                is EditorUiState.Success -> {
-                    EditorScreen(
+                is SequenceEditorUiState.Success -> {
+                    SequenceEditorScreen(
                         scaffoldPadding = padding,
                         sequence = uiState.sequence!!,
                         onTitleSave = viewModel::onTitleSave,
@@ -82,7 +82,7 @@ fun EditorScreen(
                         onSegmentOrderChanged = viewModel::onSegmentsSave,
                         onSegmentClick = {
                             navigateToSegmentEditor(
-                                SegmentNav.Edit(
+                                SegmentEditorNav.Edit(
                                     segmentId = it.id,
                                     sequenceId = uiState.sequence!!.id,
                                 )
@@ -101,7 +101,7 @@ fun EditorScreen(
 }
 
 @Composable
-private fun EditorScreen(
+private fun SequenceEditorScreen(
     scaffoldPadding: PaddingValues,
     sequence: Sequence,
     onTitleSave: (String) -> Unit,

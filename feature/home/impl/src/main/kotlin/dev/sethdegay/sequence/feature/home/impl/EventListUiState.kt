@@ -2,10 +2,10 @@ package dev.sethdegay.sequence.feature.home.impl
 
 import dev.sethdegay.sequence.core.model.CalendarEvent
 
-sealed interface EventSheetUiState {
-    data object Loading : EventSheetUiState
+sealed interface EventListUiState {
+    data object Loading : EventListUiState
 
-    data class Success(override val events: List<CalendarEvent>) : EventSheetUiState
+    data class Success(override val events: List<CalendarEvent>) : EventListUiState
 
     fun showLoadingIndicator(): Boolean = this is Loading
 

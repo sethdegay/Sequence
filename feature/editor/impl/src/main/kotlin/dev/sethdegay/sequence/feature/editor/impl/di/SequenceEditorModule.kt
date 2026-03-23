@@ -9,22 +9,22 @@ import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.BottomSheetSceneStrategy
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
-import dev.sethdegay.sequence.feature.editor.api.EditorNavKey
-import dev.sethdegay.sequence.feature.editor.api.SegmentNav
-import dev.sethdegay.sequence.feature.editor.impl.EditorScreen
-import dev.sethdegay.sequence.feature.editor.impl.EditorViewModel
+import dev.sethdegay.sequence.feature.editor.api.SegmentEditorNav
+import dev.sethdegay.sequence.feature.editor.api.SequenceEditorNav
 import dev.sethdegay.sequence.feature.editor.impl.SegmentEditorContainer
 import dev.sethdegay.sequence.feature.editor.impl.SegmentEditorViewModel
+import dev.sethdegay.sequence.feature.editor.impl.SequenceEditorScreen
+import dev.sethdegay.sequence.feature.editor.impl.SequenceEditorViewModel
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object EditorModule {
+object SequenceEditorModule {
     @IntoSet
     @Provides
     fun provideNavKeyInstaller(navigator: SequenceNavigator): NavKeyInstaller = {
-        entry<EditorNavKey> { key ->
-            EditorScreen(
-                viewModel = hiltViewModel<EditorViewModel, EditorViewModel.Factory>(
+        entry<SequenceEditorNav> { key ->
+            SequenceEditorScreen(
+                viewModel = hiltViewModel<SequenceEditorViewModel, SequenceEditorViewModel.Factory>(
                     creationCallback = { factory ->
                         factory.create(key.sequenceId, key.workspaceId)
                     },
@@ -33,7 +33,7 @@ object EditorModule {
                 navigateUp = navigator::navigateUp,
             )
         }
-        entry<SegmentNav.Create>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) { key ->
+        entry<SegmentEditorNav.Create>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) { key ->
             SegmentEditorContainer(
                 viewModel = hiltViewModel<SegmentEditorViewModel, SegmentEditorViewModel.Factory>(
                     creationCallback = { factory ->
@@ -47,7 +47,7 @@ object EditorModule {
                 navigateUp = navigator::navigateUp,
             )
         }
-        entry<SegmentNav.Edit>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) { key ->
+        entry<SegmentEditorNav.Edit>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) { key ->
             SegmentEditorContainer(
                 viewModel = hiltViewModel<SegmentEditorViewModel, SegmentEditorViewModel.Factory>(
                     creationCallback = { factory ->

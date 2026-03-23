@@ -46,8 +46,8 @@ import kotlin.uuid.Uuid
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    navigateToEventSheet: (ClosedRange<Instant>) -> Unit,
-    navigateToEditor: (Uuid?, Uuid) -> Unit,
+    navigateToEventList: (ClosedRange<Instant>) -> Unit,
+    navigateToSequenceEditor: (Uuid?, Uuid) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToTimer: (Uuid) -> Unit,
 ) {
@@ -70,7 +70,7 @@ fun HomeScreen(
             HomeFab(
                 visible = !uiState.showLoadingScreen() && uiState.accordionExpandedId == null,
                 text = stringResource(string.home_add_sequence_button_text),
-                onClick = { navigateToEditor(null, viewModel.workspaceId) },
+                onClick = { navigateToSequenceEditor(null, viewModel.workspaceId) },
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -80,7 +80,7 @@ fun HomeScreen(
         } else {
             HomeScreen(
                 scaffoldPadding = padding,
-                navigateToEditor = { navigateToEditor(it, viewModel.workspaceId) },
+                navigateToEditor = { navigateToSequenceEditor(it, viewModel.workspaceId) },
                 navigateToTimer = navigateToTimer,
                 setAccordionExpandedId = { viewModel.setAccordionExpandedId(it) },
                 isExpanded = { it == uiState.accordionExpandedId },
@@ -88,7 +88,7 @@ fun HomeScreen(
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
                 heatMapCalendarEnd = uiState.heatMapCalendarEnd,
-                onDateClicked = { navigateToEventSheet(viewModel.onCalendarDateSelected(it)) },
+                onDateClicked = { navigateToEventList(viewModel.onCalendarDateSelected(it)) },
             )
         }
     }

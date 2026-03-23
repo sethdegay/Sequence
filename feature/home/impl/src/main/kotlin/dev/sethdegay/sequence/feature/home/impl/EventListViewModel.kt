@@ -13,22 +13,22 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlin.time.Instant
 
-@HiltViewModel(assistedFactory = EventSheetViewModel.Factory::class)
-class EventSheetViewModel @AssistedInject constructor(
+@HiltViewModel(assistedFactory = EventListViewModel.Factory::class)
+class EventListViewModel @AssistedInject constructor(
     @Assisted range: ClosedRange<Instant>,
     calendarEventRepository: CalendarEventRepository,
 ) : ViewModel() {
     @AssistedFactory
     interface Factory {
-        fun create(range: ClosedRange<Instant>): EventSheetViewModel
+        fun create(range: ClosedRange<Instant>): EventListViewModel
     }
 
-    val uiState: StateFlow<EventSheetUiState> =
+    val uiState: StateFlow<EventListUiState> =
         calendarEventRepository.getCalendarEvents(start = range.start, end = range.endInclusive)
-            .map { EventSheetUiState.Success(it) }
+            .map { EventListUiState.Success(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = EventSheetUiState.Loading,
+                initialValue = EventListUiState.Loading,
             )
 }

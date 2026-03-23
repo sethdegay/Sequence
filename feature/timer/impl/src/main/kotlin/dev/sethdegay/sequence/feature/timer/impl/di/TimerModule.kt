@@ -8,7 +8,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
-import dev.sethdegay.sequence.feature.timer.api.TimerNavKey
+import dev.sethdegay.sequence.feature.timer.api.TimerNav
 import dev.sethdegay.sequence.feature.timer.impl.TimerScreen
 import dev.sethdegay.sequence.feature.timer.impl.TimerViewModel
 
@@ -18,7 +18,7 @@ object TimerModule {
     @IntoSet
     @Provides
     fun providesNavKeyInstaller(navigator: SequenceNavigator): NavKeyInstaller = {
-        entry<TimerNavKey> { key ->
+        entry<TimerNav> { key ->
             TimerScreen(
                 viewModel = hiltViewModel<TimerViewModel, TimerViewModel.Factory>(
                     creationCallback = { factory -> factory.create(key.id) },

@@ -151,7 +151,7 @@ private fun Instant.toShortTimeString(): String {
 
 @Preview(showBackground = true)
 @Composable
-private fun CalendarEventsSheetPreview(
+private fun CalendarEventListPreview(
     @PreviewParameter(CalendarStateProvider::class) events: List<CalendarEvent>,
 ) {
     SequenceTheme {
