@@ -20,7 +20,7 @@ fun SegmentEditorContainer(viewModel: SegmentEditorViewModel, navigateUp: () -> 
     LaunchedEffect(viewModel.effects) {
         viewModel.effects.collect {
             when (it) {
-                is SegmentEditorEffect -> navigateUp()
+                is SegmentEditorEffect.Finished -> navigateUp()
             }
         }
     }
