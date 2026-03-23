@@ -14,7 +14,7 @@ fun SegmentEditorContainer(viewModel: SegmentEditorViewModel, navigateUp: () -> 
         uiState.showLoadingIndicator() || uiState.segment == null -> LoadingSection()
         else -> SegmentEditor(
             segment = uiState.segment!!,
-            onSegmentUpdate = viewModel::onSegmentUpdate,
+            onSegmentUpdate = viewModel::saveSegment,
         )
     }
     LaunchedEffect(viewModel.effects) {

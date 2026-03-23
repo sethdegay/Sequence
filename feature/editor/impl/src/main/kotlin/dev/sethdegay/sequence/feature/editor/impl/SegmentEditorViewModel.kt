@@ -8,14 +8,10 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.model.Segment
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -39,43 +35,41 @@ class SegmentEditorViewModel @AssistedInject constructor(
         ): SegmentEditorViewModel
     }
 
-    private val emptySegment = Segment(
-        title = "",
-        duration = Duration.ZERO,
-        order = lastSegmentPosition?.plus(1) ?: 0,
-    )
-
     private val _effects = Channel<SegmentEditorEffect>(Channel.BUFFERED)
     val effects = _effects.receiveAsFlow()
 
-    private val _uiState = MutableStateFlow(segmentId)
+    private val _uiState = MutableStateFlow<SegmentEditorUiState>(SegmentEditorUiState.Loading)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState: StateFlow<SegmentEditorUiState> = _uiState.flatMapLatest { id ->
-        if (id != null) {
-            segmentRepository.getSegment(id).map { SegmentEditorUiState.Success(it) }
-        } else {
-            flowOf(SegmentEditorUiState.Loading)
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = SegmentEditorUiState.Loading,
-    )
+    val uiState: StateFlow<SegmentEditorUiState> = _uiState
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = SegmentEditorUiState.Loading,
+        )
 
-    fun onSegmentUpdate(segment: Segment) {
+    fun saveSegment(segment: Segment) {
         viewModelScope.launch {
-            _uiState.value = null
+            _uiState.value = SegmentEditorUiState.Loading
             segmentRepository.saveSegment(segment, sequenceId)
             _effects.send(SegmentEditorEffect.Finished)
         }
     }
 
     init {
-        if (_uiState.value == null) {
+        if (segmentId != null) {
             viewModelScope.launch {
-                segmentRepository.saveSegment(emptySegment, sequenceId)
-                _uiState.update { emptySegment.id }
+                _uiState.update {
+                    SegmentEditorUiState.Success(segmentRepository.getSegment(segmentId))
+                }
+            }
+        } else {
+            _uiState.update {
+                val emptySegment = Segment(
+                    title = "",
+                    duration = Duration.ZERO,
+                    order = lastSegmentPosition?.plus(1) ?: 0,
+                )
+                SegmentEditorUiState.Success(emptySegment)
             }
         }
     }

@@ -15,8 +15,7 @@ class LocalSegmentRepository @Inject constructor(
     override fun getSegments(sequenceId: Uuid): Flow<List<Segment>> =
         segmentDao.getSegments(sequenceId).map { entities -> entities.map { it.asExternalModel() } }
 
-    override fun getSegment(id: Uuid): Flow<Segment> =
-        segmentDao.getSegment(id).map { it.asExternalModel() }
+    override suspend fun getSegment(id: Uuid): Segment = segmentDao.getSegment(id).asExternalModel()
 
     override suspend fun saveSegment(segment: Segment, sequenceId: Uuid) {
         segmentDao.upsertSegment(segment.asEntity(sequenceId))
