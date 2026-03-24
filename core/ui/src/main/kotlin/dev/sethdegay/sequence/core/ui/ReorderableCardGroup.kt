@@ -2,7 +2,6 @@ package dev.sethdegay.sequence.core.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -47,13 +46,16 @@ fun ReorderableCardGroup(
     }
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = lazyListState,
     ) {
         item(content = headerContent)
         items(items = segments, key = { it.id }) { segment ->
-            ReorderableItem(reorderableLazyListState, key = segment.id) {
+            ReorderableItem(
+                reorderableLazyListState,
+                key = segment.id,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) {
                 ReorderableCardGroupItem(segment, onSegmentClick)
             }
         }
@@ -70,7 +72,7 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
             modifier = Modifier
                 .clickable(onClick = { onSegmentClick(segment) })
                 .fillMaxWidth()
-                .padding(vertical = 10.dp, horizontal = 0.dp),
+                .padding(vertical = 4.dp, horizontal = 0.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
