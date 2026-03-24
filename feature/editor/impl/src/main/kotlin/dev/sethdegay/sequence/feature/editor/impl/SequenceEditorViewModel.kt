@@ -13,6 +13,7 @@ import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,8 +21,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
@@ -91,6 +92,9 @@ class SequenceEditorViewModel @AssistedInject constructor(
         initialValue = SequenceEditorUiState.Loading,
     )
 
+    private val _effects = Channel<SequenceEditorEffect>(Channel.BUFFERED)
+    val effects = _effects.receiveAsFlow()
+
     fun onSegmentOrderChanged(newOrder: List<Segment>) {
         val updatedOrder = newOrder.mapIndexed { index, segment ->
             segment.copy(order = index + 1)
@@ -107,13 +111,22 @@ class SequenceEditorViewModel @AssistedInject constructor(
 
     fun getSequenceId(): Uuid = id
 
+    fun requestExit() {
+        val sequence = construct()
+        viewModelScope.launch {
+            if (sequence.isEmpty()) {
+                sequenceRepository.delete(sequence, workspaceId)
+            }
+            _effects.send(SequenceEditorEffect.Finished)
+        }
+    }
+
     init {
         viewModelScope.launch {
             if (sequenceId != null) sequenceRepository.getSequence(sequenceId).deconstruct()
             snapshotFlow { construct() }
                 .distinctUntilChanged()
                 .debounce(500.milliseconds)
-                .filter { !it.isEmpty() }
                 .collectLatest { sequence ->
                     sequenceRepository.saveSequence(sequence, workspaceId)
                 }

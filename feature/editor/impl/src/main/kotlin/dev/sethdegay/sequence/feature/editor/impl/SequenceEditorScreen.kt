@@ -1,5 +1,6 @@
 package dev.sethdegay.sequence.feature.editor.impl
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,7 +49,7 @@ fun SequenceEditorScreen(
             TopAppBar(
                 title = {},
                 navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
-                    onClick = dropUnlessResumed { navigateUp() },
+                    onClick = dropUnlessResumed { viewModel.requestExit() },
                     contentDescription = stringResource(navigate_up_content_description),
                 ),
             )
@@ -93,6 +95,16 @@ fun SequenceEditorScreen(
             }
         }
     }
+
+    LaunchedEffect(viewModel.effects) {
+        viewModel.effects.collect {
+            when (it) {
+                is SequenceEditorEffect.Finished -> navigateUp()
+            }
+        }
+    }
+
+    BackHandler { viewModel.requestExit() }
 }
 
 @Composable
