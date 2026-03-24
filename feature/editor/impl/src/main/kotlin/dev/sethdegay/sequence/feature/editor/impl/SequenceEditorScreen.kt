@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -27,9 +28,9 @@ import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.Segment
-import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
 import dev.sethdegay.sequence.feature.editor.api.SegmentEditorNav
+import kotlin.time.Duration
 
 @Composable
 fun SequenceEditorScreen(
@@ -52,10 +53,9 @@ fun SequenceEditorScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    val key = uiState.sequence?.let { sequence ->
-                        val segments = sequence.segments
+                    val key = uiState.segments?.let { segments ->
                         SegmentEditorNav.Create(
-                            sequenceId = sequence.id,
+                            sequenceId = viewModel.getSequenceId(),
                             lastSegmentPosition =
                                 if (segments.isNotEmpty()) segments.last().order else 0,
                         )
@@ -74,17 +74,16 @@ fun SequenceEditorScreen(
                 is SequenceEditorUiState.Success -> {
                     SequenceEditorScreen(
                         scaffoldPadding = padding,
-                        sequence = uiState.sequence,
-                        onTitleSave = viewModel::onTitleSave,
-                        onDescriptionSave = viewModel::onDescriptionSave,
-                        onSegmentOrderChanged = viewModel::onSegmentsSave,
+                        title = uiState.title,
+                        description = uiState.description,
+                        segments = uiState.segments,
+                        totalDuration = uiState.totalDuration,
+                        onSegmentOrderChanged = viewModel::onSegmentOrderChanged,
                         onSegmentClick = { segment ->
-                            val key = uiState.sequence.let { sequence ->
-                                SegmentEditorNav.Edit(
-                                    segmentId = segment.id,
-                                    sequenceId = sequence.id,
-                                )
-                            }
+                            val key = SegmentEditorNav.Edit(
+                                segmentId = segment.id,
+                                sequenceId = viewModel.getSequenceId(),
+                            )
                             navigateToSegmentEditor(key)
                         },
                     )
@@ -97,9 +96,10 @@ fun SequenceEditorScreen(
 @Composable
 private fun SequenceEditorScreen(
     scaffoldPadding: PaddingValues,
-    sequence: Sequence,
-    onTitleSave: (String) -> Unit,
-    onDescriptionSave: (String) -> Unit,
+    title: TextFieldState,
+    description: TextFieldState,
+    segments: List<Segment>,
+    totalDuration: Duration,
     onSegmentOrderChanged: (List<Segment>) -> Unit,
     onSegmentClick: (Segment) -> Unit,
 ) {
@@ -108,30 +108,24 @@ private fun SequenceEditorScreen(
             .consumeWindowInsets(scaffoldPadding)
             .padding(scaffoldPadding)
             .fillMaxWidth(),
-        segments = sequence.segments,
+        segments = segments,
         onSegmentOrderChanged = onSegmentOrderChanged,
         onSegmentClick = onSegmentClick,
     ) {
         Column {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = sequence.title,
-                onValueChange = onTitleSave,
+                state = title,
                 label = { Text("Title") },
-                singleLine = true,
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = sequence.description,
-                onValueChange = onDescriptionSave,
+                state = description,
                 label = { Text("Description") },
-                singleLine = false,
-                minLines = 3,
-                maxLines = 10,
             )
             Spacer(Modifier.size(16.dp))
             CountdownDisplay(
-                duration = sequence.totalDuration,
+                duration = totalDuration,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

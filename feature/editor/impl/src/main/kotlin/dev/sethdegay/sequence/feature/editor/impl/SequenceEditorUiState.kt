@@ -1,11 +1,24 @@
 package dev.sethdegay.sequence.feature.editor.impl
 
-import dev.sethdegay.sequence.core.model.Sequence
+import androidx.compose.foundation.text.input.TextFieldState
+import dev.sethdegay.sequence.core.model.Segment
+import kotlin.time.Duration
 
 sealed interface SequenceEditorUiState {
     data object Loading : SequenceEditorUiState
 
-    data class Success(override val sequence: Sequence) : SequenceEditorUiState
+    data class Success(
+        override val title: TextFieldState,
+        override val description: TextFieldState,
+        override val segments: List<Segment>,
+        override val totalDuration: Duration,
+    ) : SequenceEditorUiState
 
-    val sequence: Sequence? get() = null
+    val title: TextFieldState? get() = null
+
+    val description: TextFieldState? get() = null
+
+    val segments: List<Segment>? get() = null
+
+    val totalDuration: Duration? get() = null
 }

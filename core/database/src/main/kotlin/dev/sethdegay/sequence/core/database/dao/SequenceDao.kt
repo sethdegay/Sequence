@@ -3,7 +3,6 @@ package dev.sethdegay.sequence.core.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Upsert
 import dev.sethdegay.sequence.core.database.model.SegmentEntity
 import dev.sethdegay.sequence.core.database.model.SequenceEntity
@@ -39,21 +38,7 @@ interface SequenceDao {
     }
 
     @Upsert
-    suspend fun _upsertSequence(sequenceEntity: SequenceEntity)
-
-    @Upsert
-    suspend fun _upsertSegments(segmentEntities: List<SegmentEntity>)
-
-    @Transaction
-    suspend fun upsertSequenceWithSegments(
-        sequenceEntity: SequenceEntity,
-        segmentEntities: List<SegmentEntity>? = null,
-    ) {
-        _upsertSequence(sequenceEntity)
-        if (segmentEntities != null) {
-            _upsertSegments(segmentEntities)
-        }
-    }
+    suspend fun upsertSequence(sequenceEntity: SequenceEntity)
 
     @Delete
     suspend fun delete(sequenceEntity: SequenceEntity)

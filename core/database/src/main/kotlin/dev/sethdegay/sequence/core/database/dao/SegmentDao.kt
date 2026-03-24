@@ -10,7 +10,7 @@ import kotlin.uuid.Uuid
 
 @Dao
 interface SegmentDao {
-    @Query("SELECT * FROM segment WHERE sequence_id = :sequenceId")
+    @Query("SELECT * FROM segment WHERE sequence_id = :sequenceId ORDER BY list_order ASC")
     fun getSegments(sequenceId: Uuid): Flow<List<SegmentEntity>>
 
     @Query("SELECT * FROM segment WHERE id = :id")
@@ -18,6 +18,9 @@ interface SegmentDao {
 
     @Upsert
     suspend fun upsertSegment(segment: SegmentEntity)
+
+    @Upsert
+    suspend fun upsertSegments(segments: List<SegmentEntity>)
 
     @Delete
     suspend fun deleteSegment(segment: SegmentEntity)

@@ -21,6 +21,10 @@ class LocalSegmentRepository @Inject constructor(
         segmentDao.upsertSegment(segment.asEntity(sequenceId))
     }
 
+    override suspend fun saveSegments(segments: List<Segment>, sequenceId: Uuid) {
+        segmentDao.upsertSegments(segments.map { it.asEntity(sequenceId) })
+    }
+
     override suspend fun deleteSegment(segment: Segment, sequenceId: Uuid) {
         segmentDao.deleteSegment(segment.asEntity(sequenceId))
     }
