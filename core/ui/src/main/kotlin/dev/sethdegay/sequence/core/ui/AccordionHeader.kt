@@ -13,8 +13,8 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -28,11 +28,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
+import dev.sethdegay.sequence.core.model.Sequence
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
@@ -66,10 +68,30 @@ fun AccordionHeader(
     onClick: (Boolean) -> Unit,
     onLongClick: () -> Unit,
     onPlayButtonClick: () -> Unit,
+    sequence: Sequence,
+) {
+    AccordionHeader(
+        modifier = modifier,
+        isExpanded = isExpanded,
+        onClick = onClick,
+        onLongClick = onLongClick,
+        onPlayButtonClick = onPlayButtonClick,
+        title = sequence.title,
+        description = sequence.description,
+        totalDuration = sequence.totalDuration,
+    )
+}
+
+@Composable
+private fun AccordionHeader(
+    modifier: Modifier,
+    isExpanded: Boolean,
+    onClick: (Boolean) -> Unit,
+    onLongClick: () -> Unit,
+    onPlayButtonClick: () -> Unit,
     title: String,
     description: String,
     totalDuration: Duration,
-    padding: PaddingValues,
 ) {
     Row(
         modifier = modifier
@@ -77,7 +99,12 @@ fun AccordionHeader(
                 onClick = { onClick(!isExpanded) },
                 onLongClick = onLongClick,
             )
-            .padding(padding),
+            .padding(
+                start = 0.dp,
+                top = 16.dp,
+                bottom = 16.dp,
+                end = 16.dp,
+            ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -93,7 +120,9 @@ fun AccordionHeader(
                 exit = horizontalExitTransition,
             ) {
                 Button(
-                    modifier = Modifier.heightIn(size),
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .heightIn(size),
                     shapes = ButtonDefaults.shapes(),
                     onClick = onPlayButtonClick,
                 ) {
@@ -103,23 +132,32 @@ fun AccordionHeader(
                 }
             }
             Column(
-                modifier = Modifier.animateContentSize(
-                    animationSpec = subtleInOutTweenSpec(containerAnimationDuration),
-                ),
+                modifier = Modifier
+                    .padding(start = if (isExpanded) 0.dp else 16.dp)
+                    .animateContentSize(
+                        animationSpec = subtleInOutTweenSpec(containerAnimationDuration),
+                    ),
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 AnimatedVisibility(
                     visible = isExpanded && description.isNotBlank(),
                     enter = verticalEnterTransition,
                     exit = verticalExitTransition,
                 ) {
-                    Text(text = description)
+                    Text(
+                        text = description,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }
+        Spacer(Modifier.size(12.dp))
         CountdownDisplay(
             duration = totalDuration,
             style = MaterialTheme.typography.bodyMedium,
@@ -140,6 +178,5 @@ private fun AccordionHeaderPreview() {
         description = "Description",
         onPlayButtonClick = {},
         totalDuration = 10.minutes,
-        padding = PaddingValues(16.dp),
     )
 }

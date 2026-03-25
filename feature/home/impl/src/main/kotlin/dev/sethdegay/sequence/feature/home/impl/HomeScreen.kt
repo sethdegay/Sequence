@@ -131,25 +131,14 @@ private fun HomeScreen(
             val isExpanded = isExpanded(sequence.id)
             Accordion(
                 isExpanded = isExpanded,
-                header = { contentPadding ->
+                header = {
                     AccordionHeader(
                         modifier = Modifier.fillMaxWidth(),
                         isExpanded = isExpanded,
-                        onClick = { isExpanded ->
-                            setAccordionExpandedId(
-                                if (isExpanded) {
-                                    sequence.id
-                                } else {
-                                    null
-                                }
-                            )
-                        },
+                        onClick = { setAccordionExpandedId(if (it) sequence.id else null) },
                         onLongClick = { navigateToEditor(sequence.id) },
                         onPlayButtonClick = { navigateToTimer(sequence.id) },
-                        title = sequence.title,
-                        description = sequence.description,
-                        totalDuration = sequence.totalDuration,
-                        padding = contentPadding,
+                        sequence = sequence,
                     )
                 }
             ) {
