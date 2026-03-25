@@ -9,7 +9,7 @@ import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.BottomSheetSceneStrategy
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
-import dev.sethdegay.sequence.feature.editor.api.SequenceEditorNav
+import dev.sethdegay.sequence.feature.editor_sequence.api.SequenceEditorNav
 import dev.sethdegay.sequence.feature.home.api.EventListNav
 import dev.sethdegay.sequence.feature.home.api.HomeNav
 import dev.sethdegay.sequence.feature.home.impl.EventListContainer
