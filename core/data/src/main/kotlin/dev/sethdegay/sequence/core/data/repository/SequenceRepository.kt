@@ -7,7 +7,7 @@ import kotlin.uuid.Uuid
 interface SequenceRepository {
     suspend fun getSequence(id: Uuid): Sequence
 
-    fun getSequences(): Flow<List<Sequence>>
+    fun getSequences(workspaceId: Uuid): Flow<List<Sequence>>
 
     suspend fun saveSequence(sequence: Sequence, workspaceId: Uuid)
 

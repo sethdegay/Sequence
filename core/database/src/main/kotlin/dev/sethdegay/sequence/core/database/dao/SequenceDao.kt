@@ -22,20 +22,21 @@ interface SequenceDao {
         segmentEntities = _getSequenceSegments(id),
     )
 
-    @Query("SELECT * FROM sequence")
-    fun _getSequences(): Flow<List<SequenceEntity>>
+    @Query("SELECT * FROM sequence WHERE workspace_id = :workspaceId")
+    fun _getSequences(workspaceId: Uuid): Flow<List<SequenceEntity>>
 
     @Query("SELECT * FROM segment WHERE sequence_id = :id ORDER BY list_order ASC")
     suspend fun _getSequenceSegments(id: Uuid): List<SegmentEntity>
 
-    fun getSequences(): Flow<List<SequenceWithSegments>> = _getSequences().map { entities ->
-        entities.map { entity ->
-            SequenceWithSegments(
-                sequenceEntity = entity,
-                segmentEntities = _getSequenceSegments(entity.id),
-            )
+    fun getSequences(workspaceId: Uuid): Flow<List<SequenceWithSegments>> =
+        _getSequences(workspaceId).map { entities ->
+            entities.map { entity ->
+                SequenceWithSegments(
+                    sequenceEntity = entity,
+                    segmentEntities = _getSequenceSegments(entity.id),
+                )
+            }
         }
-    }
 
     @Upsert
     suspend fun upsertSequence(sequenceEntity: SequenceEntity)

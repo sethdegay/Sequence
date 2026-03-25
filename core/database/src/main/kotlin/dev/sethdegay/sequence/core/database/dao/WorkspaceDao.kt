@@ -8,10 +8,14 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import dev.sethdegay.sequence.core.database.model.WorkspaceEntity
 import dev.sethdegay.sequence.core.database.model.WorkspaceWithSequences
+import kotlinx.coroutines.flow.Flow
 import kotlin.uuid.Uuid
 
 @Dao
 interface WorkspaceDao {
+    @Query("SELECT * FROM workspace ORDER BY date_created ASC LIMIT 1")
+    fun getOldestWorkspace(): Flow<WorkspaceEntity?>
+
     @Query("SELECT * FROM workspace")
     suspend fun getWorkspaces(): List<WorkspaceEntity>
 
