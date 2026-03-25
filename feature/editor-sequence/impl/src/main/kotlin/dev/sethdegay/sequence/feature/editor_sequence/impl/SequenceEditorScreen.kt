@@ -4,9 +4,11 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
@@ -126,6 +129,7 @@ private fun SequenceEditorScreen(
         onSegmentOrderChanged = onSegmentOrderChanged,
         onSegmentClick = onSegmentClick,
     ) {
+        Spacer(Modifier.size(16.dp))
         CardGroup {
             item {
                 TextField(
