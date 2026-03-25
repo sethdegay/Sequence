@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_workspace_title">Personal workspace</string>
+    <string name="default_workspace_description">The home base for your timers.</string>
+</resources>

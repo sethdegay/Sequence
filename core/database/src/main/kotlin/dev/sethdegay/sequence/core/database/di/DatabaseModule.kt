@@ -32,7 +32,7 @@ object DatabaseModule {
         klass = SequenceDatabase::class.java,
         name = "sequence.db",
     )
-        .addCallback(WorkspacePreloadCallback(scope) { workspaceDaoProvider.get() })
+        .addCallback(WorkspacePreloadCallback(scope, context) { workspaceDaoProvider.get() })
         .build()
 
     @Provides
