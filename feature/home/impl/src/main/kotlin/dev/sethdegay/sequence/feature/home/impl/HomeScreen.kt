@@ -9,12 +9,15 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +35,7 @@ import dev.sethdegay.sequence.core.designsystem.component.Accordion
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
+import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.HeatMapLevel
 import dev.sethdegay.sequence.core.model.Segment
@@ -182,7 +186,12 @@ private fun HomeFab(
         MediumExtendedFloatingActionButton(
             modifier = modifier,
             onClick = onClick,
+            shape = CircleShape,
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         ) {
+            SequenceIcons.Add.asComposableIcon().invoke()
+            Spacer(Modifier.size(12.dp))
             Text(text = text)
         }
     }

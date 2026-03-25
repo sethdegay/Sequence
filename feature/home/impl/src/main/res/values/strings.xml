@@ -2,5 +2,5 @@
 <resources>
     <string name="top_app_bar_title">Sequence</string>
     <string name="home_navigate_to_settings_content_description">Settings</string>
-    <string name="home_add_sequence_button_text">Add a new sequence</string>
+    <string name="home_add_sequence_button_text">Create</string>
 </resources>
