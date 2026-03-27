@@ -3,7 +3,7 @@ package dev.sethdegay.sequence.core.model
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
-data class Workspace(
+data class Library(
     val id: Uuid = Uuid.random(),
     val title: String,
     val description: String,

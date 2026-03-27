@@ -33,7 +33,7 @@ import kotlin.uuid.Uuid
 @HiltViewModel(assistedFactory = SequenceEditorViewModel.Factory::class)
 class SequenceEditorViewModel @AssistedInject constructor(
     @Assisted("sequenceId") private val sequenceId: Uuid?,
-    @Assisted("workspaceId") private val workspaceId: Uuid,
+    @Assisted("libraryId") private val libraryId: Uuid,
     private val sequenceRepository: SequenceRepository,
     private val segmentRepository: SegmentRepository,
 ) : ViewModel() {
@@ -42,7 +42,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
     interface Factory {
         fun create(
             @Assisted("sequenceId") sequenceId: Uuid?,
-            @Assisted("workspaceId") workspaceId: Uuid,
+            @Assisted("libraryId") libraryId: Uuid,
         ): SequenceEditorViewModel
     }
 
@@ -115,7 +115,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
         val sequence = construct()
         viewModelScope.launch {
             if (sequence.isEmpty()) {
-                sequenceRepository.delete(sequence, workspaceId)
+                sequenceRepository.delete(sequence, libraryId)
             }
             _effects.send(SequenceEditorEffect.Finished)
         }
@@ -128,7 +128,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
                 .distinctUntilChanged()
                 .debounce(500.milliseconds)
                 .collectLatest { sequence ->
-                    sequenceRepository.saveSequence(sequence, workspaceId)
+                    sequenceRepository.saveSequence(sequence, libraryId)
                 }
         }
     }

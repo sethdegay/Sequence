@@ -15,13 +15,13 @@ import kotlin.uuid.Uuid
     tableName = "sequence",
     foreignKeys = [
         ForeignKey(
-            entity = WorkspaceEntity::class,
+            entity = LibraryEntity::class,
             parentColumns = ["id"],
-            childColumns = ["workspace_id"],
+            childColumns = ["library_id"],
             onDelete = ForeignKey.CASCADE,
         ),
     ],
-    indices = [Index(value = ["workspace_id"])],
+    indices = [Index(value = ["library_id"])],
 )
 data class SequenceEntity(
     @PrimaryKey
@@ -43,8 +43,8 @@ data class SequenceEntity(
     @ColumnInfo(name = "total_duration")
     val totalDuration: Duration,
 
-    @ColumnInfo(name = "workspace_id")
-    val workspaceId: Uuid,
+    @ColumnInfo(name = "library_id")
+    val libraryId: Uuid,
 )
 
 fun SequenceEntity.asExternalModel(segments: List<Segment>): Sequence = Sequence(

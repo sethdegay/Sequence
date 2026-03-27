@@ -28,8 +28,8 @@ object HomeModule {
             HomeScreen(
                 viewModel = hiltViewModel(),
                 navigateToEventList = { navigator.navigate(EventListNav(it)) },
-                navigateToSequenceEditor = { id, workspaceId ->
-                    navigator.navigate(SequenceEditorNav(id, workspaceId))
+                navigateToSequenceEditor = { id, libraryId ->
+                    navigator.navigate(SequenceEditorNav(id, libraryId))
                 },
                 navigateToSettings = { navigator.navigate(SettingsNav) },
                 navigateToTimer = { id -> navigator.navigate(TimerNav(id)) },

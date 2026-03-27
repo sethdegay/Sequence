@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1ea29f48f53608b3ac706443b0845e83",
+    "identityHash": "f623e79720bf56629e9aae1546b0b3f6",
     "entities": [
       {
         "tableName": "calendar_event",
@@ -71,8 +71,50 @@
         ]
       },
       {
+        "tableName": "library",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateCreated",
+            "columnName": "date_created",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateModified",
+            "columnName": "date_modified",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
         "tableName": "sequence",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL, `total_duration` INTEGER NOT NULL, `workspace_id` BLOB NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`workspace_id`) REFERENCES `workspace`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL, `total_duration` INTEGER NOT NULL, `library_id` BLOB NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`library_id`) REFERENCES `library`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -111,8 +153,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "workspaceId",
-            "columnName": "workspace_id",
+            "fieldPath": "libraryId",
+            "columnName": "library_id",
             "affinity": "BLOB",
             "notNull": true
           }
@@ -125,22 +167,22 @@
         },
         "indices": [
           {
-            "name": "index_sequence_workspace_id",
+            "name": "index_sequence_library_id",
             "unique": false,
             "columnNames": [
-              "workspace_id"
+              "library_id"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_sequence_workspace_id` ON `${TABLE_NAME}` (`workspace_id`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_sequence_library_id` ON `${TABLE_NAME}` (`library_id`)"
           }
         ],
         "foreignKeys": [
           {
-            "table": "workspace",
+            "table": "library",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "workspace_id"
+              "library_id"
             ],
             "referencedColumns": [
               "id"
@@ -213,53 +255,11 @@
             ]
           }
         ]
-      },
-      {
-        "tableName": "workspace",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "description",
-            "columnName": "description",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dateCreated",
-            "columnName": "date_created",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dateModified",
-            "columnName": "date_modified",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": [
-            "id"
-          ]
-        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ea29f48f53608b3ac706443b0845e83')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f623e79720bf56629e9aae1546b0b3f6')"
     ]
   }
 }

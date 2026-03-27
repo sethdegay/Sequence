@@ -3,13 +3,13 @@ package dev.sethdegay.sequence.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dev.sethdegay.sequence.core.model.Library
 import dev.sethdegay.sequence.core.model.Sequence
-import dev.sethdegay.sequence.core.model.Workspace
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
-@Entity(tableName = "workspace")
-data class WorkspaceEntity(
+@Entity(tableName = "library")
+data class LibraryEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Uuid,
@@ -27,7 +27,7 @@ data class WorkspaceEntity(
     val dateModified: Instant,
 )
 
-fun WorkspaceEntity.asExternalModel(sequences: List<Sequence>): Workspace = Workspace(
+fun LibraryEntity.asExternalModel(sequences: List<Sequence>): Library = Library(
     id = id,
     title = title,
     description = description,

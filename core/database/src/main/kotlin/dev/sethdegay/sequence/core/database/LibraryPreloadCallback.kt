@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.room.RoomDatabase
 import androidx.sqlite.SQLiteException
 import androidx.sqlite.db.SupportSQLiteDatabase
-import dev.sethdegay.sequence.core.database.dao.WorkspaceDao
-import dev.sethdegay.sequence.core.database.model.WorkspaceEntity
+import dev.sethdegay.sequence.core.database.dao.LibraryDao
+import dev.sethdegay.sequence.core.database.model.LibraryEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
@@ -17,10 +17,10 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class WorkspacePreloadCallback(
+class LibraryPreloadCallback(
     private val scope: CoroutineScope,
     private val context: Context,
-    private val workspaceDaoProvider: () -> WorkspaceDao,
+    private val libraryDaoProvider: () -> LibraryDao,
 ) : RoomDatabase.Callback() {
     @OptIn(ExperimentalUuidApi::class)
     override fun onCreate(db: SupportSQLiteDatabase) {
@@ -28,17 +28,17 @@ class WorkspacePreloadCallback(
         scope.launch(Dispatchers.IO) {
             runCatching {
                 withTimeout(10.seconds) {
-                    val dao = workspaceDaoProvider()
+                    val dao = libraryDaoProvider()
                     if (dao.getCount() == 0) {
                         val now = Clock.System.now()
-                        val workspace = WorkspaceEntity(
+                        val library = LibraryEntity(
                             id = Uuid.random(),
-                            title = context.getString(R.string.default_workspace_title),
-                            description = context.getString(R.string.default_workspace_description),
+                            title = context.getString(R.string.default_library_title),
+                            description = context.getString(R.string.default_library_description),
                             dateCreated = now,
                             dateModified = now,
                         )
-                        dao.insert(workspace)
+                        dao.insert(library)
                     } else {
                         Log.d("PRELOAD", "Database already contains data; skipping preload.")
                     }

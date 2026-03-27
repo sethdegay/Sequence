@@ -15,15 +15,15 @@ class LocalSequenceRepository @Inject constructor(
     override suspend fun getSequence(id: Uuid): Sequence =
         sequenceDao.getSequence(id).asExternalModel()
 
-    override fun getSequences(workspaceId: Uuid): Flow<List<Sequence>> =
-        sequenceDao.getSequences(workspaceId)
+    override fun getSequences(libraryId: Uuid): Flow<List<Sequence>> =
+        sequenceDao.getSequences(libraryId)
             .map { sequences -> sequences.map { it.asExternalModel() } }
 
-    override suspend fun saveSequence(sequence: Sequence, workspaceId: Uuid) {
-        sequenceDao.upsertSequence(sequence.asEntity(workspaceId))
+    override suspend fun saveSequence(sequence: Sequence, libraryId: Uuid) {
+        sequenceDao.upsertSequence(sequence.asEntity(libraryId))
     }
 
-    override suspend fun delete(sequence: Sequence, workspaceId: Uuid) {
-        sequenceDao.delete(sequence.asEntity(workspaceId))
+    override suspend fun delete(sequence: Sequence, libraryId: Uuid) {
+        sequenceDao.delete(sequence.asEntity(libraryId))
     }
 }

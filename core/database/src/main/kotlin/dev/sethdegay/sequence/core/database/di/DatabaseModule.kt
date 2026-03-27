@@ -8,12 +8,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.sethdegay.sequence.core.common.di.ApplicationScope
+import dev.sethdegay.sequence.core.database.LibraryPreloadCallback
 import dev.sethdegay.sequence.core.database.SequenceDatabase
-import dev.sethdegay.sequence.core.database.WorkspacePreloadCallback
 import dev.sethdegay.sequence.core.database.dao.CalendarEventDao
+import dev.sethdegay.sequence.core.database.dao.LibraryDao
 import dev.sethdegay.sequence.core.database.dao.SegmentDao
 import dev.sethdegay.sequence.core.database.dao.SequenceDao
-import dev.sethdegay.sequence.core.database.dao.WorkspaceDao
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -26,13 +26,13 @@ object DatabaseModule {
     fun provideSequenceDatabase(
         @ApplicationContext context: Context,
         @ApplicationScope scope: CoroutineScope,
-        workspaceDaoProvider: Provider<WorkspaceDao>,
+        libraryDaoProvider: Provider<LibraryDao>,
     ): SequenceDatabase = Room.databaseBuilder(
         context = context,
         klass = SequenceDatabase::class.java,
         name = "sequence.db",
     )
-        .addCallback(WorkspacePreloadCallback(scope, context) { workspaceDaoProvider.get() })
+        .addCallback(LibraryPreloadCallback(scope, context) { libraryDaoProvider.get() })
         .build()
 
     @Provides
@@ -48,6 +48,6 @@ object DatabaseModule {
         database.sequenceDao()
 
     @Provides
-    fun provideWorkspaceDao(database: SequenceDatabase): WorkspaceDao =
-        database.workspaceDao()
+    fun provideLibraryDao(database: SequenceDatabase): LibraryDao =
+        database.libraryDao()
 }

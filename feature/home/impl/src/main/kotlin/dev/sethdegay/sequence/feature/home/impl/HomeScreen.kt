@@ -74,7 +74,7 @@ fun HomeScreen(
             HomeFab(
                 visible = !uiState.showLoadingScreen() && uiState.accordionExpandedId == null,
                 text = stringResource(string.home_add_sequence_button_text),
-                onClick = { navigateToSequenceEditor(null, viewModel.getWorkspaceId()) },
+                onClick = { navigateToSequenceEditor(null, viewModel.getLibraryId()) },
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -84,7 +84,7 @@ fun HomeScreen(
         } else {
             HomeScreen(
                 scaffoldPadding = padding,
-                navigateToEditor = { navigateToSequenceEditor(it, viewModel.getWorkspaceId()) },
+                navigateToEditor = { navigateToSequenceEditor(it, viewModel.getLibraryId()) },
                 navigateToTimer = navigateToTimer,
                 setAccordionExpandedId = { viewModel.setAccordionExpandedId(it) },
                 isExpanded = { it == uiState.accordionExpandedId },

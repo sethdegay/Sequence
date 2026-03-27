@@ -5,15 +5,15 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
+import dev.sethdegay.sequence.core.data.repository.LibraryRepository
 import dev.sethdegay.sequence.core.data.repository.LocalCalendarEventRepository
+import dev.sethdegay.sequence.core.data.repository.LocalLibraryRepository
 import dev.sethdegay.sequence.core.data.repository.LocalSegmentRepository
 import dev.sethdegay.sequence.core.data.repository.LocalSequenceRepository
 import dev.sethdegay.sequence.core.data.repository.LocalUserPreferencesRepository
-import dev.sethdegay.sequence.core.data.repository.LocalWorkspaceRepository
 import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
-import dev.sethdegay.sequence.core.data.repository.WorkspaceRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -39,7 +39,7 @@ abstract class DataModule {
     ): UserPreferencesRepository
 
     @Binds
-    abstract fun bindWorkspaceRepository(
-        workspaceRepository: LocalWorkspaceRepository
-    ): WorkspaceRepository
+    abstract fun bindLibraryRepository(
+        libraryRepository: LocalLibraryRepository
+    ): LibraryRepository
 }

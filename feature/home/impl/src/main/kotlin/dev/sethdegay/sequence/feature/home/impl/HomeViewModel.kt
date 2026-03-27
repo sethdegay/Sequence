@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
+import dev.sethdegay.sequence.core.data.repository.LibraryRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
-import dev.sethdegay.sequence.core.data.repository.WorkspaceRepository
 import dev.sethdegay.sequence.core.model.HeatMapLevel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
     sequenceRepository: SequenceRepository,
     calendarEventRepository: CalendarEventRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val workspaceRepository: WorkspaceRepository,
+    private val libraryRepository: LibraryRepository,
 ) : ViewModel() {
 
     private val timeZone = TimeZone.currentSystemDefault()
@@ -61,14 +61,14 @@ class HomeViewModel @Inject constructor(
         .date
         .toJavaLocalDate()
 
-    private val workspaceId = MutableStateFlow<Uuid?>(null)
+    private val libraryId = MutableStateFlow<Uuid?>(null)
 
-    val uiState: StateFlow<HomeUiState> = workspaceId.flatMapLatest { workspaceId ->
-        if (workspaceId == null) {
+    val uiState: StateFlow<HomeUiState> = libraryId.flatMapLatest { libraryId ->
+        if (libraryId == null) {
             flowOf(HomeUiState.Loading)
         } else {
             combine(
-                sequenceRepository.getSequences(workspaceId),
+                sequenceRepository.getSequences(libraryId),
                 userPreferencesRepository.uiState,
                 calendarEventRepository.getHeatMapData(
                     start = firstDayOfTheYear,
@@ -102,11 +102,11 @@ class HomeViewModel @Inject constructor(
             .let { it.atStartOfDayIn(timeZone)..it.atEndOfDayIn(timeZone) }
     }
 
-    fun getWorkspaceId(): Uuid = workspaceId.value ?: throw IllegalStateException()
+    fun getLibraryId(): Uuid = libraryId.value ?: throw IllegalStateException()
 
     init {
         viewModelScope.launch {
-            workspaceId.value = workspaceRepository.getOldestWorkspace()
+            libraryId.value = libraryRepository.getOldestLibrary()
                 .filterNotNull()
                 .map { it.id }
                 .first()

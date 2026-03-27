@@ -22,7 +22,7 @@ object SequenceEditorModule {
             SequenceEditorScreen(
                 viewModel = hiltViewModel<SequenceEditorViewModel, SequenceEditorViewModel.Factory>(
                     creationCallback = { factory ->
-                        factory.create(key.sequenceId, key.workspaceId)
+                        factory.create(key.sequenceId, key.libraryId)
                     },
                 ),
                 navigateToSegmentEditor = navigator::navigate,
