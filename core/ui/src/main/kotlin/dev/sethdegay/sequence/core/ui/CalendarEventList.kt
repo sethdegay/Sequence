@@ -44,9 +44,12 @@ import kotlin.time.Instant
 import kotlin.time.toJavaInstant
 
 @Composable
-fun CalendarEventList(events: List<CalendarEvent>) {
+fun CalendarEventList(
+    events: List<CalendarEvent>,
+    contentPadding: PaddingValues = PaddingValues(16.dp),
+) {
     LazyColumn(
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = contentPadding,
     ) {
         itemsIndexed(
             items = events,
