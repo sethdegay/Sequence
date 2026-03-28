@@ -39,11 +39,12 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.model)
-    implementation(projects.feature.calendarevent.impl)
-    implementation(projects.feature.editorSegment.impl)
-    implementation(projects.feature.editorSequence.impl)
+
+    implementation(projects.feature.calendarevent.list.impl)
     implementation(projects.feature.home.api)
     implementation(projects.feature.home.impl)
+    implementation(projects.feature.segment.editor.impl)
+    implementation(projects.feature.sequence.editor.impl)
     implementation(projects.feature.settings.impl)
     implementation(projects.feature.timer.impl)
 

@@ -8,10 +8,10 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
-import dev.sethdegay.sequence.feature.calendarevent.api.EventListNav
-import dev.sethdegay.sequence.feature.editor_sequence.api.SequenceEditorNav
+import dev.sethdegay.sequence.feature.calendarevent.list.api.EventListNav
 import dev.sethdegay.sequence.feature.home.api.HomeNav
 import dev.sethdegay.sequence.feature.home.impl.HomeScreen
+import dev.sethdegay.sequence.feature.sequence.editor.api.SequenceEditorNav
 import dev.sethdegay.sequence.feature.settings.api.SettingsNav
 import dev.sethdegay.sequence.feature.timer.api.TimerNav
 
