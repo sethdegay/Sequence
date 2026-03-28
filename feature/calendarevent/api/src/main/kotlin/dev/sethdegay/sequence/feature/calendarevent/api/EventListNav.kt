@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.home.api
+package dev.sethdegay.sequence.feature.calendarevent.api
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

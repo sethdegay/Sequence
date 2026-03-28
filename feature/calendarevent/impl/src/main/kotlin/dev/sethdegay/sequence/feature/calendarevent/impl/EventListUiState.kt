@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.home.impl
+package dev.sethdegay.sequence.feature.calendarevent.impl
 
 import dev.sethdegay.sequence.core.model.CalendarEvent
 

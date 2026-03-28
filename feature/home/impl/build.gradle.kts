@@ -18,6 +18,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(projects.feature.calendarevent.api)
     implementation(projects.feature.editorSequence.api)
     implementation(projects.feature.home.api)
     implementation(projects.feature.settings.api)
