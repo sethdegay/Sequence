@@ -22,8 +22,6 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
-import dev.sethdegay.sequence.core.designsystem.component.ToggleButtonOption
-import dev.sethdegay.sequence.core.designsystem.component.ToggleButtonPosition
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
 import dev.sethdegay.sequence.core.model.ThemeConfig
@@ -103,36 +101,30 @@ private fun SettingsScreen(
                     TogglePreference(
                         title = stringResource(string.settings_theme_title),
                         description = stringResource(string.settings_theme_description),
-                        options = {
-                            listOf(
-                                ToggleButtonOption(
-                                    label = stringResource(string.settings_system_theme_title),
-                                    iconChecked = SequenceIcons.SystemChecked,
-                                    iconUnchecked = SequenceIcons.SystemUnchecked,
-                                    value = ThemeConfig.FOLLOW_SYSTEM,
-                                    onValueChanged = setThemeConfig,
-                                    toggleButtonPosition = ToggleButtonPosition.LEADING,
-                                ),
-                                ToggleButtonOption(
-                                    label = stringResource(string.settings_light_theme_title),
-                                    iconChecked = SequenceIcons.LightModeChecked,
-                                    iconUnchecked = SequenceIcons.LightModeUnchecked,
-                                    value = ThemeConfig.LIGHT,
-                                    onValueChanged = setThemeConfig,
-                                    toggleButtonPosition = ToggleButtonPosition.MIDDLE,
-                                ),
-                                ToggleButtonOption(
-                                    label = stringResource(string.settings_dark_theme_title),
-                                    iconChecked = SequenceIcons.DarkModeChecked,
-                                    iconUnchecked = SequenceIcons.DarkModeUnchecked,
-                                    value = ThemeConfig.DARK,
-                                    onValueChanged = setThemeConfig,
-                                    toggleButtonPosition = ToggleButtonPosition.TRAILING,
-                                ),
-                            )
-                        },
                         onCheckedRequest = { uiState.themeConfig == it },
-                    )
+                    ) {
+                        item(
+                            value = ThemeConfig.FOLLOW_SYSTEM,
+                            onValueChanged = setThemeConfig,
+                            label = { stringResource(string.settings_system_theme_title) },
+                            iconChecked = { SequenceIcons.SystemChecked },
+                            iconUnchecked = { SequenceIcons.SystemUnchecked },
+                        )
+                        item(
+                            value = ThemeConfig.LIGHT,
+                            onValueChanged = setThemeConfig,
+                            label = { stringResource(string.settings_light_theme_title) },
+                            iconChecked = { SequenceIcons.LightModeChecked },
+                            iconUnchecked = { SequenceIcons.LightModeUnchecked },
+                        )
+                        item(
+                            value = ThemeConfig.DARK,
+                            onValueChanged = setThemeConfig,
+                            label = { stringResource(string.settings_dark_theme_title) },
+                            iconChecked = { SequenceIcons.DarkModeChecked },
+                            iconUnchecked = { SequenceIcons.DarkModeUnchecked },
+                        )
+                    }
                 }
                 item {
                     BooleanPreference(
