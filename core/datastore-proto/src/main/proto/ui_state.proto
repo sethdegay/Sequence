@@ -4,5 +4,6 @@ option java_package = "dev.sethdegay.sequence.core.datastore";
 option java_multiple_files = true;
 
 message UiState {
-  optional bytes accordion_expanded_id = 1;
+  optional bytes active_library_id = 1;
+  optional bytes active_sequence_id = 2;
 }

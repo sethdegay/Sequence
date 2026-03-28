@@ -29,10 +29,6 @@ class LocalUserPreferencesRepository @Inject constructor(
         dataSource.setDynamicColor(dynamicColor)
     }
 
-    override suspend fun setAccordionExpandedId(accordionExpandedId: Uuid?) {
-        dataSource.setAccordionExpandedId(accordionExpandedId)
-    }
-
     override suspend fun setMuteAll(muteAll: Boolean) {
         dataSource.setMuteAll(muteAll)
     }
@@ -47,5 +43,13 @@ class LocalUserPreferencesRepository @Inject constructor(
 
     override suspend fun setSpeakTitle(speakTitle: Boolean) {
         dataSource.setSpeakTitle(speakTitle)
+    }
+
+    override suspend fun setActiveLibraryId(activeLibraryId: Uuid?) {
+        dataSource.setActiveLibraryId(activeLibraryId)
+    }
+
+    override suspend fun setActiveSequenceId(activeSequenceId: Uuid?) {
+        dataSource.setActiveSequenceId(activeSequenceId)
     }
 }

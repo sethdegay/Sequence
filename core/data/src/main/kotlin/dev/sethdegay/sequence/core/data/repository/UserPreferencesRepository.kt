@@ -15,8 +15,6 @@ interface UserPreferencesRepository {
 
     suspend fun setDynamicColor(dynamicColor: Boolean)
 
-    suspend fun setAccordionExpandedId(accordionExpandedId: Uuid?)
-
     suspend fun setMuteAll(muteAll: Boolean)
 
     suspend fun setTickSound(tickSound: Boolean)
@@ -24,4 +22,8 @@ interface UserPreferencesRepository {
     suspend fun setCompletionSound(completionSound: Boolean)
 
     suspend fun setSpeakTitle(speakTitle: Boolean)
+
+    suspend fun setActiveLibraryId(activeLibraryId: Uuid?)
+
+    suspend fun setActiveSequenceId(activeSequenceId: Uuid?)
 }

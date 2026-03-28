@@ -72,9 +72,9 @@ fun HomeScreen(
         },
         floatingActionButton = {
             HomeFab(
-                visible = !uiState.showLoadingScreen() && uiState.accordionExpandedId == null,
+                visible = !uiState.showLoadingScreen() && uiState.activeSequenceId == null,
                 text = stringResource(string.home_add_sequence_button_text),
-                onClick = { navigateToSequenceEditor(null, viewModel.getLibraryId()) },
+                onClick = { viewModel.getLibraryId()?.let { navigateToSequenceEditor(null, it) } },
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -84,10 +84,14 @@ fun HomeScreen(
         } else {
             HomeScreen(
                 scaffoldPadding = padding,
-                navigateToEditor = { navigateToSequenceEditor(it, viewModel.getLibraryId()) },
+                navigateToEditor = { sequenceId ->
+                    viewModel.getLibraryId()?.let { libraryId ->
+                        navigateToSequenceEditor(sequenceId, libraryId)
+                    }
+                },
                 navigateToTimer = navigateToTimer,
-                setAccordionExpandedId = { viewModel.setAccordionExpandedId(it) },
-                isExpanded = { it == uiState.accordionExpandedId },
+                setActiveSequenceId = viewModel::setActiveSequenceId,
+                isExpanded = { it == uiState.activeSequenceId },
                 sequences = uiState.sequences,
                 heatMapData = uiState.heatMapData,
                 heatMapCalendarStart = uiState.heatMapCalendarStart,
@@ -103,7 +107,7 @@ private fun HomeScreen(
     scaffoldPadding: PaddingValues,
     navigateToEditor: (Uuid?) -> Unit,
     navigateToTimer: (Uuid) -> Unit,
-    setAccordionExpandedId: (Uuid?) -> Unit,
+    setActiveSequenceId: (Uuid?) -> Unit,
     isExpanded: (Uuid) -> Boolean,
     sequences: List<Sequence>,
     heatMapData: Map<LocalDate, HeatMapLevel>,
@@ -135,7 +139,7 @@ private fun HomeScreen(
                     AccordionHeader(
                         modifier = Modifier.fillMaxWidth(),
                         isExpanded = isExpanded,
-                        onClick = { setAccordionExpandedId(if (it) sequence.id else null) },
+                        onClick = { setActiveSequenceId(if (it) sequence.id else null) },
                         onLongClick = { navigateToEditor(sequence.id) },
                         onPlayButtonClick = { navigateToTimer(sequence.id) },
                         sequence = sequence,

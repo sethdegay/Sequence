@@ -8,13 +8,11 @@ import dev.sethdegay.sequence.core.data.repository.LibraryRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.model.HeatMapLevel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -61,29 +59,39 @@ class HomeViewModel @Inject constructor(
         .date
         .toJavaLocalDate()
 
-    private val libraryId = MutableStateFlow<Uuid?>(null)
-
-    val uiState: StateFlow<HomeUiState> = libraryId.flatMapLatest { libraryId ->
-        if (libraryId == null) {
-            flowOf(HomeUiState.Loading)
-        } else {
-            combine(
-                sequenceRepository.getSequences(libraryId),
-                userPreferencesRepository.uiState,
-                calendarEventRepository.getHeatMapData(
-                    start = firstDayOfTheYear,
-                    end = endOfCurrentDay,
-                ).map { it.toJavaHeatMapData() }
-                    .distinctUntilChanged(),
-            ) { sequences, uiState, heatMapData ->
-                HomeUiState.Success(
-                    sequences = sequences,
-                    accordionExpandedId = uiState.accordionExpandedId,
-                    heatMapData = heatMapData,
-                    heatMapCalendarStart = heatMapCalendarStart,
-                    heatMapCalendarEnd = heatMapCalendarEnd,
-                )
+    private val libraryId: StateFlow<Uuid?> = userPreferencesRepository.uiState
+        .map { it.activeLibraryId }
+        .flatMapLatest { activeLibraryId ->
+            if (activeLibraryId != null) {
+                flowOf(activeLibraryId)
+            } else {
+                libraryRepository.getOldestLibrary()
+                    .filterNotNull()
+                    .map { it.id }
             }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null,
+        )
+
+    val uiState: StateFlow<HomeUiState> = libraryId.filterNotNull().flatMapLatest { libraryId ->
+        combine(
+            sequenceRepository.getSequences(libraryId),
+            userPreferencesRepository.uiState,
+            calendarEventRepository.getHeatMapData(
+                start = firstDayOfTheYear,
+                end = endOfCurrentDay,
+            ).map { it.toJavaHeatMapData() }
+                .distinctUntilChanged(),
+        ) { sequences, uiState, heatMapData ->
+            HomeUiState.Success(
+                sequences = sequences,
+                activeSequenceId = uiState.activeSequenceId,
+                heatMapData = heatMapData,
+                heatMapCalendarStart = heatMapCalendarStart,
+                heatMapCalendarEnd = heatMapCalendarEnd,
+            )
         }
     }.stateIn(
         scope = viewModelScope,
@@ -91,9 +99,9 @@ class HomeViewModel @Inject constructor(
         initialValue = HomeUiState.Loading,
     )
 
-    fun setAccordionExpandedId(accordionExpandedId: Uuid?) {
+    fun setActiveSequenceId(activeSequenceId: Uuid?) {
         viewModelScope.launch {
-            userPreferencesRepository.setAccordionExpandedId(accordionExpandedId)
+            userPreferencesRepository.setActiveSequenceId(activeSequenceId)
         }
     }
 
@@ -102,16 +110,7 @@ class HomeViewModel @Inject constructor(
             .let { it.atStartOfDayIn(timeZone)..it.atEndOfDayIn(timeZone) }
     }
 
-    fun getLibraryId(): Uuid = libraryId.value ?: throw IllegalStateException()
-
-    init {
-        viewModelScope.launch {
-            libraryId.value = libraryRepository.getOldestLibrary()
-                .filterNotNull()
-                .map { it.id }
-                .first()
-        }
-    }
+    fun getLibraryId(): Uuid? = libraryId.value
 }
 
 private fun KotlinLocalDate.atEndOfDayIn(timeZone: TimeZone): Instant =

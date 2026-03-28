@@ -56,15 +56,28 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setAccordionExpandedId(accordionExpandedId: Uuid?) {
+    suspend fun setActiveLibraryId(activeLibraryId: Uuid?) {
         _userPreferences.updateData { current ->
             current.copy {
-                this.uiState = this.uiState.copy {
-                    if (accordionExpandedId == null) {
-                        clearAccordionExpandedId()
+                uiState = uiState.copy {
+                    if (activeLibraryId == null) {
+                        clearActiveLibraryId()
                     } else {
-                        this.accordionExpandedId =
-                            ByteString.copyFrom(accordionExpandedId.toByteArray())
+                        this.activeLibraryId = ByteString.copyFrom(activeLibraryId.toByteArray())
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun setActiveSequenceId(activeSequenceId: Uuid?) {
+        _userPreferences.updateData { current ->
+            current.copy {
+                uiState = uiState.copy {
+                    if (activeSequenceId == null) {
+                        clearActiveSequenceId()
+                    } else {
+                        this.activeSequenceId = ByteString.copyFrom(activeSequenceId.toByteArray())
                     }
                 }
             }
@@ -83,11 +96,8 @@ private fun UserPreferences.asExternalModel(): ExtUserPreferences {
             speakTitle = settings.speakTitle,
         ),
         uiState = UiState(
-            accordionExpandedId = try {
-                Uuid.fromByteArray(uiState.accordionExpandedId.toByteArray())
-            } catch (_: IllegalArgumentException) {
-                null
-            },
+            activeLibraryId = uiState.activeLibraryId.toUuidOrNull(),
+            activeSequenceId = uiState.activeSequenceId.toUuidOrNull(),
         ),
     )
 }
@@ -102,4 +112,14 @@ private fun ExtThemeConfig.asProto(): ThemeConfig = when (this) {
     ExtThemeConfig.FOLLOW_SYSTEM -> ThemeConfig.FOLLOW_SYSTEM
     ExtThemeConfig.LIGHT -> ThemeConfig.LIGHT
     ExtThemeConfig.DARK -> ThemeConfig.DARK
+}
+
+private fun ByteString.toUuidOrNull(): Uuid? {
+    return if (isEmpty) null else {
+        try {
+            Uuid.fromByteArray(toByteArray())
+        } catch (_: IllegalArgumentException) {
+            null
+        }
+    }
 }

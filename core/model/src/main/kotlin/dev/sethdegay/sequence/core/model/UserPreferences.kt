@@ -17,7 +17,8 @@ data class Settings(
 )
 
 data class UiState(
-    val accordionExpandedId: Uuid?,
+    val activeLibraryId: Uuid?,
+    val activeSequenceId: Uuid?,
 )
 
 enum class ThemeConfig { FOLLOW_SYSTEM, LIGHT, DARK; }
