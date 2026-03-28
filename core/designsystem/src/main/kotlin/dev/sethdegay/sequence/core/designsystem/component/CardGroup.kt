@@ -116,10 +116,9 @@ fun CardGroup(content: CardGroupScope.() -> Unit) {
 }
 
 class CardGroupScope {
-    private val _items = mutableListOf<@Composable (PaddingValues) -> Unit>()
-    val items: List<@Composable (PaddingValues) -> Unit> = _items
+    internal val items = mutableListOf<@Composable (PaddingValues) -> Unit>()
 
     fun item(content: @Composable (PaddingValues) -> Unit) {
-        _items.add(content)
+        items.add(content)
     }
 }
