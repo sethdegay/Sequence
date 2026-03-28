@@ -24,6 +24,11 @@ abstract class DataModule {
     ): CalendarEventRepository
 
     @Binds
+    abstract fun bindLibraryRepository(
+        libraryRepository: LocalLibraryRepository
+    ): LibraryRepository
+
+    @Binds
     abstract fun bindSegmentRepository(
         segmentRepository: LocalSegmentRepository
     ): SegmentRepository
@@ -37,9 +42,4 @@ abstract class DataModule {
     abstract fun bindUserPreferencesRepository(
         userPreferencesRepository: LocalUserPreferencesRepository
     ): UserPreferencesRepository
-
-    @Binds
-    abstract fun bindLibraryRepository(
-        libraryRepository: LocalLibraryRepository
-    ): LibraryRepository
 }

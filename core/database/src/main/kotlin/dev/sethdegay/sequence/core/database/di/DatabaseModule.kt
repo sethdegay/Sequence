@@ -40,14 +40,14 @@ object DatabaseModule {
         database.calendarEventDao()
 
     @Provides
+    fun provideLibraryDao(database: SequenceDatabase): LibraryDao =
+        database.libraryDao()
+
+    @Provides
     fun provideSegmentDao(database: SequenceDatabase): SegmentDao =
         database.segmentDao()
 
     @Provides
     fun provideSequenceDao(database: SequenceDatabase): SequenceDao =
         database.sequenceDao()
-
-    @Provides
-    fun provideLibraryDao(database: SequenceDatabase): LibraryDao =
-        database.libraryDao()
 }
