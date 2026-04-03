@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipScope
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,15 +16,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Composable
 private fun ConditionalTooltipWrapper(
     showTooltip: Boolean,
-    tooltip: String?,
+    tooltip: @Composable TooltipScope.() -> Unit,
+    position: TooltipAnchorPosition = TooltipAnchorPosition.Below,
     content: @Composable () -> Unit,
 ) {
-    if (showTooltip && tooltip != null) {
+    if (showTooltip) {
         TooltipBox(
             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                positioning = TooltipAnchorPosition.Below,
+                positioning = position,
             ),
-            tooltip = { PlainTooltip { Text(text = tooltip) } },
+            tooltip = tooltip,
             state = rememberTooltipState(),
             content = content,
         )
@@ -51,10 +53,18 @@ fun ImageVector.IconButton(
     enabled: Boolean = true,
     contentDescription: String? = null,
     showTooltip: Boolean = true,
+    tooltipText: String? = null,
+    tooltipPosition: TooltipAnchorPosition = TooltipAnchorPosition.Below,
 ) {
+    val effectiveTooltipText = tooltipText ?: contentDescription
     ConditionalTooltipWrapper(
-        showTooltip = showTooltip,
-        tooltip = contentDescription,
+        showTooltip = showTooltip && effectiveTooltipText != null,
+        position = tooltipPosition,
+        tooltip = {
+            effectiveTooltipText?.let {
+                PlainTooltip { Text(text = it) }
+            }
+        },
     ) {
         IconButton(
             modifier = modifier,
