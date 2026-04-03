@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.sethdegay.sequence.core.designsystem.R.string
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.designsystem.util.IconButton
 
 @Composable
 fun NumericStepper(
@@ -41,7 +41,7 @@ fun NumericStepper(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing),
     ) {
-        SequenceIcons.KeyboardArrowUp.asComposableIconButton(
+        SequenceIcons.KeyboardArrowUp.IconButton(
             onClick = {
                 val value = value + 1
                 if (value <= maxValue) {
@@ -50,7 +50,7 @@ fun NumericStepper(
             },
             enabled = value < maxValue,
             contentDescription = stringResource(string.increment_content_description),
-        ).invoke()
+        )
         BasicTextField(
             value = value.toString().padStart(2, '0'),
             onValueChange = {
@@ -64,7 +64,7 @@ fun NumericStepper(
                 fontSize = fontSize,
             ),
         )
-        SequenceIcons.KeyboardArrowDown.asComposableIconButton(
+        SequenceIcons.KeyboardArrowDown.IconButton(
             onClick = {
                 val value = value - 1
                 if (value >= minValue) {
@@ -73,7 +73,7 @@ fun NumericStepper(
             },
             enabled = value > minValue,
             contentDescription = stringResource(string.decrement_content_description),
-        ).invoke()
+        )
     }
 }
 

@@ -23,7 +23,7 @@ import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_des
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.ThemeConfig
 import dev.sethdegay.sequence.core.ui.BooleanPreference
 import dev.sethdegay.sequence.core.ui.PreferenceError
@@ -51,10 +51,12 @@ fun SettingsScreen(
                 title = {
                     Text(text = stringResource(string.settings_top_app_bar_title))
                 },
-                navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
-                    onClick = dropUnlessResumed { navigateUp() },
-                    contentDescription = stringResource(navigate_up_content_description),
-                ),
+                navigationIcon = {
+                    SequenceIcons.NavigateUp.IconButton(
+                        onClick = dropUnlessResumed { navigateUp() },
+                        contentDescription = stringResource(navigate_up_content_description),
+                    )
+                },
                 scrollBehavior = scrollBehavior,
             )
         }

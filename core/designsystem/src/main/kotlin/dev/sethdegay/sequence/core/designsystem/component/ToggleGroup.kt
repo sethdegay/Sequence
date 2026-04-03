@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
+import dev.sethdegay.sequence.core.designsystem.util.Icon
 
 private enum class ToggleGroupItemPosition { LEADING, MIDDLE, TRAILING; }
 
@@ -98,8 +98,7 @@ private fun <T> ToggleGroupButton(
         },
         enabled = enabled,
     ) {
-        (if (checked) item.iconChecked else item.iconUnchecked).invoke()
-            .asComposableIcon().invoke()
+        (if (checked) item.iconChecked else item.iconUnchecked).invoke().Icon()
         Spacer(modifier = Modifier.size(ToggleButtonDefaults.IconSpacing))
         Text(item.label())
     }

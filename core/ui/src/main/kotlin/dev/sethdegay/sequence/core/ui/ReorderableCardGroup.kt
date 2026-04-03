@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CardGroupItem
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.ui.R.string
 import sh.calvin.reorderable.ReorderableCollectionItemScope
@@ -87,14 +87,14 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
-            SequenceIcons.DragHandle.asComposableIconButton(
+            SequenceIcons.DragHandle.IconButton(
                 modifier = with(this@ReorderableCardGroupItem) {
                     Modifier.draggableHandle()
                 },
                 onClick = {},
                 contentDescription = stringResource(string.drag_handle_content_description),
                 showTooltip = false,
-            ).invoke()
+            )
         }
     }
 }

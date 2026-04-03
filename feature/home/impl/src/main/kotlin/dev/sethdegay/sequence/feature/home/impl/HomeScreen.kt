@@ -35,8 +35,8 @@ import dev.sethdegay.sequence.core.designsystem.component.Accordion
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.designsystem.util.Icon
+import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.HeatMapLevel
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
@@ -63,10 +63,10 @@ fun HomeScreen(
                     Text(text = stringResource(string.top_app_bar_title))
                 },
                 actions = {
-                    SequenceIcons.Settings.asComposableIconButton(
+                    SequenceIcons.Settings.IconButton(
                         onClick = navigateToSettings,
                         contentDescription = stringResource(string.home_navigate_to_settings_content_description),
-                    ).invoke()
+                    )
                 }
             )
         },
@@ -183,7 +183,7 @@ private fun HomeFab(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         ) {
-            SequenceIcons.Add.asComposableIcon().invoke()
+            SequenceIcons.Add.Icon()
             Spacer(Modifier.size(12.dp))
             Text(text = text)
         }

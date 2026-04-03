@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.sethdegay.sequence.core.designsystem.R.string
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
+import dev.sethdegay.sequence.core.designsystem.util.Icon
 
 enum class TimerControlsMode { RUNNING, PAUSED; }
 
@@ -46,9 +46,9 @@ fun TimerControls(
             enabled = canMovePrevious,
             size = mediumButtonSize,
         ) {
-            SequenceIcons.Previous.asComposableIcon(
+            SequenceIcons.Previous.Icon(
                 modifier = Modifier.size(ButtonDefaults.iconSizeFor(largeButtonSize))
-            ).invoke()
+            )
         }
         ExpressiveButton(
             modifier = Modifier.weight(2f),
@@ -81,9 +81,9 @@ fun TimerControls(
             enabled = canMoveNext,
             size = mediumButtonSize,
         ) {
-            SequenceIcons.Next.asComposableIcon(
+            SequenceIcons.Next.Icon(
                 modifier = Modifier.size(ButtonDefaults.iconSizeFor(largeButtonSize))
-            ).invoke()
+            )
         }
     }
 }

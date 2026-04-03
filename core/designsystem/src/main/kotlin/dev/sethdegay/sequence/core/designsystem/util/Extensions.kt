@@ -32,10 +32,11 @@ private fun ConditionalTooltipWrapper(
     }
 }
 
-fun ImageVector.asComposableIcon(
+@Composable
+fun ImageVector.Icon(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
-): @Composable () -> Unit = {
+) {
     Icon(
         modifier = modifier,
         imageVector = this,
@@ -43,13 +44,14 @@ fun ImageVector.asComposableIcon(
     )
 }
 
-fun ImageVector.asComposableIconButton(
+@Composable
+fun ImageVector.IconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     enabled: Boolean = true,
     contentDescription: String? = null,
     showTooltip: Boolean = true,
-): @Composable () -> Unit = {
+) {
     ConditionalTooltipWrapper(
         showTooltip = showTooltip,
         tooltip = contentDescription,
@@ -59,7 +61,7 @@ fun ImageVector.asComposableIconButton(
             onClick = onClick,
             enabled = enabled,
         ) {
-            this.asComposableIcon(contentDescription = contentDescription).invoke()
+            this.Icon(contentDescription = contentDescription)
         }
     }
 }

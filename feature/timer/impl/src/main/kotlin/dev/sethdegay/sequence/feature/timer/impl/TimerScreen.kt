@@ -33,7 +33,7 @@ import dev.sethdegay.sequence.core.designsystem.component.TimerControls
 import dev.sethdegay.sequence.core.designsystem.component.TimerControlsActions
 import dev.sethdegay.sequence.core.designsystem.component.TimerControlsMode
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.designsystem.util.IconButton
 
 @Composable
 fun TimerScreen(
@@ -61,10 +61,12 @@ fun TimerScreen(
                 title = {
                     Text(text = "")
                 },
-                navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
-                    onClick = dropUnlessResumed { navigateUp() },
-                    contentDescription = stringResource(navigate_up_content_description),
-                ),
+                navigationIcon = {
+                    SequenceIcons.NavigateUp.IconButton(
+                        onClick = dropUnlessResumed { navigateUp() },
+                        contentDescription = stringResource(navigate_up_content_description),
+                    )
+                },
                 scrollBehavior = scrollBehavior,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,

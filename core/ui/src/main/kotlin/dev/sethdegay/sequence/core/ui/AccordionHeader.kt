@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
+import dev.sethdegay.sequence.core.designsystem.util.Icon
 import dev.sethdegay.sequence.core.model.Sequence
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -126,9 +126,9 @@ private fun AccordionHeader(
                     shapes = ButtonDefaults.shapes(),
                     onClick = onPlayButtonClick,
                 ) {
-                    SequenceIcons.PlayArrow.asComposableIcon(
+                    SequenceIcons.PlayArrow.Icon(
                         modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
-                    ).invoke()
+                    )
                 }
             }
             Column(

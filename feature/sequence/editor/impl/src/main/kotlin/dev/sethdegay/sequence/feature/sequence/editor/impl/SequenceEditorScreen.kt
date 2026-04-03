@@ -32,8 +32,8 @@ import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIcon
-import dev.sethdegay.sequence.core.designsystem.util.asComposableIconButton
+import dev.sethdegay.sequence.core.designsystem.util.Icon
+import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
 import dev.sethdegay.sequence.feature.segment.editor.api.SegmentEditorNav
@@ -51,10 +51,12 @@ fun SequenceEditorScreen(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = SequenceIcons.NavigateUp.asComposableIconButton(
-                    onClick = dropUnlessResumed { viewModel.requestExit() },
-                    contentDescription = stringResource(navigate_up_content_description),
-                ),
+                navigationIcon = {
+                    SequenceIcons.NavigateUp.IconButton(
+                        onClick = dropUnlessResumed { viewModel.requestExit() },
+                        contentDescription = stringResource(navigate_up_content_description),
+                    )
+                },
             )
         },
         floatingActionButton = {
@@ -69,7 +71,7 @@ fun SequenceEditorScreen(
                     }
                     if (key != null) navigateToSegmentEditor(key) // TODO handle null
                 },
-                content = SequenceIcons.Add.asComposableIcon(),
+                content = { SequenceIcons.Add.Icon() },
             )
         }
     ) { padding ->
