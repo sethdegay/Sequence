@@ -26,6 +26,7 @@ fun ImageVector.asComposableIcon(
 fun ImageVector.asComposableIconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    enabled: Boolean = true,
     contentDescription: String? = null,
     enableToolTip: Boolean = true,
 ): @Composable () -> Unit = {
@@ -42,6 +43,7 @@ fun ImageVector.asComposableIconButton(
             IconButton(
                 modifier = modifier,
                 onClick = onClick,
+                enabled = enabled,
             ) {
                 this.asComposableIcon(contentDescription = contentDescription).invoke()
             }
@@ -50,6 +52,7 @@ fun ImageVector.asComposableIconButton(
         IconButton(
             modifier = modifier,
             onClick = onClick,
+            enabled = enabled,
         ) {
             this.asComposableIcon(contentDescription = contentDescription).invoke()
         }

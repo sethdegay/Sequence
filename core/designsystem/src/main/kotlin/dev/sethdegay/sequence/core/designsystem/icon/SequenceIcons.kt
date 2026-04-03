@@ -10,6 +10,8 @@ object SequenceIcons {
     val DarkModeChecked @Composable get() = ImageVector.vectorResource(drawable.dark_mode_checked_24px)
     val DarkModeUnchecked @Composable get() = ImageVector.vectorResource(drawable.dark_mode_unchecked_24px)
     val DragHandle @Composable get() = ImageVector.vectorResource(drawable.drag_handle_24px)
+    val KeyboardArrowUp @Composable get() = ImageVector.vectorResource(drawable.keyboard_arrow_up_24px)
+    val KeyboardArrowDown @Composable get() = ImageVector.vectorResource(drawable.keyboard_arrow_down_24px)
     val LightModeChecked @Composable get() = ImageVector.vectorResource(drawable.light_mode_checked_24px)
     val LightModeUnchecked @Composable get() = ImageVector.vectorResource(drawable.light_mode_unchecked_24px)
     val NavigateUp @Composable get() = ImageVector.vectorResource(drawable.arrow_back_24px)
