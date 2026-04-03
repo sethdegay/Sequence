@@ -12,6 +12,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
+@Composable
+private fun ConditionalTooltipWrapper(
+    showTooltip: Boolean,
+    tooltip: String?,
+    content: @Composable () -> Unit,
+) {
+    if (showTooltip && tooltip != null) {
+        TooltipBox(
+            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                positioning = TooltipAnchorPosition.Below,
+            ),
+            tooltip = { PlainTooltip { Text(text = tooltip) } },
+            state = rememberTooltipState(),
+            content = content,
+        )
+    } else {
+        content()
+    }
+}
+
 fun ImageVector.asComposableIcon(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
@@ -28,27 +48,12 @@ fun ImageVector.asComposableIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     contentDescription: String? = null,
-    enableToolTip: Boolean = true,
+    showTooltip: Boolean = true,
 ): @Composable () -> Unit = {
-    if (enableToolTip && contentDescription != null) {
-        TooltipBox(
-            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                positioning = TooltipAnchorPosition.Below,
-            ),
-            tooltip = {
-                PlainTooltip { Text(text = contentDescription) }
-            },
-            state = rememberTooltipState(),
-        ) {
-            IconButton(
-                modifier = modifier,
-                onClick = onClick,
-                enabled = enabled,
-            ) {
-                this.asComposableIcon(contentDescription = contentDescription).invoke()
-            }
-        }
-    } else {
+    ConditionalTooltipWrapper(
+        showTooltip = showTooltip,
+        tooltip = contentDescription,
+    ) {
         IconButton(
             modifier = modifier,
             onClick = onClick,

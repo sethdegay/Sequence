@@ -93,7 +93,7 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
                 },
                 onClick = {},
                 contentDescription = stringResource(string.drag_handle_content_description),
-                enableToolTip = false,
+                showTooltip = false,
             ).invoke()
         }
     }
