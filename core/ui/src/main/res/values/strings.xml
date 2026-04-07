@@ -3,6 +3,13 @@
     <string name="drag_handle_content_description">Drag handle</string>
 
     <!-- =====================
+           Duration picker
+         ===================== -->
+    <string name="duration_picker_hours_label">Hour</string>
+    <string name="duration_picker_minutes_label">Min</string>
+    <string name="duration_picker_seconds_label">Sec</string>
+
+    <!-- =====================
            Heat map calendar
          ===================== -->
     <string name="heat_map_calendar_legend_less_text">Less</string>

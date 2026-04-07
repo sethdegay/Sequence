@@ -1,0 +1,102 @@
+package dev.sethdegay.sequence.core.ui
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import dev.sethdegay.sequence.core.designsystem.component.NumericStepper
+import dev.sethdegay.sequence.core.ui.R.string
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+
+@Composable
+fun DurationPicker(modifier: Modifier = Modifier, state: DurationPickerState) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        LabeledNumericStepper(
+            value = state.hours,
+            onValueChange = { state.hours = it },
+            label = stringResource(string.duration_picker_hours_label),
+            minValue = 0,
+            maxValue = 24,
+        )
+        LabeledNumericStepper(
+            value = state.minutes,
+            onValueChange = { state.minutes = it },
+            label = stringResource(string.duration_picker_minutes_label),
+            minValue = 0,
+            maxValue = 60,
+        )
+        LabeledNumericStepper(
+            value = state.seconds,
+            onValueChange = { state.seconds = it },
+            label = stringResource(string.duration_picker_seconds_label),
+            minValue = 0,
+            maxValue = 60,
+        )
+    }
+}
+
+@Composable
+private fun LabeledNumericStepper(
+    modifier: Modifier = Modifier,
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    label: String,
+    minValue: Int,
+    maxValue: Int,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(text = label)
+        NumericStepper(
+            value = value,
+            onValueChange = onValueChange,
+            minValue = minValue,
+            maxValue = maxValue,
+            contentPadding = 0.dp,
+        )
+    }
+}
+
+class DurationPickerState(
+    initialHours: Int = 0,
+    initialMinutes: Int = 0,
+    initialSeconds: Int = 0,
+) {
+    var hours by mutableIntStateOf(value = initialHours)
+    var minutes by mutableIntStateOf(value = initialMinutes)
+    var seconds by mutableIntStateOf(value = initialSeconds)
+
+    fun toDuration(): Duration = hours.hours + minutes.minutes + seconds.seconds
+}
+
+@Composable
+fun rememberDurationPickerState(): DurationPickerState {
+    return remember { DurationPickerState() }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DurationPickerPickerPreview() {
+    val state = rememberDurationPickerState()
+    DurationPicker(state = state)
+}
