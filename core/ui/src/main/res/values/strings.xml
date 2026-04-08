@@ -10,6 +10,11 @@
     <string name="duration_picker_seconds_label">Sec</string>
 
     <!-- =====================
+           Duration text field
+         ===================== -->
+    <string name="duration_text_field_label">Duration</string>
+
+    <!-- =====================
            Heat map calendar
          ===================== -->
     <string name="heat_map_calendar_legend_less_text">Less</string>

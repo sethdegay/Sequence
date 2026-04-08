@@ -25,29 +25,10 @@ import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.ExpressiveButton
 import dev.sethdegay.sequence.core.model.Segment
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-
-private val regex = Regex(
-    """(?:(?<days>\d+)\s*d\w*)?\s*(?:(?<hours>\d+)\s*h\w*)?\s*(?:(?<minutes>\d+)\s*m\w*)?\s*(?:(?<seconds>\d+)\s*s\w*)?""",
-    RegexOption.IGNORE_CASE,
-)
-
-fun parseDuration(input: String): Duration? {
-    return regex.find(input)
-        ?.takeIf { it.value.isNotBlank() }
-        ?.let { match ->
-            val days = match.groups["days"]?.value?.toInt() ?: 0
-            val hours = match.groups["hours"]?.value?.toInt() ?: 0
-            val minutes = match.groups["minutes"]?.value?.toInt() ?: 0
-            val seconds = match.groups["seconds"]?.value?.toInt() ?: 0
-            (days.days + hours.hours + minutes.minutes + seconds.seconds)
-                .takeIf { it != Duration.ZERO }
-        }
-}
 
 @Composable
 fun SegmentEditor(
@@ -55,8 +36,8 @@ fun SegmentEditor(
     onSegmentUpdate: (Segment) -> Unit,
 ) {
     val titleState = rememberTextFieldState(segment.title)
-    val durationState = rememberTextFieldState(segment.duration.toString())
-    var durationInputIsError by remember { mutableStateOf(false) }
+    val durationTextFieldState = rememberTextFieldState(segment.duration.toString())
+    var durationTextFieldIsError by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.padding(
             start = 0.dp,
@@ -83,18 +64,9 @@ fun SegmentEditor(
                 )
             }
             item {
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    state = durationState,
-                    label = { Text("Duration") },
-                    isError = durationInputIsError,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
+                DurationTextField(
+                    state = durationTextFieldState,
+                    isError = durationTextFieldIsError,
                     contentPadding = it,
                 )
             }
@@ -105,11 +77,11 @@ fun SegmentEditor(
                 .padding(horizontal = 16.dp),
             onClick = {
                 val newTitle = titleState.text.toString()
-                val newDuration = parseDuration(durationState.text.toString())
+                val newDuration = durationTextFieldState.parseDuration()
                 if (newDuration == null) {
-                    durationInputIsError = true
+                    durationTextFieldIsError = true
                 } else {
-                    durationInputIsError = false
+                    durationTextFieldIsError = false
                     onSegmentUpdate(segment.copy(title = newTitle, duration = newDuration))
                 }
             },
