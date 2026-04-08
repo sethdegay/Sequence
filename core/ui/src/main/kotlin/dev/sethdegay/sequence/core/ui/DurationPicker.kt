@@ -82,16 +82,24 @@ class DurationPickerState(
     initialMinutes: Int = 0,
     initialSeconds: Int = 0,
 ) {
-    var hours by mutableIntStateOf(value = initialHours)
-    var minutes by mutableIntStateOf(value = initialMinutes)
-    var seconds by mutableIntStateOf(value = initialSeconds)
+    var hours by mutableIntStateOf(value = initialHours.coerceIn(0, 24))
+    var minutes by mutableIntStateOf(value = initialMinutes.coerceIn(0, 60))
+    var seconds by mutableIntStateOf(value = initialSeconds.coerceIn(0, 60))
 
     fun toDuration(): Duration = hours.hours + minutes.minutes + seconds.seconds
 }
 
 @Composable
-fun rememberDurationPickerState(): DurationPickerState {
-    return remember { DurationPickerState() }
+fun rememberDurationPickerState(initialDuration: Duration = Duration.ZERO): DurationPickerState {
+    return initialDuration.toComponents { hours, minutes, seconds, _ ->
+        remember {
+            DurationPickerState(
+                initialHours = hours.toInt(),
+                initialMinutes = minutes,
+                initialSeconds = seconds,
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)

@@ -39,6 +39,9 @@ private val trailingItemPadding = PaddingValues(
 )
 
 @Composable
+internal fun singleItemShape() = RoundedCornerShape(16.dp)
+
+@Composable
 internal fun leadingItemShape(shape: CornerBasedShape = RoundedCornerShape(16.dp)) =
     RoundedCornerShape(
         bottomEnd = middleItemShape().bottomEnd,
@@ -58,6 +61,16 @@ internal fun trailingItemShape(shape: CornerBasedShape = RoundedCornerShape(16.d
         topStart = middleItemShape().topStart,
         topEnd = middleItemShape().topEnd,
     )
+
+@Composable
+fun CardGroupSingleItem(content: @Composable (PaddingValues) -> Unit) {
+    Card(
+        modifier = Modifier.padding(paddingDp),
+        shape = singleItemShape(),
+    ) {
+        content(contentPadding)
+    }
+}
 
 @Composable
 fun CardGroupLeadingItem(
@@ -105,11 +118,15 @@ fun CardGroup(content: CardGroupScope.() -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(1.5.dp),
     ) {
-        scope.items.forEachIndexed { i, item ->
-            when (i) {
-                0 -> CardGroupLeadingItem(content = item)
-                scope.items.lastIndex -> CardGroupTrailingItem(item)
-                else -> CardGroupMiddleItem(item)
+        if (scope.items.size == 1) {
+            CardGroupSingleItem(scope.items.first())
+        } else {
+            scope.items.forEachIndexed { i, item ->
+                when (i) {
+                    0 -> CardGroupLeadingItem(content = item)
+                    scope.items.lastIndex -> CardGroupTrailingItem(item)
+                    else -> CardGroupMiddleItem(item)
+                }
             }
         }
     }

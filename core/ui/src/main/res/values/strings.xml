@@ -3,6 +3,14 @@
     <string name="drag_handle_content_description">Drag handle</string>
 
     <!-- =====================
+           Duration input switcher
+         ===================== -->
+    <string name="duration_input_switcher_title">Duration</string>
+    <string name="duration_input_switcher_description">Set the segment duration by using the selectors or type it manually.</string>
+    <string name="duration_input_switcher_mode_pick">Pick</string>
+    <string name="duration_input_switcher_mode_type">Type</string>
+
+    <!-- =====================
            Duration picker
          ===================== -->
     <string name="duration_picker_hours_label">Hour</string>
@@ -12,7 +20,7 @@
     <!-- =====================
            Duration text field
          ===================== -->
-    <string name="duration_text_field_label">Duration</string>
+    <string name="duration_text_field_label">e.g., 1h 30m 15s</string>
 
     <!-- =====================
            Heat map calendar

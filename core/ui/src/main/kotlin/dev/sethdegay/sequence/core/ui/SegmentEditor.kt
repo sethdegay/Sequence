@@ -1,11 +1,14 @@
 package dev.sethdegay.sequence.core.ui
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -38,14 +41,17 @@ fun SegmentEditor(
     val titleState = rememberTextFieldState(segment.title)
     val durationTextFieldState = rememberTextFieldState(segment.duration.toString())
     var durationTextFieldIsError by remember { mutableStateOf(false) }
+    val durationPickerState = rememberDurationPickerState(segment.duration)
+    val (mode, onModeChange) = remember { mutableStateOf(DurationInputSwitcherMode.PICK) }
     Column(
-        modifier = Modifier.padding(
-            start = 0.dp,
-            top = 0.dp,
-            end = 0.dp,
-            bottom = 16.dp,
-        ),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .padding(
+                start = 0.dp,
+                top = 0.dp,
+                end = 0.dp,
+                bottom = 16.dp,
+            )
+            .animateContentSize(),
     ) {
         CardGroup {
             item {
@@ -63,26 +69,35 @@ fun SegmentEditor(
                     contentPadding = it,
                 )
             }
-            item {
-                DurationTextField(
-                    state = durationTextFieldState,
-                    isError = durationTextFieldIsError,
-                    contentPadding = it,
-                )
-            }
         }
+        DurationInputSwitcher(
+            mode = mode,
+            onModeChange = onModeChange,
+            durationPickerState = durationPickerState,
+            durationTextFieldState = durationTextFieldState,
+            durationTextFieldIsError = durationTextFieldIsError,
+        )
+        Spacer(modifier = Modifier.size(16.dp))
         ExpressiveButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             onClick = {
                 val newTitle = titleState.text.toString()
-                val newDuration = durationTextFieldState.parseDuration()
-                if (newDuration == null) {
-                    durationTextFieldIsError = true
-                } else {
-                    durationTextFieldIsError = false
-                    onSegmentUpdate(segment.copy(title = newTitle, duration = newDuration))
+                when (mode) {
+                    DurationInputSwitcherMode.PICK -> onSegmentUpdate(
+                        segment.copy(title = newTitle, duration = durationPickerState.toDuration()),
+                    )
+
+                    DurationInputSwitcherMode.TYPE -> {
+                        val newDuration = durationTextFieldState.parseDuration()
+                        if (newDuration == null) {
+                            durationTextFieldIsError = true
+                        } else {
+                            durationTextFieldIsError = false
+                            onSegmentUpdate(segment.copy(title = newTitle, duration = newDuration))
+                        }
+                    }
                 }
             },
             size = ButtonDefaults.MediumContainerHeight,

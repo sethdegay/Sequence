@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -75,6 +76,7 @@ fun NumericStepper(
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
                 fontSize = fontSize,
+                color = MaterialTheme.colorScheme.onSurface,
             ),
         )
         NumericStepperButton(
