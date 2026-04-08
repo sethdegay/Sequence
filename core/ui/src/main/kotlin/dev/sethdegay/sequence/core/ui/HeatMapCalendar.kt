@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -134,17 +135,14 @@ private fun LevelBox(
 }
 
 @Composable
-private fun WeekHeader(dayOfWeek: DayOfWeek) {
+private fun WeekHeader(dayOfWeek: DayOfWeek, locale: Locale = LocalLocale.current.platformLocale) {
     Box(
         modifier = Modifier
             .height(defaultDaySize)
             .padding(end = 8.dp),
     ) {
         Text(
-            text = dayOfWeek.getDisplayName(
-                TextStyle.SHORT,
-                Locale.getDefault(),
-            ),
+            text = dayOfWeek.getDisplayName(TextStyle.SHORT, locale),
             modifier = Modifier.align(Alignment.Center),
             style = MaterialTheme.typography.labelSmall,
         )
@@ -155,13 +153,11 @@ private fun WeekHeader(dayOfWeek: DayOfWeek) {
 private fun MonthHeader(
     calendarMonth: CalendarMonth,
     endDate: LocalDate,
+    locale: Locale = LocalLocale.current.platformLocale,
 ) {
     if (calendarMonth.weekDays.first().first().date <= endDate) {
         val month = calendarMonth.yearMonth
-        val title = month.month.getDisplayName(
-            TextStyle.FULL,
-            Locale.getDefault(),
-        )
+        val title = month.month.getDisplayName(TextStyle.FULL, locale)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
