@@ -1,18 +1,23 @@
 # Sequence
 
-A sequential timer for structured task execution. It orchestrates multiple **Segments** into a
-single, continuous **Sequence**, eliminating manual resets between intervals.
+A sequential timer for structured task execution.
 
-**Note**: This project is in active development. Expect breaking changes.
+## Features
 
-## Key Features
+- Configurable segment duration.
+- Audio cues for completion and time depletion.
+- Text-to-speech announcements for segment titles.
+- Heatmap visualizing completion times.
+- Auto/light/dark themes and dynamic color.
+- Fully offline.
 
-- **Variable Segment Durations**: Define specific durations for each segment within a sequence.
-- **Automated Transitions**: Move from one segment to the next without user intervention.
-- **Auditory Feedback**: Distinct audio cues mark the approach of time depletion and segment
-  completion.
-- **Consistency Tracking**: Integrated heatmap for long-term consistency tracking.
-- **Fully Offline Functionality**: Track time anywhere even without internet connection.
+## Example Use Cases
+
+- Interval training
+- Study sessions
+- Meal preparation
+- Coding sprints
+- Morning/evening routines
 
 ## Quick Start
 
@@ -22,8 +27,7 @@ single, continuous **Sequence**, eliminating manual resets between intervals.
 
 ## Development Environment
 
-Use the latest stable version of Android Studio. To use a custom JDK instead of the bundled
-JetBrains Runtime, ensure your JDK is version 17 or higher and update the configuration
+Use the latest stable Android Studio. If using a custom JDK, ensure it is version 17+ and configured
 in [build.gradle.kts](build.gradle.kts).
 
 ## License

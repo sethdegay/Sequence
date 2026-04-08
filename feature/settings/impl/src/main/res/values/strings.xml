@@ -18,7 +18,7 @@
     <string name="settings_completion_sound_title">Completion sound</string>
     <string name="settings_completion_sound_description">Play a bell sound when the countdown finishes.</string>
     <string name="settings_speak_title_title">Speak title</string>
-    <string name="settings_speak_title_description">Read out task titles using text-to-speech.</string>
+    <string name="settings_speak_title_description">Announce segment titles using text-to-speech.</string>
     <string name="settings_no_tts_engine_found_error_message">No TTS engine found.</string>
     <string name="settings_download_from_play_store_error_link_text">Download from Play Store</string>
 </resources>
