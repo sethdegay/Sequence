@@ -139,7 +139,8 @@ class SequenceEditorViewModel @AssistedInject constructor(
                 }
                 .debounce(500.milliseconds)
                 .collectLatest { sequence ->
-                    sequenceRepository.saveSequence(sequence, libraryId)
+                    sequenceRepository
+                        .saveSequence(sequence.copy(dateModified = Clock.System.now()), libraryId)
                 }
         }
     }
