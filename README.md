@@ -1,6 +1,6 @@
 # Sequence
 
-A sequential timer for structured task execution.
+Sequence (stylized as SΞQUΞNCΞ) is a sequential timer for structured task execution.
 
 ## Features
 

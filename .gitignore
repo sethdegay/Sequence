@@ -20,6 +20,8 @@ output-metadata.json
 # IntelliJ
 *.iml
 .idea/*
+# Keep dictionaries
+!.idea/dictionaries/
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
