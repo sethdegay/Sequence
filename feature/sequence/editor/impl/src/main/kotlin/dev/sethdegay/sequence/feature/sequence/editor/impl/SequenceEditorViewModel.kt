@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
 
 @HiltViewModel(assistedFactory = SequenceEditorViewModel.Factory::class)
@@ -69,7 +70,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
     }.distinctUntilChanged()
 
     private val currentDuration = currentSegments
-        .map { list -> list.sumOf { it.duration.inWholeMilliseconds }.milliseconds }
+        .map { list -> list.sumOf { it.duration.inWholeSeconds }.seconds }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -124,8 +125,18 @@ class SequenceEditorViewModel @AssistedInject constructor(
     init {
         viewModelScope.launch {
             if (sequenceId != null) sequenceRepository.getSequence(sequenceId).deconstruct()
-            snapshotFlow { construct() }
-                .distinctUntilChanged()
+            combine(
+                snapshotFlow { construct() },
+                currentDuration,
+            ) { sequence, duration -> sequence.copy(totalDuration = duration) }
+                .distinctUntilChanged { old, new ->
+                    old.id == new.id &&
+                            old.title == new.title &&
+                            old.description == new.description &&
+                            old.dateCreated == new.dateCreated &&
+                            old.dateModified == new.dateModified &&
+                            old.totalDuration == new.totalDuration
+                }
                 .debounce(500.milliseconds)
                 .collectLatest { sequence ->
                     sequenceRepository.saveSequence(sequence, libraryId)
