@@ -12,10 +12,10 @@
         <group android:translateY="106.12804">
             <path
                 android:pathData="M6.046875,-40.03125L6.046875,-28.078125L41.90625,-28.078125L41.90625,-40.03125L6.046875,-40.03125Z"
-                android:fillColor="#FFFFFF" />
+                android:fillColor="#55FFFFFF" />
             <path
                 android:pathData="M54.046875,-40.03125L54.046875,-28.078125L89.90625,-28.078125L89.90625,-40.03125L54.046875,-40.03125Z"
-                android:fillColor="#FFFFFF" />
+                android:fillColor="#A9FFFFFF" />
             <path
                 android:pathData="M102.046875,-40.03125L102.046875,-28.078125L137.90625,-28.078125L137.90625,-40.03125L102.046875,-40.03125Z"
                 android:fillColor="#FFFFFF" />
