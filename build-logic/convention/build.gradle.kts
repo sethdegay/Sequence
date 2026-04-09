@@ -33,6 +33,10 @@ tasks {
 
 gradlePlugin {
     plugins {
+        register("sequenceApplication") {
+            id = libs.plugins.sequence.application.get().pluginId
+            implementationClass = "SequenceApplicationConventionPlugin"
+        }
         register("sequenceCompose") {
             id = libs.plugins.sequence.compose.get().pluginId
             implementationClass = "SequenceComposeConventionPlugin"
