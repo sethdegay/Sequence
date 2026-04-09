@@ -62,14 +62,14 @@ fun SequenceEditorScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    val key = uiState.segments?.let { segments ->
+                    val key = uiState.segments.let { segments ->
                         SegmentEditorNav.Create(
                             sequenceId = viewModel.getSequenceId(),
                             lastSegmentPosition =
-                                if (segments.isNotEmpty()) segments.last().order else 0,
+                                if (!segments.isNullOrEmpty()) segments.last().order else 0,
                         )
                     }
-                    if (key != null) navigateToSegmentEditor(key) // TODO handle null
+                    navigateToSegmentEditor(key)
                 },
                 content = { SequenceIcons.Add.Icon() },
             )
