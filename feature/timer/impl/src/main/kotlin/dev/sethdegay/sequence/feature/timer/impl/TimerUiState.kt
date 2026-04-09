@@ -17,9 +17,12 @@ sealed interface TimerUiState {
         val canMovePrevious: Boolean,
         val canMoveNext: Boolean,
         val amplitudeLevel: ProgressIndicatorAmplitudeLevel,
+        override val topAppBarTitle: String,
     ) : TimerUiState
 
     fun showLoadingScreen(): Boolean = this is Loading
 
     fun shouldNavigateUp(): Boolean = this is Finished
+
+    val topAppBarTitle: String get() = ""
 }

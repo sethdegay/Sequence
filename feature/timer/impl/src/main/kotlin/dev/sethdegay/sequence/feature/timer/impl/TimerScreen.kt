@@ -58,9 +58,7 @@ fun TimerScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
-                title = {
-                    Text(text = "")
-                },
+                title = { Text(text = uiState.topAppBarTitle) },
                 navigationIcon = {
                     SequenceIcons.NavigateUp.IconButton(
                         onClick = dropUnlessResumed { navigateUp() },
