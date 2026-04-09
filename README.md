@@ -16,7 +16,6 @@ Sequence (stylized as SΞQUΞNCΞ) is a sequential timer for structured task exe
 - Interval training
 - Study sessions
 - Meal preparation
-- Coding sprints
 - Morning/evening routines
 
 ## Quick Start
