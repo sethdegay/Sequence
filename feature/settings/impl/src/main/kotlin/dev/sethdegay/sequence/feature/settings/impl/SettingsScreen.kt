@@ -174,11 +174,7 @@ private fun SettingsScreen(
                         onCheckedChange = setSpeakTitle,
                         isEnabled = !uiState.muteAll && uiState.hasTtsEngineInstalled,
                         preferenceError = if (!uiState.hasTtsEngineInstalled) {
-                            PreferenceError(
-                                message = stringResource(string.settings_no_tts_engine_found_error_message),
-//                                linkText = stringResource(string.settings_download_from_play_store_error_link_text),
-//                                actionUri = "market://search?q=text to speech",
-                            )
+                            PreferenceError(message = stringResource(string.settings_no_tts_engine_found_error_message))
                         } else {
                             null
                         },
