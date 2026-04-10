@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -129,6 +130,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
                 snapshotFlow { construct() },
                 currentDuration,
             ) { sequence, duration -> sequence.copy(totalDuration = duration) }
+                .filter { !it.isEmpty() }
                 .distinctUntilChanged { old, new ->
                     old.id == new.id &&
                             old.title == new.title &&
