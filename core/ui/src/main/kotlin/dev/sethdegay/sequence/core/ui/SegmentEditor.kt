@@ -38,9 +38,9 @@ fun SegmentEditor(
     onSegmentUpdate: (Segment) -> Unit,
 ) {
     val titleState = rememberTextFieldState(segment.title)
-    val durationTextFieldState = rememberTextFieldState(segment.duration.toString())
-    var durationTextFieldIsError by remember { mutableStateOf(false) }
-    val durationPickerState = rememberDurationPickerState(segment.duration)
+    val typeState = rememberTextFieldState(segment.duration.toString())
+    var typeTextFieldIsError by remember { mutableStateOf(false) }
+    val pickerState = rememberDurationPickerState(segment.duration)
     val (mode, onModeChange) = remember { mutableStateOf(DurationInputSwitcherMode.PICK) }
     Column(
         modifier = Modifier
@@ -73,9 +73,9 @@ fun SegmentEditor(
         DurationInputSwitcher(
             mode = mode,
             onModeChange = onModeChange,
-            durationPickerState = durationPickerState,
-            durationTextFieldState = durationTextFieldState,
-            durationTextFieldIsError = durationTextFieldIsError,
+            pickerState = pickerState,
+            typeState = typeState,
+            durationTextFieldIsError = typeTextFieldIsError,
         )
         ExpressiveButton(
             modifier = Modifier
@@ -85,15 +85,15 @@ fun SegmentEditor(
                 val newTitle = titleState.text.toString()
                 when (mode) {
                     DurationInputSwitcherMode.PICK -> onSegmentUpdate(
-                        segment.copy(title = newTitle, duration = durationPickerState.toDuration()),
+                        segment.copy(title = newTitle, duration = pickerState.toDuration()),
                     )
 
                     DurationInputSwitcherMode.TYPE -> {
-                        val newDuration = durationTextFieldState.parseDuration()
+                        val newDuration = typeState.parseDuration()
                         if (newDuration == null) {
-                            durationTextFieldIsError = true
+                            typeTextFieldIsError = true
                         } else {
-                            durationTextFieldIsError = false
+                            typeTextFieldIsError = false
                             onSegmentUpdate(segment.copy(title = newTitle, duration = newDuration))
                         }
                     }

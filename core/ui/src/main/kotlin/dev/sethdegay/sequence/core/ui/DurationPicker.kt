@@ -82,9 +82,26 @@ class DurationPickerState(
     initialMinutes: Int = 0,
     initialSeconds: Int = 0,
 ) {
-    var hours by mutableIntStateOf(value = initialHours.coerceIn(0, 24))
-    var minutes by mutableIntStateOf(value = initialMinutes.coerceIn(0, 60))
-    var seconds by mutableIntStateOf(value = initialSeconds.coerceIn(0, 60))
+    private var _hours by mutableIntStateOf(value = initialHours.coerceIn(0, 24))
+    var hours: Int
+        get() = _hours
+        set(value) {
+            _hours = value.coerceIn(0, 24)
+        }
+
+    private var _minutes by mutableIntStateOf(value = initialMinutes.coerceIn(0, 60))
+    var minutes: Int
+        get() = _minutes
+        set(value) {
+            _minutes = value.coerceIn(0, 60)
+        }
+
+    private var _seconds by mutableIntStateOf(value = initialSeconds.coerceIn(0, 60))
+    var seconds: Int
+        get() = _seconds
+        set(value) {
+            _seconds = value.coerceIn(0, 60)
+        }
 
     fun toDuration(): Duration = hours.hours + minutes.minutes + seconds.seconds
 }
