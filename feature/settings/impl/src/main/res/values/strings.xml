@@ -23,6 +23,7 @@
     <string name="settings_download_from_play_store_error_link_text">Download from Play Store</string>
 
     <!-- About section -->
+    <string name="settings_version_title">App version</string>
+    <string name="settings_version_not_available">n/a</string>
     <string name="settings_open_source_licenses_title">Open source licenses</string>
-    <string name="settings_open_source_licenses_description">View licenses for open source software used in this app.</string>
 </resources>
