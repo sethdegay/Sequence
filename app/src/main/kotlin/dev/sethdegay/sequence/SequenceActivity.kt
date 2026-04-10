@@ -2,9 +2,19 @@ package dev.sethdegay.sequence
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -37,31 +47,58 @@ class SequenceActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        val themeConfig by collectLocalThemeConfig(viewModel.uiState)
-
         splashScreen.setKeepOnScreenCondition { viewModel.uiState.value.showSplashScreen() }
 
         setContent {
+            val uiState by viewModel.uiState.collectAsState()
+            val useDarkTheme = uiState.useDarkTheme(isSystemInDarkTheme())
+
+            SystemBarsThemeEffect(useDarkTheme)
+
             SequenceTheme(
-                darkTheme = themeConfig.darkTheme,
-                dynamicColor = themeConfig.dynamicColor,
+                darkTheme = useDarkTheme,
+                dynamicColor = uiState.useDynamicColor,
             ) {
-                NavDisplay(
-                    backStack = navigator.backStack,
-                    onBack = navigator::navigateUp,
-                    entryDecorators = listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator(),
-                    ),
-                    entryProvider = entryProvider {
-                        entryProviderScopes.forEach { builder -> this.builder() }
-                    },
-                    sceneStrategies = listOf(
-                        bottomSheetSceneStrategy,
-                        SinglePaneSceneStrategy(),
-                    ),
-                )
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.surface,
+                ) {
+                    NavDisplay(
+                        backStack = navigator.backStack,
+                        onBack = navigator::navigateUp,
+                        entryDecorators = listOf(
+                            rememberSaveableStateHolderNavEntryDecorator(),
+                            rememberViewModelStoreNavEntryDecorator(),
+                        ),
+                        entryProvider = entryProvider {
+                            entryProviderScopes.forEach { builder -> this.builder() }
+                        },
+                        sceneStrategies = listOf(
+                            bottomSheetSceneStrategy,
+                            SinglePaneSceneStrategy(),
+                        ),
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun SequenceActivity.SystemBarsThemeEffect(useDarkTheme: Boolean) {
+    DisposableEffect(useDarkTheme) {
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                lightScrim = android.graphics.Color.TRANSPARENT,
+                darkScrim = android.graphics.Color.TRANSPARENT,
+                detectDarkMode = { useDarkTheme },
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                lightScrim = android.graphics.Color.TRANSPARENT,
+                darkScrim = android.graphics.Color.TRANSPARENT,
+                detectDarkMode = { useDarkTheme },
+            ),
+        )
+        onDispose { }
     }
 }
