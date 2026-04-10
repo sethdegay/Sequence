@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import dev.sethdegay.sequence.core.model.SegmentInputMethod as ExtSegmentInputMethod
 import dev.sethdegay.sequence.core.model.ThemeConfig as ExtThemeConfig
 import dev.sethdegay.sequence.core.model.UserPreferences as ExtUserPreferences
 
@@ -83,6 +84,19 @@ class UserPreferencesDataSource @Inject constructor(
             }
         }
     }
+
+    suspend fun setActiveSegmentIm(activeSegmentIm: ExtSegmentInputMethod) {
+        _userPreferences.updateData { current ->
+            current.copy {
+                uiState = uiState.copy {
+                    this.activeSegmentIm = when (activeSegmentIm) {
+                        ExtSegmentInputMethod.PICK -> SegmentInputMethod.PICK
+                        ExtSegmentInputMethod.TYPE -> SegmentInputMethod.TYPE
+                    }
+                }
+            }
+        }
+    }
 }
 
 private fun UserPreferences.asExternalModel(): ExtUserPreferences {
@@ -98,6 +112,10 @@ private fun UserPreferences.asExternalModel(): ExtUserPreferences {
         uiState = UiState(
             activeLibraryId = uiState.activeLibraryId.toUuidOrNull(),
             activeSequenceId = uiState.activeSequenceId.toUuidOrNull(),
+            activeSegmentIm = when (uiState.activeSegmentIm) {
+                SegmentInputMethod.PICK, SegmentInputMethod.UNRECOGNIZED -> ExtSegmentInputMethod.PICK
+                SegmentInputMethod.TYPE -> ExtSegmentInputMethod.TYPE
+            },
         ),
     )
 }

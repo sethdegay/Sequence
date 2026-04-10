@@ -15,16 +15,13 @@ import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.IconButton
+import dev.sethdegay.sequence.core.model.SegmentInputMethod
 import dev.sethdegay.sequence.core.ui.R.string
 
-enum class DurationInputSwitcherMode { PICK, TYPE; }
-
-// TODO
-// ux: save preferred input method to ui state pref
 @Composable
 fun DurationInputSwitcher(
-    mode: DurationInputSwitcherMode,
-    onModeChange: (DurationInputSwitcherMode) -> Unit,
+    inputMethod: SegmentInputMethod,
+    onInputMethodChange: (SegmentInputMethod) -> Unit,
     pickerState: DurationPickerState,
     typeState: TextFieldState,
     durationTextFieldIsError: Boolean,
@@ -34,19 +31,19 @@ fun DurationInputSwitcher(
             ListItem(
                 headlineContent = { Text(stringResource(string.duration_input_switcher_title)) },
                 trailingContent = {
-                    when (mode) {
-                        DurationInputSwitcherMode.PICK -> SequenceIcons.Keyboard.IconButton(
+                    when (inputMethod) {
+                        SegmentInputMethod.PICK -> SequenceIcons.Keyboard.IconButton(
                             onClick = {
                                 typeState.applyPickerData(pickerState)
-                                onModeChange(DurationInputSwitcherMode.TYPE)
+                                onInputMethodChange(SegmentInputMethod.TYPE)
                             },
                             contentDescription = stringResource(string.duration_input_switcher_mode_type),
                         )
 
-                        DurationInputSwitcherMode.TYPE -> SequenceIcons.Pick.IconButton(
+                        SegmentInputMethod.TYPE -> SequenceIcons.Pick.IconButton(
                             onClick = {
                                 pickerState.applyTypeData(typeState)
-                                onModeChange(DurationInputSwitcherMode.PICK)
+                                onInputMethodChange(SegmentInputMethod.PICK)
                             },
                             contentDescription = stringResource(string.duration_input_switcher_mode_pick),
                         )
@@ -60,8 +57,8 @@ fun DurationInputSwitcher(
             )
         }
         item {
-            when (mode) {
-                DurationInputSwitcherMode.PICK -> DurationPicker(
+            when (inputMethod) {
+                SegmentInputMethod.PICK -> DurationPicker(
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .fillMaxWidth()
@@ -69,7 +66,7 @@ fun DurationInputSwitcher(
                     state = pickerState,
                 )
 
-                DurationInputSwitcherMode.TYPE -> {
+                SegmentInputMethod.TYPE -> {
                     DurationTextField(
                         state = typeState,
                         isError = durationTextFieldIsError,

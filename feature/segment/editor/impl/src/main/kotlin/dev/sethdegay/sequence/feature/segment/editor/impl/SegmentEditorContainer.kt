@@ -15,6 +15,8 @@ fun SegmentEditorContainer(viewModel: SegmentEditorViewModel, navigateUp: () -> 
             segment != null -> SegmentEditor(
                 segment = segment,
                 onSegmentUpdate = viewModel::saveSegment,
+                inputMethod = uiState.inputMethod,
+                onInputMethodChange = viewModel::onInputMethodChange,
             )
 
             else -> LoadingSection()

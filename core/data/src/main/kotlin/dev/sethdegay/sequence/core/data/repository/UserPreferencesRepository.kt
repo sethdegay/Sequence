@@ -1,5 +1,6 @@
 package dev.sethdegay.sequence.core.data.repository
 
+import dev.sethdegay.sequence.core.model.SegmentInputMethod
 import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.ThemeConfig
 import dev.sethdegay.sequence.core.model.UiState
@@ -26,4 +27,6 @@ interface UserPreferencesRepository {
     suspend fun setActiveLibraryId(activeLibraryId: Uuid?)
 
     suspend fun setActiveSequenceId(activeSequenceId: Uuid?)
+
+    suspend fun setActiveSegmentIm(activeSegmentIm: SegmentInputMethod)
 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.ExpressiveButton
 import dev.sethdegay.sequence.core.model.Segment
+import dev.sethdegay.sequence.core.model.SegmentInputMethod
 import dev.sethdegay.sequence.core.ui.R.string
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -36,12 +37,13 @@ import kotlin.time.Duration.Companion.seconds
 fun SegmentEditor(
     segment: Segment,
     onSegmentUpdate: (Segment) -> Unit,
+    inputMethod: SegmentInputMethod,
+    onInputMethodChange: (SegmentInputMethod) -> Unit,
 ) {
     val titleState = rememberTextFieldState(segment.title)
     val typeState = rememberTextFieldState(segment.duration.toString())
     var typeTextFieldIsError by remember { mutableStateOf(false) }
     val pickerState = rememberDurationPickerState(segment.duration)
-    val (mode, onModeChange) = remember { mutableStateOf(DurationInputSwitcherMode.PICK) }
     Column(
         modifier = Modifier
             .padding(
@@ -71,8 +73,8 @@ fun SegmentEditor(
             }
         }
         DurationInputSwitcher(
-            mode = mode,
-            onModeChange = onModeChange,
+            inputMethod = inputMethod,
+            onInputMethodChange = onInputMethodChange,
             pickerState = pickerState,
             typeState = typeState,
             durationTextFieldIsError = typeTextFieldIsError,
@@ -83,12 +85,12 @@ fun SegmentEditor(
                 .padding(horizontal = 16.dp),
             onClick = {
                 val newTitle = titleState.text.toString()
-                when (mode) {
-                    DurationInputSwitcherMode.PICK -> onSegmentUpdate(
+                when (inputMethod) {
+                    SegmentInputMethod.PICK -> onSegmentUpdate(
                         segment.copy(title = newTitle, duration = pickerState.toDuration()),
                     )
 
-                    DurationInputSwitcherMode.TYPE -> {
+                    SegmentInputMethod.TYPE -> {
                         val newDuration = typeState.parseDuration()
                         if (newDuration == null) {
                             typeTextFieldIsError = true
@@ -121,6 +123,9 @@ private fun SegmentEditorPreview() {
             ),
         )
     }
+    val (inputMethod, onInputMethodChange) =
+        remember { mutableStateOf(SegmentInputMethod.PICK) }
+
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Box(
             modifier =
@@ -134,6 +139,8 @@ private fun SegmentEditorPreview() {
         SegmentEditor(
             segment = segment,
             onSegmentUpdate = onSegmentUpdate,
+            inputMethod = inputMethod,
+            onInputMethodChange = onInputMethodChange,
         )
     }
 }

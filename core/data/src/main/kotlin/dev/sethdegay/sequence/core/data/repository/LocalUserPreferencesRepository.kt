@@ -1,6 +1,7 @@
 package dev.sethdegay.sequence.core.data.repository
 
 import dev.sethdegay.sequence.core.datastore.UserPreferencesDataSource
+import dev.sethdegay.sequence.core.model.SegmentInputMethod
 import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.model.ThemeConfig
 import dev.sethdegay.sequence.core.model.UiState
@@ -51,5 +52,9 @@ class LocalUserPreferencesRepository @Inject constructor(
 
     override suspend fun setActiveSequenceId(activeSequenceId: Uuid?) {
         dataSource.setActiveSequenceId(activeSequenceId)
+    }
+
+    override suspend fun setActiveSegmentIm(activeSegmentIm: SegmentInputMethod) {
+        dataSource.setActiveSegmentIm(activeSegmentIm)
     }
 }

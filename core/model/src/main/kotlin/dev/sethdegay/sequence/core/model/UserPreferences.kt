@@ -19,6 +19,9 @@ data class Settings(
 data class UiState(
     val activeLibraryId: Uuid?,
     val activeSequenceId: Uuid?,
+    val activeSegmentIm: SegmentInputMethod,
 )
 
 enum class ThemeConfig { FOLLOW_SYSTEM, LIGHT, DARK; }
+
+enum class SegmentInputMethod { PICK, TYPE; }

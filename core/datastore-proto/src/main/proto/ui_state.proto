@@ -1,9 +1,12 @@
 syntax = "proto3";
 
+import "segment_input_method.proto";
+
 option java_package = "dev.sethdegay.sequence.core.datastore";
 option java_multiple_files = true;
 
 message UiState {
   optional bytes active_library_id = 1;
   optional bytes active_sequence_id = 2;
+  optional SegmentInputMethod active_segment_im = 3;
 }

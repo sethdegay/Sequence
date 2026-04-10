@@ -7,11 +7,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.sequence.core.data.repository.SegmentRepository
+import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.model.Segment
+import dev.sethdegay.sequence.core.model.SegmentInputMethod
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -25,6 +29,7 @@ class SegmentEditorViewModel @AssistedInject constructor(
     @Assisted("sequenceId") private val sequenceId: Uuid,
     @Assisted val lastSegmentPosition: Int?,
     private val segmentRepository: SegmentRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
     @AssistedFactory
     interface Factory {
@@ -38,39 +43,46 @@ class SegmentEditorViewModel @AssistedInject constructor(
     private val _effects = Channel<SegmentEditorEffect>(Channel.BUFFERED)
     val effects = _effects.receiveAsFlow()
 
-    private val _uiState = MutableStateFlow<SegmentEditorUiState>(SegmentEditorUiState.Loading)
+    private val _segment = MutableStateFlow<Segment?>(null)
+    private val _inputMethod = userPreferencesRepository.uiState.map { it.activeSegmentIm }
 
-    val uiState: StateFlow<SegmentEditorUiState> = _uiState
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = SegmentEditorUiState.Loading,
-        )
+    val uiState: StateFlow<SegmentEditorUiState> =
+        combine(_segment, _inputMethod) { segment, inputMethod ->
+            when (segment) {
+                null -> SegmentEditorUiState.Loading
+                else -> SegmentEditorUiState.Success(segment, inputMethod)
+            }
+        }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = SegmentEditorUiState.Loading,
+            )
 
     fun saveSegment(segment: Segment) {
         viewModelScope.launch {
-            _uiState.value = SegmentEditorUiState.Loading
+            _segment.value = null
             segmentRepository.saveSegment(segment, sequenceId)
             _effects.send(SegmentEditorEffect.Finished)
         }
     }
 
+    fun onInputMethodChange(inputMethod: SegmentInputMethod) {
+        viewModelScope.launch { userPreferencesRepository.setActiveSegmentIm(inputMethod) }
+    }
+
     init {
         if (segmentId != null) {
             viewModelScope.launch {
-                _uiState.update {
-                    SegmentEditorUiState.Success(segmentRepository.getSegment(segmentId))
-                }
+                _segment.update { segmentRepository.getSegment(segmentId) }
             }
         } else {
-            _uiState.update {
-                val emptySegment = Segment(
-                    title = "",
-                    duration = Duration.ZERO,
-                    order = lastSegmentPosition?.plus(1) ?: 0,
-                )
-                SegmentEditorUiState.Success(emptySegment)
-            }
+            val emptySegment = Segment(
+                title = "",
+                duration = Duration.ZERO,
+                order = lastSegmentPosition?.plus(1) ?: 0,
+            )
+            _segment.update { emptySegment }
         }
     }
 }
