@@ -1,9 +1,7 @@
 package dev.sethdegay.sequence.feature.sequence.editor.impl
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -23,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
-import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.Icon
@@ -41,7 +38,6 @@ import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
 import dev.sethdegay.sequence.feature.segment.editor.api.SegmentEditorNav
 import dev.sethdegay.sequence.feature.sequence.editor.impl.R.string
-import kotlin.time.Duration
 
 @Composable
 fun SequenceEditorScreen(
@@ -58,13 +54,9 @@ fun SequenceEditorScreen(
         topBar = {
             LargeTopAppBar(
                 title = {
-                    Text(
-                        text = when (uiState.isCreateMode) {
-                            true -> stringResource(string.sequence_editor_top_app_bar_title_create)
-                            false -> stringResource(string.sequence_editor_top_app_bar_title_edit)
-                            else -> ""
-                        }
-                    )
+                    uiState.totalDuration?.let {
+                        DurationDisplay(duration = it, style = LocalTextStyle.current)
+                    }
                 },
                 navigationIcon = {
                     SequenceIcons.NavigateUp.IconButton(
@@ -102,7 +94,6 @@ fun SequenceEditorScreen(
                         title = uiState.title,
                         description = uiState.description,
                         segments = uiState.segments,
-                        totalDuration = uiState.totalDuration,
                         onSegmentOrderChanged = viewModel::onSegmentOrderChanged,
                         onSegmentClick = { segment ->
                             val key = SegmentEditorNav.Edit(
@@ -134,7 +125,6 @@ private fun SequenceEditorScreen(
     title: TextFieldState,
     description: TextFieldState,
     segments: List<Segment>,
-    totalDuration: Duration,
     onSegmentOrderChanged: (List<Segment>) -> Unit,
     onSegmentClick: (Segment) -> Unit,
 ) {
@@ -178,21 +168,6 @@ private fun SequenceEditorScreen(
                     ),
                     contentPadding = it,
                 )
-            }
-            item {
-                Row(
-                    modifier = Modifier
-                        .padding(it)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(text = stringResource(string.sequence_editor_total_duration_text))
-                    CountdownDisplay(
-                        duration = totalDuration,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                }
             }
         }
     }

@@ -12,7 +12,6 @@ sealed interface SequenceEditorUiState {
         override val description: TextFieldState,
         override val segments: List<Segment>,
         override val totalDuration: Duration,
-        override val isCreateMode: Boolean?,
     ) : SequenceEditorUiState
 
     val title: TextFieldState? get() = null
@@ -22,6 +21,4 @@ sealed interface SequenceEditorUiState {
     val segments: List<Segment>? get() = null
 
     val totalDuration: Duration? get() = null
-
-    val isCreateMode: Boolean? get() = null
 }
