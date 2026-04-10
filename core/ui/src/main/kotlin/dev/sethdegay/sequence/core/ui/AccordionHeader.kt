@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.Icon
 import dev.sethdegay.sequence.core.model.Sequence
@@ -158,7 +158,7 @@ private fun AccordionHeader(
             }
         }
         Spacer(Modifier.size(12.dp))
-        CountdownDisplay(
+        DurationDisplay(
             duration = totalDuration,
             style = MaterialTheme.typography.bodyMedium,
         )

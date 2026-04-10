@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CardGroupItem
-import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.Segment
@@ -82,7 +82,7 @@ internal fun ReorderableCollectionItemScope.ReorderableCardGroupItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(modifier = Modifier.padding(start = 16.dp), text = segment.title)
-                CountdownDisplay(
+                DurationDisplay(
                     duration = segment.duration,
                     style = MaterialTheme.typography.bodyMedium,
                 )

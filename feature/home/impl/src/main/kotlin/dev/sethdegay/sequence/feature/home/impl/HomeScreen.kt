@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.Accordion
-import dev.sethdegay.sequence.core.designsystem.component.CountdownDisplay
+import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.Icon
@@ -199,7 +199,7 @@ private fun SequenceSegment(modifier: Modifier, segment: Segment) {
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(text = segment.title)
-        CountdownDisplay(
+        DurationDisplay(
             duration = segment.duration,
             style = MaterialTheme.typography.bodyMedium,
         )
