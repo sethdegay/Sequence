@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -225,10 +226,12 @@ private val versionName: String
     @Composable
     get() {
         val context = LocalContext.current
-        val packageInfo = try {
-            context.packageManager.getPackageInfo(context.packageName, 0)
-        } catch (_: PackageManager.NameNotFoundException) {
-            null
+        val packageInfo = remember(context) {
+            try {
+                context.packageManager.getPackageInfo(context.packageName, 0)
+            } catch (_: PackageManager.NameNotFoundException) {
+                null
+            }
         }
         return packageInfo?.versionName ?: stringResource(string.settings_version_not_available)
     }
