@@ -51,7 +51,8 @@ import kotlin.uuid.Uuid
 fun HomeScreen(
     viewModel: HomeViewModel,
     navigateToEventList: (ClosedRange<Instant>) -> Unit,
-    navigateToSequenceEditor: (Uuid?, Uuid) -> Unit,
+    createSequence: (Uuid) -> Unit,
+    editSequence: (Uuid, Uuid) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToTimer: (Uuid) -> Unit,
 ) {
@@ -74,7 +75,7 @@ fun HomeScreen(
             HomeFab(
                 visible = !uiState.showLoadingScreen() && uiState.activeSequenceId == null,
                 text = stringResource(string.home_add_sequence_button_text),
-                onClick = { viewModel.getLibraryId()?.let { navigateToSequenceEditor(null, it) } },
+                onClick = { viewModel.getLibraryId()?.let { createSequence(it) } },
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -86,7 +87,7 @@ fun HomeScreen(
                 scaffoldPadding = padding,
                 navigateToEditor = { sequenceId ->
                     viewModel.getLibraryId()?.let { libraryId ->
-                        navigateToSequenceEditor(sequenceId, libraryId)
+                        editSequence(sequenceId, libraryId)
                     }
                 },
                 navigateToTimer = navigateToTimer,
@@ -105,7 +106,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreen(
     scaffoldPadding: PaddingValues,
-    navigateToEditor: (Uuid?) -> Unit,
+    navigateToEditor: (Uuid) -> Unit,
     navigateToTimer: (Uuid) -> Unit,
     setActiveSequenceId: (Uuid?) -> Unit,
     isExpanded: (Uuid) -> Boolean,

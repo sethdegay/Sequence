@@ -6,17 +6,19 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
@@ -37,6 +40,7 @@ import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
 import dev.sethdegay.sequence.feature.segment.editor.api.SegmentEditorNav
+import dev.sethdegay.sequence.feature.sequence.editor.impl.R.string
 import kotlin.time.Duration
 
 @Composable
@@ -47,16 +51,28 @@ fun SequenceEditorScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                title = {},
+            LargeTopAppBar(
+                title = {
+                    Text(
+                        text = when (uiState.isCreateMode) {
+                            true -> stringResource(string.sequence_editor_top_app_bar_title_create)
+                            false -> stringResource(string.sequence_editor_top_app_bar_title_edit)
+                            else -> ""
+                        }
+                    )
+                },
                 navigationIcon = {
                     SequenceIcons.NavigateUp.IconButton(
-                        onClick = dropUnlessResumed { viewModel.requestExit() },
+                        onClick = dropUnlessResumed { navigateUp() },
                         contentDescription = stringResource(navigate_up_content_description),
                     )
                 },
+                scrollBehavior = scrollBehavior,
             )
         },
         floatingActionButton = {
@@ -126,7 +142,7 @@ private fun SequenceEditorScreen(
         modifier = Modifier
             .consumeWindowInsets(scaffoldPadding)
             .padding(scaffoldPadding)
-            .fillMaxWidth(),
+            .fillMaxSize(),
         segments = segments,
         onSegmentOrderChanged = onSegmentOrderChanged,
         onSegmentClick = onSegmentClick,
@@ -137,7 +153,7 @@ private fun SequenceEditorScreen(
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = title,
-                    label = { Text("Title") },
+                    label = { Text(stringResource(string.sequence_editor_title_label)) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
@@ -152,7 +168,7 @@ private fun SequenceEditorScreen(
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = description,
-                    label = { Text("Description") },
+                    label = { Text(stringResource(string.sequence_editor_description_label)) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
@@ -171,7 +187,7 @@ private fun SequenceEditorScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text(text = "Total duration")
+                    Text(text = stringResource(string.sequence_editor_total_duration_text))
                     CountdownDisplay(
                         duration = totalDuration,
                         style = MaterialTheme.typography.bodyMedium,

@@ -5,4 +5,10 @@ import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
 
 @Serializable
-data class SequenceEditorNav(val sequenceId: Uuid?, val libraryId: Uuid) : NavKey
+sealed class SequenceEditorNav : NavKey {
+    @Serializable
+    data class Create(val libraryId: Uuid) : SequenceEditorNav()
+
+    @Serializable
+    data class Edit(val sequenceId: Uuid, val libraryId: Uuid) : SequenceEditorNav()
+}

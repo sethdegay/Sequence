@@ -47,6 +47,8 @@ class SequenceEditorViewModel @AssistedInject constructor(
         ): SequenceEditorViewModel
     }
 
+    private val isCreateMode = sequenceId == null
+
     private val now = Clock.System.now()
 
     private val id = sequenceId ?: Uuid.random()
@@ -86,6 +88,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
             description = description,
             segments = segments,
             totalDuration = duration,
+            isCreateMode = isCreateMode,
         )
     }.stateIn(
         scope = viewModelScope,

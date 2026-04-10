@@ -18,7 +18,18 @@ object SequenceEditorModule {
     @IntoSet
     @Provides
     fun provideNavKeyInstaller(navigator: SequenceNavigator): NavKeyInstaller = {
-        entry<SequenceEditorNav> { key ->
+        entry<SequenceEditorNav.Create> { key ->
+            SequenceEditorScreen(
+                viewModel = hiltViewModel<SequenceEditorViewModel, SequenceEditorViewModel.Factory>(
+                    creationCallback = { factory ->
+                        factory.create(null, key.libraryId)
+                    },
+                ),
+                navigateToSegmentEditor = navigator::navigate,
+                navigateUp = navigator::navigateUp,
+            )
+        }
+        entry<SequenceEditorNav.Edit> { key ->
             SequenceEditorScreen(
                 viewModel = hiltViewModel<SequenceEditorViewModel, SequenceEditorViewModel.Factory>(
                     creationCallback = { factory ->
