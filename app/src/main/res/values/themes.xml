@@ -1,4 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Sequence" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Sequence.Starting" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">@color/surface_dark</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="postSplashScreenTheme">@style/Theme.Sequence</item>
+    </style>
+
+    <style name="Theme.Sequence" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
 </resources>
