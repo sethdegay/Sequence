@@ -21,4 +21,8 @@
     <string name="settings_speak_title_description">Announce segment titles using text-to-speech.</string>
     <string name="settings_no_tts_engine_found_error_message">No TTS engine found.</string>
     <string name="settings_download_from_play_store_error_link_text">Download from Play Store</string>
+
+    <!-- About section -->
+    <string name="settings_open_source_licenses_title">Open source licenses</string>
+    <string name="settings_open_source_licenses_description">View licenses for open source software used in this app.</string>
 </resources>

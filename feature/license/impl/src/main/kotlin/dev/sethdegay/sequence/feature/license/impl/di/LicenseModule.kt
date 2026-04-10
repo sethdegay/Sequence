@@ -1,6 +1,5 @@
-package dev.sethdegay.sequence.feature.settings.impl.di
+package dev.sethdegay.sequence.feature.license.impl.di
 
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,21 +8,14 @@ import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
 import dev.sethdegay.sequence.feature.license.api.LicenseNav
-import dev.sethdegay.sequence.feature.settings.api.SettingsNav
-import dev.sethdegay.sequence.feature.settings.impl.SettingsScreen
+import dev.sethdegay.sequence.feature.license.impl.LicenseScreen
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object SettingsModule {
+object LicenseModule {
     @IntoSet
     @Provides
     fun provideNavKeyInstaller(navigator: SequenceNavigator): NavKeyInstaller = {
-        entry<SettingsNav> {
-            SettingsScreen(
-                viewModel = hiltViewModel(),
-                navigateToLicense = { navigator.navigate(LicenseNav) },
-                navigateUp = navigator::navigateUp,
-            )
-        }
+        entry<LicenseNav> { LicenseScreen(navigateUp = navigator::navigateUp) }
     }
 }

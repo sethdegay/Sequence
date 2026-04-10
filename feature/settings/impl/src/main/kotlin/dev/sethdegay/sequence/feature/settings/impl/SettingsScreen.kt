@@ -1,12 +1,17 @@
 package dev.sethdegay.sequence.feature.settings.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -33,6 +38,7 @@ import dev.sethdegay.sequence.feature.settings.impl.R.string
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
+    navigateToLicense: () -> Unit,
     navigateUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -66,6 +72,7 @@ fun SettingsScreen(
         } else {
             SettingsScreen(
                 scaffoldPadding = padding,
+                navigateToLicense = navigateToLicense,
                 uiState = uiState,
                 setThemeConfig = viewModel::setThemeConfig,
                 setDynamicColor = viewModel::setDynamicColor,
@@ -81,6 +88,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingsScreen(
     scaffoldPadding: PaddingValues,
+    navigateToLicense: () -> Unit,
     uiState: SettingsUiState,
     setThemeConfig: (ThemeConfig) -> Unit,
     setDynamicColor: (Boolean) -> Unit,
@@ -178,6 +186,29 @@ private fun SettingsScreen(
                         } else {
                             null
                         },
+                    )
+                }
+            }
+        }
+        item {
+            CardGroup {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(it), text = "Placeholder"
+                    )
+                }
+                item {
+                    ListItem(
+                        modifier = Modifier.clickable(onClick = navigateToLicense),
+                        headlineContent = { Text(stringResource(string.settings_open_source_licenses_title)) },
+                        supportingContent = { Text(stringResource(string.settings_open_source_licenses_description)) },
+                        colors = ListItemDefaults.colors(
+                            containerColor = CardDefaults.cardColors().containerColor,
+                            headlineColor = CardDefaults.cardColors().contentColor,
+                            supportingColor = CardDefaults.cardColors().contentColor,
+                        ),
                     )
                 }
             }

@@ -1,4 +1,5 @@
 [versions]
+aboutlibraries = "14.0.1"
 android-gradle-plugin = "9.1.0"
 androidx-activity = "1.13.0"
 androidx-compose = "2026.03.01"
@@ -28,6 +29,7 @@ reorderable = "3.0.0"
 turbine = "1.2.1"
 
 [libraries]
+aboutlibraries-compose-m3 = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "aboutlibraries" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-compose-material3" }
@@ -70,6 +72,7 @@ ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devt
 room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
 
 [plugins]
+aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

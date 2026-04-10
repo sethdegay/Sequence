@@ -1,7 +1,12 @@
+import com.mikepenz.aboutlibraries.plugin.DuplicateMode
+import com.mikepenz.aboutlibraries.plugin.DuplicateRule
+import com.mikepenz.aboutlibraries.plugin.StrictMode
+
 plugins {
     alias(libs.plugins.sequence.application)
     alias(libs.plugins.sequence.compose)
     alias(libs.plugins.sequence.hilt)
+    alias(libs.plugins.aboutlibraries)
 }
 
 android {
@@ -31,6 +36,7 @@ dependencies {
     implementation(projects.feature.calendarevent.list.impl)
     implementation(projects.feature.home.api)
     implementation(projects.feature.home.impl)
+    implementation(projects.feature.license.impl)
     implementation(projects.feature.segment.editor.impl)
     implementation(projects.feature.sequence.editor.impl)
     implementation(projects.feature.settings.impl)
@@ -52,4 +58,25 @@ dependencies {
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+}
+
+aboutLibraries {
+    offlineMode = false
+    collect {
+        fetchRemoteLicense = false
+        fetchRemoteFunding = false
+        filterVariants.add("release")
+    }
+    export {
+        outputFile = file("../feature/license/impl/src/main/res/raw/licenses.json")
+        prettyPrint = true
+    }
+    license {
+        strictMode = StrictMode.FAIL
+        allowedLicenses.addAll("Apache-2.0", "MIT", "BSD-3-Clause")
+    }
+    library {
+        duplicationMode = DuplicateMode.MERGE
+        duplicationRule = DuplicateRule.SIMPLE
+    }
 }
