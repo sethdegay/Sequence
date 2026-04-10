@@ -65,7 +65,7 @@ internal fun trailingItemShape(shape: CornerBasedShape = RoundedCornerShape(16.d
 @Composable
 fun CardGroupSingleItem(content: @Composable (PaddingValues) -> Unit) {
     Card(
-        modifier = Modifier.padding(paddingDp),
+        modifier = Modifier.padding(leadingItemPadding),
         shape = singleItemShape(),
     ) {
         content(contentPadding)

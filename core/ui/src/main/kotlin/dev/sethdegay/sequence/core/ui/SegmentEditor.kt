@@ -5,10 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.ExpressiveButton
 import dev.sethdegay.sequence.core.model.Segment
+import dev.sethdegay.sequence.core.ui.R.string
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -52,13 +51,14 @@ fun SegmentEditor(
                 bottom = 16.dp,
             )
             .animateContentSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         CardGroup {
             item {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = titleState,
-                    label = { Text("Title") },
+                    label = { Text(stringResource(string.segment_editor_title_label)) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
@@ -77,7 +77,6 @@ fun SegmentEditor(
             durationTextFieldState = durationTextFieldState,
             durationTextFieldIsError = durationTextFieldIsError,
         )
-        Spacer(modifier = Modifier.size(16.dp))
         ExpressiveButton(
             modifier = Modifier
                 .fillMaxWidth()

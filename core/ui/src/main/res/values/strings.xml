@@ -6,9 +6,8 @@
            Duration input switcher
          ===================== -->
     <string name="duration_input_switcher_title">Duration</string>
-    <string name="duration_input_switcher_description">Set the segment duration by using the selectors or type it manually.</string>
-    <string name="duration_input_switcher_mode_pick">Pick</string>
-    <string name="duration_input_switcher_mode_type">Type</string>
+    <string name="duration_input_switcher_mode_pick">Pick duration</string>
+    <string name="duration_input_switcher_mode_type">Type duration</string>
 
     <!-- =====================
            Duration picker
@@ -32,4 +31,9 @@
            Preference error
          ===================== -->
     <string name="preference_error_cannot_open_uri">Error: Could not open link</string>
+
+    <!-- =====================
+           Segment editor
+         ===================== -->
+    <string name="segment_editor_title_label">Title</string>
 </resources>
