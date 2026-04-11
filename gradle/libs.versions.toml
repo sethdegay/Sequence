@@ -23,6 +23,7 @@ kotlinx-datetime = "0.7.1"
 kotlinx-serialization = "1.10.0"
 kotlinx-serialization-plugin = "2.3.20"
 ksp = "2.3.6"
+modulegraph = "0.13.0"
 protobuf = "4.34.1"
 protobuf-gradle-plugin = "0.9.6"
 reorderable = "3.0.0"
@@ -80,6 +81,7 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinx-serialization-plugin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+modulegraph = { id = "dev.iurysouza.modulegraph", version.ref = "modulegraph" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-gradle-plugin" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
 
