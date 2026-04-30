@@ -14,7 +14,7 @@
     <!-- Global audio settings -->
     <string name="settings_mute_all_title">Mute all</string>
     <string name="settings_tick_sound_title">Tick sound</string>
-    <string name="settings_tick_sound_description">Play a ticking sound when the countdown is almost done.</string>
+    <string name="settings_tick_sound_description">Enable audio cues during the final 5 seconds of the countdown.</string>
     <string name="settings_completion_sound_title">Completion sound</string>
     <string name="settings_completion_sound_description">Play a bell sound when the countdown finishes.</string>
     <string name="settings_speak_title_title">Speak title</string>
