@@ -5,6 +5,8 @@ import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
@@ -38,6 +40,36 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
+fun HorizontalNumericStepper(
+    modifier: Modifier = Modifier,
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    fontSize: TextUnit = 24.sp,
+    minValue: Int = 0,
+    maxValue: Int = Int.MAX_VALUE,
+    contentPadding: Dp = 8.dp,
+    spacing: Dp = 0.dp,
+    incrementFirst: Boolean = false,
+) {
+    Row(
+        modifier
+            .padding(contentPadding)
+            .height(IntrinsicSize.Min),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(spacing),
+    ) {
+        NumericStepper(
+            value = value,
+            onValueChange = onValueChange,
+            fontSize = fontSize,
+            minValue = minValue,
+            maxValue = maxValue,
+            incrementFirst = incrementFirst,
+        )
+    }
+}
+
+@Composable
 fun VerticalNumericStepper(
     modifier: Modifier = Modifier,
     value: Int,
@@ -47,6 +79,7 @@ fun VerticalNumericStepper(
     maxValue: Int = Int.MAX_VALUE,
     contentPadding: Dp = 8.dp,
     spacing: Dp = 12.dp,
+    incrementFirst: Boolean = true,
 ) {
     Column(
         modifier = modifier
@@ -61,6 +94,7 @@ fun VerticalNumericStepper(
             fontSize = fontSize,
             minValue = minValue,
             maxValue = maxValue,
+            incrementFirst = incrementFirst,
         )
     }
 }
@@ -72,41 +106,53 @@ private fun NumericStepper(
     fontSize: TextUnit = 24.sp,
     minValue: Int = 0,
     maxValue: Int = Int.MAX_VALUE,
+    incrementFirst: Boolean = true,
 ) {
-    NumericStepperButton(
-        icon = SequenceIcons.KeyboardArrowUp,
-        contentDescription = stringResource(string.increment_content_description),
-        enabled = value < maxValue,
-    ) {
-        val value = value + 1
-        if (value <= maxValue) {
-            onValueChange(value)
+    val incrementButton: @Composable () -> Unit = {
+        NumericStepperButton(
+            icon = SequenceIcons.Add,
+            contentDescription = stringResource(string.increment_content_description),
+            enabled = value < maxValue,
+        ) {
+            val nextValue = value + 1
+            if (nextValue <= maxValue) {
+                onValueChange(nextValue)
+            }
         }
     }
-    BasicTextField(
-        value = value.toString().padStart(2, '0'),
-        onValueChange = {
-            val newValue = it.filter { char -> char.isDigit() }.toIntOrNull() ?: 0
-            onValueChange(newValue)
-        },
-        readOnly = true,
-        singleLine = true,
-        textStyle = LocalTextStyle.current.copy(
-            textAlign = TextAlign.Center,
-            fontSize = fontSize,
-            color = MaterialTheme.colorScheme.onSurface,
-        ),
-    )
-    NumericStepperButton(
-        icon = SequenceIcons.KeyboardArrowDown,
-        contentDescription = stringResource(string.decrement_content_description),
-        enabled = value > minValue,
-    ) {
-        val value = value - 1
-        if (value >= minValue) {
-            onValueChange(value)
+    val displayField: @Composable () -> Unit = {
+        BasicTextField(
+            value = value.toString().padStart(2, '0'),
+            onValueChange = {
+                val newValue = it.filter { char -> char.isDigit() }.toIntOrNull() ?: 0
+                onValueChange(newValue)
+            },
+            readOnly = true,
+            singleLine = true,
+            textStyle = LocalTextStyle.current.copy(
+                textAlign = TextAlign.Center,
+                fontSize = fontSize,
+                color = MaterialTheme.colorScheme.onSurface,
+            ),
+        )
+    }
+    val decrementButton: @Composable () -> Unit = {
+        NumericStepperButton(
+            icon = SequenceIcons.Remove,
+            contentDescription = stringResource(string.decrement_content_description),
+            enabled = value > minValue,
+        ) {
+            val nextValue = value - 1
+            if (nextValue >= minValue) {
+                onValueChange(nextValue)
+            }
         }
     }
+
+    val components = listOf(incrementButton, displayField, decrementButton)
+    val orderedComponents = if (incrementFirst) components else components.reversed()
+
+    orderedComponents.forEach { it() }
 }
 
 @Composable
@@ -157,6 +203,17 @@ private fun Modifier.autoRepeatClick(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HorizontalNumericStepperPreview() {
+    val (value, onValueChange) = remember { mutableIntStateOf(0) }
+    HorizontalNumericStepper(
+        value = value,
+        onValueChange = onValueChange,
+        maxValue = 10,
+    )
 }
 
 @Preview(showBackground = true)
