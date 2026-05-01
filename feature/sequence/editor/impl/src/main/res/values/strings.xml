@@ -2,4 +2,5 @@
 <resources>
     <string name="sequence_editor_title_label">Title</string>
     <string name="sequence_editor_description_label">Description</string>
+    <string name="sequence_editor_rounds_label">Rounds</string>
 </resources>

@@ -1,6 +1,7 @@
 package dev.sethdegay.sequence.feature.sequence.editor.impl
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -9,8 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -31,6 +37,8 @@ import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_des
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
+import dev.sethdegay.sequence.core.designsystem.component.NumericStepper
+import dev.sethdegay.sequence.core.designsystem.component.NumericStepperOrientation
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.Icon
 import dev.sethdegay.sequence.core.designsystem.util.IconButton
@@ -167,6 +175,29 @@ private fun SequenceEditorScreen(
                         unfocusedIndicatorColor = Color.Transparent,
                     ),
                     contentPadding = it,
+                )
+            }
+            item {
+                val (value, setValue) = remember { mutableIntStateOf(1) }
+                ListItem(
+                    headlineContent = { Text(stringResource(string.sequence_editor_rounds_label)) },
+                    supportingContent = {
+                        NumericStepper(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Transparent),
+                            value = value,
+                            minValue = 1,
+                            onValueChange = setValue,
+                            orientation = NumericStepperOrientation.HORIZONTAL,
+                            incrementFirst = false,
+                        )
+                    },
+                    colors = ListItemDefaults.colors(
+                        containerColor = CardDefaults.cardColors().containerColor,
+                        headlineColor = CardDefaults.cardColors().contentColor,
+                        supportingColor = CardDefaults.cardColors().contentColor,
+                    ),
                 )
             }
         }

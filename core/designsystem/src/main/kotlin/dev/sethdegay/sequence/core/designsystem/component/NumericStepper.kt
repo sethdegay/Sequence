@@ -98,7 +98,10 @@ private fun HorizontalNumericStepper(
             .padding(contentPadding)
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(spacing),
+        horizontalArrangement = Arrangement.spacedBy(
+            spacing,
+            alignment = Alignment.CenterHorizontally,
+        ),
     ) {
         NumericStepperComponents(
             value = value,
