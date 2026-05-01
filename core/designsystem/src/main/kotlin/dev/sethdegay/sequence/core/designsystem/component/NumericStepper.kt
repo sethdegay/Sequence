@@ -38,7 +38,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun NumericStepper(
+fun VerticalNumericStepper(
     modifier: Modifier = Modifier,
     value: Int,
     onValueChange: (Int) -> Unit,
@@ -55,39 +55,56 @@ fun NumericStepper(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing),
     ) {
-        NumericStepperButton(
-            icon = SequenceIcons.KeyboardArrowUp,
-            contentDescription = stringResource(string.increment_content_description),
-            enabled = value < maxValue,
-        ) {
-            val value = value + 1
-            if (value <= maxValue) {
-                onValueChange(value)
-            }
-        }
-        BasicTextField(
-            value = value.toString().padStart(2, '0'),
-            onValueChange = {
-                val newValue = it.filter { char -> char.isDigit() }.toIntOrNull() ?: 0
-                onValueChange(newValue)
-            },
-            readOnly = true,
-            singleLine = true,
-            textStyle = LocalTextStyle.current.copy(
-                textAlign = TextAlign.Center,
-                fontSize = fontSize,
-                color = MaterialTheme.colorScheme.onSurface,
-            ),
+        NumericStepper(
+            value = value,
+            onValueChange = onValueChange,
+            fontSize = fontSize,
+            minValue = minValue,
+            maxValue = maxValue,
         )
-        NumericStepperButton(
-            icon = SequenceIcons.KeyboardArrowDown,
-            contentDescription = stringResource(string.decrement_content_description),
-            enabled = value > minValue,
-        ) {
-            val value = value - 1
-            if (value >= minValue) {
-                onValueChange(value)
-            }
+    }
+}
+
+@Composable
+private fun NumericStepper(
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    fontSize: TextUnit = 24.sp,
+    minValue: Int = 0,
+    maxValue: Int = Int.MAX_VALUE,
+) {
+    NumericStepperButton(
+        icon = SequenceIcons.KeyboardArrowUp,
+        contentDescription = stringResource(string.increment_content_description),
+        enabled = value < maxValue,
+    ) {
+        val value = value + 1
+        if (value <= maxValue) {
+            onValueChange(value)
+        }
+    }
+    BasicTextField(
+        value = value.toString().padStart(2, '0'),
+        onValueChange = {
+            val newValue = it.filter { char -> char.isDigit() }.toIntOrNull() ?: 0
+            onValueChange(newValue)
+        },
+        readOnly = true,
+        singleLine = true,
+        textStyle = LocalTextStyle.current.copy(
+            textAlign = TextAlign.Center,
+            fontSize = fontSize,
+            color = MaterialTheme.colorScheme.onSurface,
+        ),
+    )
+    NumericStepperButton(
+        icon = SequenceIcons.KeyboardArrowDown,
+        contentDescription = stringResource(string.decrement_content_description),
+        enabled = value > minValue,
+    ) {
+        val value = value - 1
+        if (value >= minValue) {
+            onValueChange(value)
         }
     }
 }
@@ -144,9 +161,9 @@ private fun Modifier.autoRepeatClick(
 
 @Preview(showBackground = true)
 @Composable
-private fun NumericStepperPreview() {
+private fun VerticalNumericStepperPreview() {
     val (value, onValueChange) = remember { mutableIntStateOf(0) }
-    NumericStepper(
+    VerticalNumericStepper(
         value = value,
         onValueChange = onValueChange,
         maxValue = 10,
