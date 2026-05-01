@@ -39,8 +39,50 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
+enum class NumericStepperOrientation { HORIZONTAL, VERTICAL };
+
 @Composable
-fun HorizontalNumericStepper(
+fun NumericStepper(
+    modifier: Modifier = Modifier,
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    fontSize: TextUnit = 24.sp,
+    minValue: Int = 0,
+    maxValue: Int = Int.MAX_VALUE,
+    contentPadding: Dp = 8.dp,
+    spacing: Dp = 12.dp,
+    incrementFirst: Boolean = true,
+    orientation: NumericStepperOrientation,
+) {
+    when (orientation) {
+        NumericStepperOrientation.HORIZONTAL -> HorizontalNumericStepper(
+            modifier = modifier,
+            value = value,
+            onValueChange = onValueChange,
+            fontSize = fontSize,
+            minValue = minValue,
+            maxValue = maxValue,
+            contentPadding = contentPadding,
+            spacing = spacing,
+            incrementFirst = incrementFirst,
+        )
+
+        NumericStepperOrientation.VERTICAL -> VerticalNumericStepper(
+            modifier = modifier,
+            value = value,
+            onValueChange = onValueChange,
+            fontSize = fontSize,
+            minValue = minValue,
+            maxValue = maxValue,
+            contentPadding = contentPadding,
+            spacing = spacing,
+            incrementFirst = incrementFirst,
+        )
+    }
+}
+
+@Composable
+private fun HorizontalNumericStepper(
     modifier: Modifier = Modifier,
     value: Int,
     onValueChange: (Int) -> Unit,
@@ -58,7 +100,7 @@ fun HorizontalNumericStepper(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(spacing),
     ) {
-        NumericStepper(
+        NumericStepperComponents(
             value = value,
             onValueChange = onValueChange,
             fontSize = fontSize,
@@ -70,7 +112,7 @@ fun HorizontalNumericStepper(
 }
 
 @Composable
-fun VerticalNumericStepper(
+private fun VerticalNumericStepper(
     modifier: Modifier = Modifier,
     value: Int,
     onValueChange: (Int) -> Unit,
@@ -88,7 +130,7 @@ fun VerticalNumericStepper(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(spacing),
     ) {
-        NumericStepper(
+        NumericStepperComponents(
             value = value,
             onValueChange = onValueChange,
             fontSize = fontSize,
@@ -100,7 +142,7 @@ fun VerticalNumericStepper(
 }
 
 @Composable
-private fun NumericStepper(
+private fun NumericStepperComponents(
     value: Int,
     onValueChange: (Int) -> Unit,
     fontSize: TextUnit = 24.sp,

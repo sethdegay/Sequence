@@ -14,7 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.sethdegay.sequence.core.designsystem.component.VerticalNumericStepper
+import dev.sethdegay.sequence.core.designsystem.component.NumericStepper
+import dev.sethdegay.sequence.core.designsystem.component.NumericStepperOrientation
 import dev.sethdegay.sequence.core.ui.R.string
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
@@ -67,12 +68,13 @@ private fun LabeledNumericStepper(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = label)
-        VerticalNumericStepper(
+        NumericStepper(
             value = value,
             onValueChange = onValueChange,
             minValue = minValue,
             maxValue = maxValue,
             contentPadding = 0.dp,
+            orientation = NumericStepperOrientation.VERTICAL,
         )
     }
 }
