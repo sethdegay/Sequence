@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f623e79720bf56629e9aae1546b0b3f6",
+    "identityHash": "2354a3fe8784a2a14703ef5519b3b602",
     "entities": [
       {
         "tableName": "calendar_event",
@@ -114,7 +114,7 @@
       },
       {
         "tableName": "sequence",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL, `total_duration` INTEGER NOT NULL, `library_id` BLOB NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`library_id`) REFERENCES `library`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_modified` INTEGER NOT NULL, `total_duration` INTEGER NOT NULL, `rounds` INTEGER NOT NULL, `library_id` BLOB NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`library_id`) REFERENCES `library`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -149,6 +149,12 @@
           {
             "fieldPath": "totalDuration",
             "columnName": "total_duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rounds",
+            "columnName": "rounds",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -259,7 +265,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f623e79720bf56629e9aae1546b0b3f6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2354a3fe8784a2a14703ef5519b3b602')"
     ]
   }
 }

@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -55,6 +54,8 @@ class SequenceEditorViewModel @AssistedInject constructor(
     private var dateCreated = now
     private var dateModified = now
 
+    private val rounds = MutableStateFlow(1)
+
     private val localSegments = MutableStateFlow<List<Segment>?>(null)
 
     private val currentSegments = combine(
@@ -69,8 +70,8 @@ class SequenceEditorViewModel @AssistedInject constructor(
         }
     }.distinctUntilChanged()
 
-    private val currentDuration = currentSegments
-        .map { list -> list.sumOf { it.duration.inWholeSeconds }.seconds }
+    private val currentDuration = combine(currentSegments, rounds)
+    { list, rounds -> (list.sumOf { it.duration.inWholeSeconds } * rounds).seconds }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -80,12 +81,14 @@ class SequenceEditorViewModel @AssistedInject constructor(
     val uiState: StateFlow<SequenceEditorUiState> = combine(
         currentSegments,
         currentDuration,
-    ) { segments, duration ->
+        rounds,
+    ) { segments, duration, rounds ->
         SequenceEditorUiState.Success(
             title = title,
             description = description,
             segments = segments,
             totalDuration = duration,
+            rounds = rounds,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -112,6 +115,10 @@ class SequenceEditorViewModel @AssistedInject constructor(
 
     fun getSequenceId(): Uuid = id
 
+    fun setRounds(rounds: Int) {
+        this.rounds.value = rounds
+    }
+
     fun requestExit() {
         val sequence = construct()
         viewModelScope.launch {
@@ -128,14 +135,18 @@ class SequenceEditorViewModel @AssistedInject constructor(
             combine(
                 snapshotFlow { construct() },
                 currentDuration,
-            ) { sequence, duration -> sequence.copy(totalDuration = duration) }
+                rounds,
+            ) { sequence, duration, rounds ->
+                sequence.copy(totalDuration = duration, rounds = rounds)
+            }
                 .distinctUntilChanged { old, new ->
                     old.id == new.id &&
                             old.title == new.title &&
                             old.description == new.description &&
                             old.dateCreated == new.dateCreated &&
                             old.dateModified == new.dateModified &&
-                            old.totalDuration == new.totalDuration
+                            old.totalDuration == new.totalDuration &&
+                            old.rounds == new.rounds
                 }
                 .debounce(500.milliseconds)
                 .collectLatest { sequence ->
@@ -153,6 +164,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
         dateModified = dateModified,
         segments = emptyList(), // saved separately in onSegmentOrderChanged
         totalDuration = currentDuration.value,
+        rounds = rounds.value,
     )
 
     private fun Sequence.deconstruct() {
@@ -161,6 +173,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
         this@SequenceEditorViewModel.dateCreated = dateCreated
         this@SequenceEditorViewModel.dateModified = dateModified
         this@SequenceEditorViewModel.localSegments.value = null
+        this@SequenceEditorViewModel.rounds.value = rounds
     }
 
     private fun Sequence.isEmpty(): Boolean =

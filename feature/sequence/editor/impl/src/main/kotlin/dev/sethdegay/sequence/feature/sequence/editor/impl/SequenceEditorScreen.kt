@@ -25,8 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -102,6 +100,7 @@ fun SequenceEditorScreen(
                         title = uiState.title,
                         description = uiState.description,
                         segments = uiState.segments,
+                        rounds = uiState.rounds,
                         onSegmentOrderChanged = viewModel::onSegmentOrderChanged,
                         onSegmentClick = { segment ->
                             val key = SegmentEditorNav.Edit(
@@ -110,6 +109,7 @@ fun SequenceEditorScreen(
                             )
                             navigateToSegmentEditor(key)
                         },
+                        onRoundsChanged = viewModel::setRounds,
                     )
                 }
             }
@@ -133,8 +133,10 @@ private fun SequenceEditorScreen(
     title: TextFieldState,
     description: TextFieldState,
     segments: List<Segment>,
+    rounds: Int,
     onSegmentOrderChanged: (List<Segment>) -> Unit,
     onSegmentClick: (Segment) -> Unit,
+    onRoundsChanged: (Int) -> Unit,
 ) {
     ReorderableCardGroup(
         modifier = Modifier
@@ -178,7 +180,6 @@ private fun SequenceEditorScreen(
                 )
             }
             item {
-                val (value, setValue) = remember { mutableIntStateOf(1) }
                 ListItem(
                     headlineContent = { Text(stringResource(string.sequence_editor_rounds_label)) },
                     supportingContent = {
@@ -186,9 +187,9 @@ private fun SequenceEditorScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.Transparent),
-                            value = value,
+                            value = rounds,
                             minValue = 1,
-                            onValueChange = setValue,
+                            onValueChange = onRoundsChanged,
                             orientation = NumericStepperOrientation.HORIZONTAL,
                             incrementFirst = false,
                         )

@@ -43,6 +43,9 @@ data class SequenceEntity(
     @ColumnInfo(name = "total_duration")
     val totalDuration: Duration,
 
+    @ColumnInfo(name = "rounds")
+    val rounds: Int,
+
     @ColumnInfo(name = "library_id")
     val libraryId: Uuid,
 )
@@ -55,4 +58,5 @@ fun SequenceEntity.asExternalModel(segments: List<Segment>): Sequence = Sequence
     dateModified = dateModified,
     segments = segments,
     totalDuration = totalDuration,
+    rounds = rounds,
 )

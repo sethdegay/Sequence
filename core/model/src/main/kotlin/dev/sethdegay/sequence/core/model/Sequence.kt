@@ -12,4 +12,5 @@ data class Sequence(
     val dateModified: Instant,
     val segments: List<Segment>,
     val totalDuration: Duration,
+    val rounds: Int,
 )

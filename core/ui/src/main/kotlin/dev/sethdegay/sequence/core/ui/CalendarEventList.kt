@@ -177,6 +177,7 @@ private fun createMockEvent(
         dateModified = Clock.System.now(),
         segments = emptyList(),
         totalDuration = duration,
+        rounds = 1,
     )
 )
 
