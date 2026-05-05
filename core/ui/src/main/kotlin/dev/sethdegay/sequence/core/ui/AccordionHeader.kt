@@ -14,7 +14,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -79,6 +78,8 @@ fun AccordionHeader(
         title = sequence.title,
         description = sequence.description,
         totalDuration = sequence.totalDuration,
+        rounds = sequence.rounds,
+        repeatedDuration = sequence.repeatedDuration,
     )
 }
 
@@ -92,6 +93,8 @@ private fun AccordionHeader(
     title: String,
     description: String,
     totalDuration: Duration,
+    rounds: Int,
+    repeatedDuration: Duration,
 ) {
     Row(
         modifier = modifier
@@ -105,7 +108,10 @@ private fun AccordionHeader(
                 bottom = 16.dp,
                 end = 16.dp,
             ),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(
+            space = 12.dp,
+            alignment = Alignment.CenterHorizontally,
+        ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
@@ -157,11 +163,28 @@ private fun AccordionHeader(
                 }
             }
         }
-        Spacer(Modifier.size(12.dp))
-        DurationDisplay(
-            duration = totalDuration,
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        Column(
+            modifier = Modifier.animateContentSize(
+                animationSpec = subtleInOutTweenSpec(containerAnimationDuration),
+            ),
+            horizontalAlignment = Alignment.End,
+        ) {
+            DurationDisplay(
+                duration = repeatedDuration,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = verticalEnterTransition,
+                exit = verticalExitTransition,
+            ) {
+                Text(
+                    text = "$totalDuration x $rounds",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        }
+
     }
 }
 
@@ -178,5 +201,7 @@ private fun AccordionHeaderPreview() {
         description = "Description",
         onPlayButtonClick = {},
         totalDuration = 10.minutes,
+        rounds = 2,
+        repeatedDuration = 20.minutes,
     )
 }

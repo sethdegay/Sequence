@@ -60,13 +60,13 @@ fun SequenceEditorScreen(
         topBar = {
             TwoRowsTopAppBar(
                 title = {
-                    uiState.totalDuration?.let {
+                    uiState.repeatedDuration?.let {
                         DurationDisplay(duration = it, style = LocalTextStyle.current)
                     }
                 },
                 subtitle = {
-                    uiState.repeatedDuration?.let {
-                        Text("${uiState.totalDuration} x ${uiState.rounds} rounds = $it")
+                    uiState.totalDuration?.let {
+                        Text("$it x ${uiState.rounds}")
                     }
                 },
                 navigationIcon = {
