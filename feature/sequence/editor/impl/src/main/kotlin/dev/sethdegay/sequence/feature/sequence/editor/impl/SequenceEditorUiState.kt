@@ -13,6 +13,7 @@ sealed interface SequenceEditorUiState {
         override val segments: List<Segment>,
         override val totalDuration: Duration,
         override val rounds: Int,
+        override val repeatedDuration: Duration,
     ) : SequenceEditorUiState
 
     val title: TextFieldState? get() = null
@@ -24,4 +25,6 @@ sealed interface SequenceEditorUiState {
     val totalDuration: Duration? get() = null
 
     val rounds: Int get() = 1
+
+    val repeatedDuration: Duration? get() = null
 }

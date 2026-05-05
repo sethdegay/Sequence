@@ -10,7 +10,6 @@ fun Sequence.asEntity(libraryId: Uuid): SequenceEntity = SequenceEntity(
     description = description,
     dateCreated = dateCreated,
     dateModified = dateModified,
-    totalDuration = totalDuration,
     rounds = rounds,
     libraryId = libraryId,
 )

@@ -13,6 +13,7 @@ import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
+import dev.sethdegay.sequence.core.model.calculateTotalDuration
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,13 +22,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
 
 @HiltViewModel(assistedFactory = SequenceEditorViewModel.Factory::class)
@@ -70,25 +71,37 @@ class SequenceEditorViewModel @AssistedInject constructor(
         }
     }.distinctUntilChanged()
 
-    private val currentDuration = combine(currentSegments, rounds)
-    { list, rounds -> (list.sumOf { it.duration.inWholeSeconds } * rounds).seconds }
+    private val currentDuration = currentSegments.map { it.calculateTotalDuration() }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
             initialValue = Duration.ZERO,
         )
 
+    private val repeatedDuration = combine(
+        currentSegments,
+        rounds,
+    ) { list, rounds ->
+        list.calculateTotalDuration(rounds)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = Duration.ZERO,
+    )
+
     val uiState: StateFlow<SequenceEditorUiState> = combine(
         currentSegments,
         currentDuration,
         rounds,
-    ) { segments, duration, rounds ->
+        repeatedDuration,
+    ) { segments, totalDuration, rounds, repeatedDuration ->
         SequenceEditorUiState.Success(
             title = title,
             description = description,
             segments = segments,
-            totalDuration = duration,
+            totalDuration = totalDuration,
             rounds = rounds,
+            repeatedDuration = repeatedDuration,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -134,10 +147,9 @@ class SequenceEditorViewModel @AssistedInject constructor(
             if (sequenceId != null) sequenceRepository.getSequence(sequenceId).deconstruct()
             combine(
                 snapshotFlow { construct() },
-                currentDuration,
                 rounds,
-            ) { sequence, duration, rounds ->
-                sequence.copy(totalDuration = duration, rounds = rounds)
+            ) { sequence, rounds ->
+                sequence.copy(rounds = rounds)
             }
                 .distinctUntilChanged { old, new ->
                     old.id == new.id &&
@@ -146,7 +158,8 @@ class SequenceEditorViewModel @AssistedInject constructor(
                             old.dateCreated == new.dateCreated &&
                             old.dateModified == new.dateModified &&
                             old.totalDuration == new.totalDuration &&
-                            old.rounds == new.rounds
+                            old.rounds == new.rounds &&
+                            old.repeatedDuration == new.repeatedDuration
                 }
                 .debounce(500.milliseconds)
                 .collectLatest { sequence ->
@@ -163,7 +176,6 @@ class SequenceEditorViewModel @AssistedInject constructor(
         dateCreated = dateCreated,
         dateModified = dateModified,
         segments = emptyList(), // saved separately in onSegmentOrderChanged
-        totalDuration = currentDuration.value,
         rounds = rounds.value,
     )
 

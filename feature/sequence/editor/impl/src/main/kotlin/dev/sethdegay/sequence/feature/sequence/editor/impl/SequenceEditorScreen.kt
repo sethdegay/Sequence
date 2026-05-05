@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalTextStyle
@@ -21,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TwoRowsTopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -58,10 +58,15 @@ fun SequenceEditorScreen(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(
+            TwoRowsTopAppBar(
                 title = {
                     uiState.totalDuration?.let {
                         DurationDisplay(duration = it, style = LocalTextStyle.current)
+                    }
+                },
+                subtitle = {
+                    uiState.repeatedDuration?.let {
+                        Text("${uiState.totalDuration} x ${uiState.rounds} rounds = $it")
                     }
                 },
                 navigationIcon = {

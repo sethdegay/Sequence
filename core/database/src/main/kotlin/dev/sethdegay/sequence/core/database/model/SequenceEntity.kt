@@ -7,7 +7,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
-import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
@@ -40,9 +39,6 @@ data class SequenceEntity(
     @ColumnInfo(name = "date_modified")
     val dateModified: Instant,
 
-    @ColumnInfo(name = "total_duration")
-    val totalDuration: Duration,
-
     @ColumnInfo(name = "rounds")
     val rounds: Int,
 
@@ -57,6 +53,5 @@ fun SequenceEntity.asExternalModel(segments: List<Segment>): Sequence = Sequence
     dateCreated = dateCreated,
     dateModified = dateModified,
     segments = segments,
-    totalDuration = totalDuration,
     rounds = rounds,
 )

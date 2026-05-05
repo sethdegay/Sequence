@@ -1,6 +1,7 @@
 package dev.sethdegay.sequence.core.model
 
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
@@ -11,6 +12,12 @@ data class Sequence(
     val dateCreated: Instant,
     val dateModified: Instant,
     val segments: List<Segment>,
-    val totalDuration: Duration,
     val rounds: Int,
-)
+) {
+    val repeatedDuration: Duration = segments.calculateTotalDuration(rounds)
+    val totalDuration: Duration = segments.calculateTotalDuration()
+}
+
+fun List<Segment>.calculateTotalDuration(scale: Int = 1): Duration {
+    return this.sumOf { it.duration.inWholeSeconds }.seconds.times(scale)
+}
