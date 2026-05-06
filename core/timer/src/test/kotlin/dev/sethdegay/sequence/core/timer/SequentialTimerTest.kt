@@ -186,7 +186,7 @@ class SequentialTimerTest {
             timer.start(emptyList())
             assertTrue(awaitItem() is SequentialTimerState.Error)
 
-            timer.start(listOf("A"), startIndex = 5)
+            timer.start(listOf("A"), currentItemIndex = 5)
             assertTrue(awaitItem() is SequentialTimerState.Error)
         }
     }
@@ -303,7 +303,7 @@ class SequentialTimerTest {
         timer.state.test {
             assertEquals(SequentialTimerState.Idle, awaitItem())
 
-            timer.start(items, startIndex = 1)
+            timer.start(items, currentItemIndex = 1)
 
             with(awaitItem() as SequentialTimerState.Running<*>) {
                 assertEquals(1, currentItemIndex)
@@ -327,7 +327,7 @@ class SequentialTimerTest {
 
         timer.state.test {
             assertEquals(SequentialTimerState.Idle, awaitItem())
-            timer.start(items, startIndex = 1)
+            timer.start(items, currentItemIndex = 1)
 
             awaitItem()
 
@@ -351,7 +351,7 @@ class SequentialTimerTest {
 
         timer.state.test {
             assertEquals(SequentialTimerState.Idle, awaitItem())
-            timer.start(items, startIndex = 0)
+            timer.start(items, currentItemIndex = 0)
             awaitItem()
 
             timer.movePrevious()
