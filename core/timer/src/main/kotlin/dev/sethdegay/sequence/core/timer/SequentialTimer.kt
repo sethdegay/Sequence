@@ -128,6 +128,11 @@ class SequentialTimer<T>(
     }
 
     fun moveNext() {
+        if (_state.value !is SequentialTimerState.Active<*>) {
+            _state.value =
+                SequentialTimerState.Error(IllegalStateException("Cannot move element from state: Idle"))
+            return
+        }
         @Suppress("UNCHECKED_CAST")
         val currentState = _state.value as SequentialTimerState.Active<T>
         val nextIndex = currentState.currentItemIndex + 1
@@ -147,6 +152,11 @@ class SequentialTimer<T>(
     }
 
     fun movePrevious() {
+        if (_state.value !is SequentialTimerState.Active<*>) {
+            _state.value =
+                SequentialTimerState.Error(IllegalStateException("Cannot move element from state: Idle"))
+            return
+        }
         @Suppress("UNCHECKED_CAST")
         val currentState = _state.value as SequentialTimerState.Active<T>
         val nextIndex = currentState.currentItemIndex - 1
