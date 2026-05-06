@@ -17,6 +17,7 @@ sealed interface TimerUiState {
         val canMovePrevious: Boolean,
         val canMoveNext: Boolean,
         val amplitudeLevel: ProgressIndicatorAmplitudeLevel,
+        override val rounds: Int?,
         override val topAppBarTitle: String,
     ) : TimerUiState
 
@@ -25,4 +26,6 @@ sealed interface TimerUiState {
     fun shouldNavigateUp(): Boolean = this is Finished
 
     val topAppBarTitle: String get() = ""
+
+    val rounds: Int? get() = null
 }

@@ -171,6 +171,7 @@ class TimerViewModel @AssistedInject constructor(
                 ProgressIndicatorAmplitudeLevel.FLAT
             },
             topAppBarTitle = sequence.title,
+            rounds = sequence.rounds.takeIf { it > 1 },
         )
     }
 

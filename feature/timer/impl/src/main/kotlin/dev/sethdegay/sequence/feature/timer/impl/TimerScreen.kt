@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TwoRowsTopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,6 +34,7 @@ import dev.sethdegay.sequence.core.designsystem.component.TimerControlsActions
 import dev.sethdegay.sequence.core.designsystem.component.TimerControlsMode
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.IconButton
+import dev.sethdegay.sequence.feature.timer.impl.R.string
 
 @Composable
 fun TimerScreen(
@@ -57,8 +58,11 @@ fun TimerScreen(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(
+            TwoRowsTopAppBar(
                 title = { Text(text = uiState.topAppBarTitle) },
+                subtitle = uiState.rounds?.let { rounds ->
+                    { Text(stringResource(string.rounds, rounds)) }
+                },
                 navigationIcon = {
                     SequenceIcons.NavigateUp.IconButton(
                         onClick = dropUnlessResumed { navigateUp() },
