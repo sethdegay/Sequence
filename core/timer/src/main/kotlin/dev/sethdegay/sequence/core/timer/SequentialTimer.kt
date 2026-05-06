@@ -64,9 +64,12 @@ class SequentialTimer<T>(
 
         timerJob = scope.launch {
             try {
+                var activeStartIndex = currentItemIndex
+                var activeTimeLeft = timeLeft
                 for (round in currentRound..rounds) {
-                    var completedItemsDuration = accumulatedDuration
-                    for (i in currentItemIndex..items.lastIndex) {
+                    var activeAccumulatedDuration =
+                        if (round == currentRound) accumulatedDuration else Duration.ZERO
+                    for (i in activeStartIndex..items.lastIndex) {
                         val element = items[i]
 
                         val providedDuration = durationProvider(element)
@@ -76,18 +79,14 @@ class SequentialTimer<T>(
                             return@launch
                         }
 
-                        val currentItemDuration = if (i == currentItemIndex && timeLeft != null) {
-                            timeLeft
-                        } else {
-                            providedDuration
-                        }
+                        val currentItemDuration = activeTimeLeft ?: providedDuration
 
                         countdownFlow(
                             duration = currentItemDuration,
                             dispatcher = dispatcher,
                         ).collect { timeLeft ->
                             val currentProgress =
-                                completedItemsDuration + (providedDuration - timeLeft)
+                                activeAccumulatedDuration + (providedDuration - timeLeft)
                             _state.value = SequentialTimerState.Running(
                                 items = items,
                                 currentItemIndex = i,
@@ -98,8 +97,10 @@ class SequentialTimer<T>(
                             )
                         }
 
-                        completedItemsDuration += providedDuration
+                        activeAccumulatedDuration += providedDuration
+                        activeTimeLeft = null
                     }
+                    activeStartIndex = 0
                 }
                 _state.value = SequentialTimerState.Finished
             } catch (_: CancellationException) {
