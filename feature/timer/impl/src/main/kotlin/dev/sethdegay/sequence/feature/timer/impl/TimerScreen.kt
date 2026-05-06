@@ -60,8 +60,8 @@ fun TimerScreen(
         topBar = {
             TwoRowsTopAppBar(
                 title = { Text(text = uiState.topAppBarTitle) },
-                subtitle = uiState.rounds?.let { rounds ->
-                    { Text(stringResource(string.rounds, rounds)) }
+                subtitle = uiState.currentRound?.let { currentRound ->
+                    { Text(stringResource(string.current_round, currentRound)) }
                 },
                 navigationIcon = {
                     SequenceIcons.NavigateUp.IconButton(
