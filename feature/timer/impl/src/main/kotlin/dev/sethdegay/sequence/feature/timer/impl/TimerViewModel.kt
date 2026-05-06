@@ -87,7 +87,8 @@ class TimerViewModel @AssistedInject constructor(
                 .first()
                 .apply {
                     if (!this) return@apply
-                    timer.start(sequenceRepository.getSequence(id).also { sequence = it }.segments)
+                    sequence = sequenceRepository.getSequence(id)
+                    timer.start(items = sequence.segments, rounds = sequence.rounds)
                     start = Clock.System.now()
                 }
         }
@@ -119,25 +120,9 @@ class TimerViewModel @AssistedInject constructor(
             return TimerUiState.Loading
         }
 
-        val (segments, index, time, accumulatedDuration) =
-            @Suppress("UNCHECKED_CAST")
-            when (this) {
-                is SequentialTimerState.Running<*> -> SequentialTimerStateData(
-                    items as List<Segment>,
-                    currentItemIndex,
-                    timeLeft,
-                    accumulatedDuration,
-                )
+        this as SequentialTimerState.Active<*>
 
-                is SequentialTimerState.Paused<*> -> SequentialTimerStateData(
-                    items as List<Segment>,
-                    currentItemIndex,
-                    timeLeft,
-                    accumulatedDuration,
-                )
-            }
-
-        val currentSegment = segments[index]
+        val currentSegment = items[currentItemIndex] as Segment
 
         val progress = if (sequence.totalDuration > Duration.ZERO) {
             (accumulatedDuration / sequence.totalDuration).toFloat()
@@ -148,10 +133,10 @@ class TimerViewModel @AssistedInject constructor(
         val isTimerRunning = this is SequentialTimerState.Running<*>
 
         if (isTimerRunning) {
-            if (segments[index].duration == time) {
-                speakTitle(segments[index].title)
+            if (currentSegment.duration == timeLeft) {
+                speakTitle(currentSegment.title)
             }
-            when (time) {
+            when (timeLeft) {
                 5.seconds, 3.seconds, 1.seconds -> playOddTickSound()
                 4.seconds, 2.seconds -> playEvenTickSound()
                 0.seconds -> playCompletionSound()
@@ -160,10 +145,10 @@ class TimerViewModel @AssistedInject constructor(
 
         return TimerUiState.Success(
             currentSegment = currentSegment,
-            remainingTime = time,
+            remainingTime = timeLeft,
             isTimerRunning = isTimerRunning,
-            canMovePrevious = index > 0,
-            canMoveNext = index < segments.lastIndex,
+            canMovePrevious = currentRound > 1 || currentItemIndex > 0,
+            canMoveNext = currentRound < rounds || currentItemIndex < items.lastIndex,
             progress = progress,
             amplitudeLevel = if (isTimerRunning) {
                 ProgressIndicatorAmplitudeLevel.MAXIMUM
@@ -171,7 +156,7 @@ class TimerViewModel @AssistedInject constructor(
                 ProgressIndicatorAmplitudeLevel.FLAT
             },
             topAppBarTitle = sequence.title,
-            rounds = sequence.rounds.takeIf { it > 1 },
+            rounds = currentRound.takeIf { rounds > 1 },
         )
     }
 
@@ -208,13 +193,6 @@ class TimerViewModel @AssistedInject constructor(
         super.onCleared()
     }
 }
-
-private data class SequentialTimerStateData(
-    val items: List<Segment>,
-    val currentItemIndex: Int,
-    val timeLeft: Duration,
-    val accumulatedDuration: Duration,
-)
 
 private data class AudioSettings(
     val tickSound: Boolean,

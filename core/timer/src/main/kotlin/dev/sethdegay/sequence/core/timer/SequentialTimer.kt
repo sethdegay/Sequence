@@ -45,6 +45,8 @@ class SequentialTimer<T>(
         currentItemIndex: Int = 0,
         timeLeft: Duration? = null,
         accumulatedDuration: Duration = Duration.ZERO,
+        currentRound: Int = 1,
+        rounds: Int = 1,
     ) {
         timerJob?.cancel()
 
@@ -62,37 +64,42 @@ class SequentialTimer<T>(
 
         timerJob = scope.launch {
             try {
-                var completedItemsDuration = accumulatedDuration
-                for (i in currentItemIndex..items.lastIndex) {
-                    val element = items[i]
+                for (round in currentRound..rounds) {
+                    var completedItemsDuration = accumulatedDuration
+                    for (i in currentItemIndex..items.lastIndex) {
+                        val element = items[i]
 
-                    val providedDuration = durationProvider(element)
-                    if (providedDuration.inWholeMilliseconds % 1000L != 0L) {
-                        _state.value =
-                            SequentialTimerState.Error(IllegalArgumentException("Duration must be in whole seconds."))
-                        return@launch
+                        val providedDuration = durationProvider(element)
+                        if (providedDuration.inWholeMilliseconds % 1000L != 0L) {
+                            _state.value =
+                                SequentialTimerState.Error(IllegalArgumentException("Duration must be in whole seconds."))
+                            return@launch
+                        }
+
+                        val currentItemDuration = if (i == currentItemIndex && timeLeft != null) {
+                            timeLeft
+                        } else {
+                            providedDuration
+                        }
+
+                        countdownFlow(
+                            duration = currentItemDuration,
+                            dispatcher = dispatcher,
+                        ).collect { timeLeft ->
+                            val currentProgress =
+                                completedItemsDuration + (providedDuration - timeLeft)
+                            _state.value = SequentialTimerState.Running(
+                                items = items,
+                                currentItemIndex = i,
+                                timeLeft = timeLeft,
+                                accumulatedDuration = currentProgress,
+                                currentRound = round,
+                                rounds = rounds,
+                            )
+                        }
+
+                        completedItemsDuration += providedDuration
                     }
-
-                    val currentItemDuration = if (i == currentItemIndex && timeLeft != null) {
-                        timeLeft
-                    } else {
-                        providedDuration
-                    }
-
-                    countdownFlow(
-                        duration = currentItemDuration,
-                        dispatcher = dispatcher,
-                    ).collect { timeLeft ->
-                        val currentProgress = completedItemsDuration + (providedDuration - timeLeft)
-                        _state.value = SequentialTimerState.Running(
-                            items = items,
-                            currentItemIndex = i,
-                            timeLeft = timeLeft,
-                            accumulatedDuration = currentProgress,
-                        )
-                    }
-
-                    completedItemsDuration += providedDuration
                 }
                 _state.value = SequentialTimerState.Finished
             } catch (_: CancellationException) {
@@ -109,6 +116,8 @@ class SequentialTimer<T>(
                 currentItemIndex = currentState.currentItemIndex,
                 timeLeft = currentState.timeLeft.takeIf { it > Duration.ZERO },
                 accumulatedDuration = currentState.accumulatedDuration,
+                currentRound = currentState.currentRound,
+                rounds = currentState.rounds,
             )
         }
     }
@@ -123,6 +132,8 @@ class SequentialTimer<T>(
                 currentItemIndex = currentState.currentItemIndex,
                 timeLeft = currentState.timeLeft,
                 accumulatedDuration = currentState.accumulatedDuration,
+                currentRound = currentState.currentRound,
+                rounds = currentState.rounds,
             )
         }
     }
@@ -134,20 +145,28 @@ class SequentialTimer<T>(
             return
         }
         @Suppress("UNCHECKED_CAST")
-        val currentState = _state.value as SequentialTimerState.Active<T>
-        val nextIndex = currentState.currentItemIndex + 1
+        val current = _state.value as SequentialTimerState.Active<T>
+        var nextIndex = current.currentItemIndex + 1
+        var nextRound = current.currentRound
 
-        if (nextIndex > currentState.items.lastIndex) {
-            _state.value =
-                SequentialTimerState.Error(IllegalStateException("Cannot move to next element. Current index is at the end."))
-            return
+        if (nextIndex > current.items.lastIndex) {
+            if (nextRound < current.rounds) {
+                nextRound += 1
+                nextIndex = 0
+            } else {
+                _state.value =
+                    SequentialTimerState.Error(IllegalStateException("Cannot move to next element. Current index is at the end."))
+                return
+            }
         }
 
         start(
-            items = currentState.items,
+            items = current.items,
             currentItemIndex = nextIndex,
             timeLeft = null,
-            accumulatedDuration = currentState.getCompletedDuration(nextIndex),
+            accumulatedDuration = current.getCompletedDuration(nextIndex),
+            currentRound = nextRound,
+            rounds = current.rounds,
         )
     }
 
@@ -158,20 +177,28 @@ class SequentialTimer<T>(
             return
         }
         @Suppress("UNCHECKED_CAST")
-        val currentState = _state.value as SequentialTimerState.Active<T>
-        val nextIndex = currentState.currentItemIndex - 1
+        val current = _state.value as SequentialTimerState.Active<T>
+        var prevIndex = current.currentItemIndex - 1
+        var prevRound = current.currentRound
 
-        if (nextIndex < 0) {
-            _state.value =
-                SequentialTimerState.Error(IllegalStateException("Cannot move to previous element. Current index is at the start."))
-            return
+        if (prevIndex < 0) {
+            if (prevRound > 1) {
+                prevRound -= 1
+                prevIndex = current.items.lastIndex
+            } else {
+                _state.value =
+                    SequentialTimerState.Error(IllegalStateException("Cannot move to previous element. Current index is at the start."))
+                return
+            }
         }
 
         start(
-            items = currentState.items,
-            currentItemIndex = nextIndex,
+            items = current.items,
+            currentItemIndex = prevIndex,
             timeLeft = null,
-            accumulatedDuration = currentState.getCompletedDuration(nextIndex),
+            accumulatedDuration = current.getCompletedDuration(prevIndex),
+            currentRound = prevRound,
+            rounds = current.rounds,
         )
     }
 

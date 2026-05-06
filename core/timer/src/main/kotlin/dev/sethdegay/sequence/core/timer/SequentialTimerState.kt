@@ -12,6 +12,8 @@ sealed interface SequentialTimerState {
         override val currentItemIndex: Int,
         override val timeLeft: Duration,
         override val accumulatedDuration: Duration,
+        override val currentRound: Int,
+        override val rounds: Int,
     ) : Active<T>
 
     data class Paused<T>(
@@ -19,6 +21,8 @@ sealed interface SequentialTimerState {
         override val currentItemIndex: Int,
         override val timeLeft: Duration,
         override val accumulatedDuration: Duration,
+        override val currentRound: Int,
+        override val rounds: Int,
     ) : Active<T>
 
     sealed interface Active<T> : SequentialTimerState {
@@ -26,5 +30,7 @@ sealed interface SequentialTimerState {
         val currentItemIndex: Int
         val timeLeft: Duration
         val accumulatedDuration: Duration
+        val currentRound: Int
+        val rounds: Int
     }
 }
