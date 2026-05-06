@@ -1,6 +1,6 @@
 [versions]
-aboutlibraries = "14.0.1"
-android-gradle-plugin = "9.2.0"
+aboutlibraries = "14.1.0"
+android-gradle-plugin = "9.2.1"
 androidx-activity = "1.13.0"
 androidx-compose = "2026.04.01"
 androidx-compose-material3 = "1.5.0-alpha18"
