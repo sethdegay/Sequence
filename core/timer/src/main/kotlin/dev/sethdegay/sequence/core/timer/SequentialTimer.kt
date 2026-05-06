@@ -62,7 +62,7 @@ class SequentialTimer<T>(
 
         timerJob = scope.launch {
             try {
-                var accumulatedDuration = accumulatedDuration
+                var completedItemsDuration = accumulatedDuration
                 for (i in currentItemIndex..items.lastIndex) {
                     val element = items[i]
 
@@ -73,25 +73,26 @@ class SequentialTimer<T>(
                         return@launch
                     }
 
-                    val duration = if (i == currentItemIndex && timeLeft != null) {
+                    val currentItemDuration = if (i == currentItemIndex && timeLeft != null) {
                         timeLeft
                     } else {
                         providedDuration
                     }
 
                     countdownFlow(
-                        duration = duration,
+                        duration = currentItemDuration,
                         dispatcher = dispatcher,
                     ).collect { timeLeft ->
+                        val currentProgress = completedItemsDuration + (providedDuration - timeLeft)
                         _state.value = SequentialTimerState.Running(
                             items = items,
                             currentItemIndex = i,
                             timeLeft = timeLeft,
-                            accumulatedDuration = accumulatedDuration + (providedDuration - timeLeft),
+                            accumulatedDuration = currentProgress,
                         )
                     }
 
-                    accumulatedDuration += duration
+                    completedItemsDuration += providedDuration
                 }
                 _state.value = SequentialTimerState.Finished
             } catch (_: CancellationException) {
