@@ -96,8 +96,9 @@ class SequenceContextMenuViewModel @AssistedInject constructor(
             dateModified = now,
             segments = emptyList(),
         )
+        val newSegments = sequence.segments.map { it.copy(id = Uuid.random()) }
 
         sequenceRepository.saveSequence(newSequence, libraryId)
-        segmentRepository.saveSegments(sequence.segments, newId)
+        segmentRepository.saveSegments(newSegments, newId)
     }
 }
