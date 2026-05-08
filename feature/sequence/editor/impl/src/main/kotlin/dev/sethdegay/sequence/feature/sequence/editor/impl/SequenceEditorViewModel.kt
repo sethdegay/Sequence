@@ -14,6 +14,7 @@ import dev.sethdegay.sequence.core.data.repository.SequenceRepository
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.calculateTotalDuration
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -46,6 +47,8 @@ class SequenceEditorViewModel @AssistedInject constructor(
             @Assisted("libraryId") libraryId: Uuid,
         ): SequenceEditorViewModel
     }
+
+    private var autoSaveJob: Job
 
     private val now = Clock.System.now()
 
@@ -132,10 +135,11 @@ class SequenceEditorViewModel @AssistedInject constructor(
         this.rounds.value = rounds
     }
 
-    fun requestExit() {
+    fun requestExit(forceDelete: Boolean = false) {
+        autoSaveJob.cancel()
         val sequence = construct()
         viewModelScope.launch {
-            if (sequence.isEmpty()) {
+            if (sequence.isEmpty() || forceDelete) {
                 sequenceRepository.delete(sequence, libraryId)
             }
             _effects.send(SequenceEditorEffect.Finished)
@@ -143,7 +147,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
     }
 
     init {
-        viewModelScope.launch {
+        autoSaveJob = viewModelScope.launch {
             if (sequenceId != null) sequenceRepository.getSequence(sequenceId).deconstruct()
             combine(
                 snapshotFlow { construct() },

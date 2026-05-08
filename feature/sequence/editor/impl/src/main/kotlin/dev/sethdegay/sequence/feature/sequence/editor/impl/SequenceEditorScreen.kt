@@ -76,6 +76,12 @@ fun SequenceEditorScreen(
                     )
                 },
                 scrollBehavior = scrollBehavior,
+                actions = {
+                    SequenceIcons.Delete.IconButton(
+                        onClick = { viewModel.requestExit(forceDelete = true) },
+                        contentDescription = stringResource(string.action_delete),
+                    )
+                }
             )
         },
         floatingActionButton = {
