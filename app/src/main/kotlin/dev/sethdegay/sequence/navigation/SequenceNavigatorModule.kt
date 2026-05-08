@@ -30,4 +30,12 @@ class SequenceNavigatorImpl @Inject constructor() : SequenceNavigator {
     override fun navigateUp() {
         backStack.removeLastOrNull()
     }
+
+    override fun replaceLast(key: NavKey) {
+        if (backStack.isNotEmpty()) {
+            backStack[backStack.lastIndex] = key
+        } else {
+            backStack.add(key)
+        }
+    }
 }

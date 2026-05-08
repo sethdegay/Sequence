@@ -30,8 +30,7 @@ object SequenceContextMenuModule {
                 ),
                 navigateUp = navigator::navigateUp,
                 editSequence = { sequenceId, libraryId ->
-                    navigator.backStack.removeLastOrNull()
-                    navigator.navigate(SequenceEditorNav.Edit(sequenceId, libraryId))
+                    navigator.replaceLast(SequenceEditorNav.Edit(sequenceId, libraryId))
                 },
             )
         }

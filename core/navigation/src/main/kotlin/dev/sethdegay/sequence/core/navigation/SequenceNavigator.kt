@@ -6,4 +6,5 @@ interface SequenceNavigator {
     val backStack: MutableList<NavKey>
     fun navigate(key: NavKey)
     fun navigateUp()
+    fun replaceLast(key: NavKey)
 }
