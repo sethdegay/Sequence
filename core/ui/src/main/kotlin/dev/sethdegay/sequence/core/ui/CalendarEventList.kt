@@ -28,20 +28,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import dev.sethdegay.sequence.core.common.toTimeString
 import dev.sethdegay.sequence.core.designsystem.R.string
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.theme.SequenceTheme
 import dev.sethdegay.sequence.core.model.CalendarEvent
 import dev.sethdegay.sequence.core.model.Sequence
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
-import kotlin.time.toJavaInstant
 
 @Composable
 fun CalendarEventList(
@@ -69,7 +66,7 @@ fun CalendarEventList(
 @Composable
 private fun CalendarEventRow(event: CalendarEvent) {
     val timeRange = remember(event.start, event.end) {
-        "${event.start.toShortTimeString()} - ${event.end.toShortTimeString()}"
+        "${event.start.toTimeString(FormatStyle.SHORT)} - ${event.end.toTimeString(FormatStyle.SHORT)}"
     }
     Column(
         modifier = Modifier
@@ -142,14 +139,6 @@ private fun TimelineConnector(modifier: Modifier = Modifier) {
             .width(2.dp)
             .background(MaterialTheme.colorScheme.outlineVariant),
     )
-}
-
-private fun Instant.toShortTimeString(): String {
-    val formatter = DateTimeFormatter
-        .ofLocalizedTime(FormatStyle.SHORT)
-        .withLocale(Locale.getDefault())
-        .withZone(ZoneId.systemDefault())
-    return formatter.format(this.toJavaInstant())
 }
 
 @Preview(showBackground = true)

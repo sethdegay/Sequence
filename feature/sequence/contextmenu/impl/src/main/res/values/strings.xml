@@ -4,4 +4,6 @@
     <string name="context_action_edit">Edit</string>
     <string name="context_action_duplicate">Duplicate</string>
     <string name="context_action_delete">Delete</string>
+    <string name="date_created">Created: %1$s</string>
+    <string name="date_modified">Modified: %1$s</string>
 </resources>

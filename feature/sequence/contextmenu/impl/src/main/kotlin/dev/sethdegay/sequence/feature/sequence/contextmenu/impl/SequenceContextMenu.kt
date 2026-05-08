@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.sethdegay.sequence.core.common.toDateTimeString
 import dev.sethdegay.sequence.core.designsystem.component.ContextAction
 import dev.sethdegay.sequence.core.designsystem.component.ContextActionsRow
 import dev.sethdegay.sequence.core.designsystem.component.LoadingSection
@@ -87,11 +88,17 @@ private fun SequenceContextMenu(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "Date created: $dateCreated",
+                    text = stringResource(
+                        R.string.date_created,
+                        dateCreated.toDateTimeString(),
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                 )
                 Text(
-                    text = "Date modified: $dateModified",
+                    text = stringResource(
+                        R.string.date_modified,
+                        dateModified.toDateTimeString(),
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
