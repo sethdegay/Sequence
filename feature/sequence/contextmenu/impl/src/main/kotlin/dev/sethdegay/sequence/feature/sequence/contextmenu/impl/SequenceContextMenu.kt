@@ -86,8 +86,14 @@ private fun SequenceContextMenu(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Text(text = "Date created: $dateCreated")
-                Text(text = "Date modified: $dateModified")
+                Text(
+                    text = "Date created: $dateCreated",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                Text(
+                    text = "Date modified: $dateModified",
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
         }
         item {
