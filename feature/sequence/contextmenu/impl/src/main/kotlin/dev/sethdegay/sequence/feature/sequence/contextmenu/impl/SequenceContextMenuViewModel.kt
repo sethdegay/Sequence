@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
+import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.model.Sequence
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,7 @@ class SequenceContextMenuViewModel @AssistedInject constructor(
     @Assisted(LIBRARY_ID_KEY) private val libraryId: Uuid,
     private val sequenceRepository: SequenceRepository,
     private val segmentRepository: SegmentRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     @param:ApplicationContext private val context: Context,
 ) : ViewModel() {
     @AssistedFactory
@@ -100,5 +102,6 @@ class SequenceContextMenuViewModel @AssistedInject constructor(
 
         sequenceRepository.saveSequence(newSequence, libraryId)
         segmentRepository.saveSegments(newSegments, newId)
+        userPreferencesRepository.setActiveSequenceId(newId)
     }
 }
