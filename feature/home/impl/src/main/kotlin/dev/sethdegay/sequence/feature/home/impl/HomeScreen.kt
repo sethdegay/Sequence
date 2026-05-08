@@ -52,7 +52,7 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navigateToEventList: (ClosedRange<Instant>) -> Unit,
     createSequence: (Uuid) -> Unit,
-    editSequence: (Uuid, Uuid) -> Unit,
+    navigateToSequenceContextMenu: (Uuid, Uuid) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToTimer: (Uuid) -> Unit,
 ) {
@@ -87,7 +87,7 @@ fun HomeScreen(
                 scaffoldPadding = padding,
                 navigateToEditor = { sequenceId ->
                     viewModel.getLibraryId()?.let { libraryId ->
-                        editSequence(sequenceId, libraryId)
+                        navigateToSequenceContextMenu(sequenceId, libraryId)
                     }
                 },
                 navigateToTimer = navigateToTimer,

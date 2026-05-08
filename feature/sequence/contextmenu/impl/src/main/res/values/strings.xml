@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="duplicate_title_template">Copy of %1$s</string>
+    <string name="context_action_edit">Edit</string>
+    <string name="context_action_duplicate">Duplicate</string>
+    <string name="context_action_delete">Delete</string>
+</resources>

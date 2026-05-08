@@ -11,6 +11,7 @@ import dev.sethdegay.sequence.core.navigation.SequenceNavigator
 import dev.sethdegay.sequence.feature.calendarevent.list.api.EventListNav
 import dev.sethdegay.sequence.feature.home.api.HomeNav
 import dev.sethdegay.sequence.feature.home.impl.HomeScreen
+import dev.sethdegay.sequence.feature.sequence.contextmenu.api.SequenceContextMenuNav
 import dev.sethdegay.sequence.feature.sequence.editor.api.SequenceEditorNav
 import dev.sethdegay.sequence.feature.settings.api.SettingsNav
 import dev.sethdegay.sequence.feature.timer.api.TimerNav
@@ -28,8 +29,8 @@ object HomeModule {
                 createSequence = { libraryId ->
                     navigator.navigate(SequenceEditorNav.Create(libraryId))
                 },
-                editSequence = { sequenceId, libraryId ->
-                    navigator.navigate(SequenceEditorNav.Edit(sequenceId, libraryId))
+                navigateToSequenceContextMenu = { sequenceId, libraryId ->
+                    navigator.navigate(SequenceContextMenuNav(sequenceId, libraryId))
                 },
                 navigateToSettings = { navigator.navigate(SettingsNav) },
                 navigateToTimer = { id -> navigator.navigate(TimerNav(id)) },

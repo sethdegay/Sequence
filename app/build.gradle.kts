@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.feature.home.impl)
     implementation(projects.feature.license.impl)
     implementation(projects.feature.segment.editor.impl)
+    implementation(projects.feature.sequence.contextmenu.impl)
     implementation(projects.feature.sequence.editor.impl)
     implementation(projects.feature.settings.impl)
     implementation(projects.feature.timer.impl)

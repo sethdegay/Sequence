@@ -7,5 +7,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.segment.contextmenu.api)
+    implementation(projects.feature.sequence.contextmenu.api)
+    implementation(projects.feature.sequence.editor.api)
 }
