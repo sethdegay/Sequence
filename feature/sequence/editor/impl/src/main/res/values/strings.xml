@@ -4,4 +4,6 @@
     <string name="sequence_editor_description_label">Description</string>
     <string name="sequence_editor_rounds_label">Rounds</string>
     <string name="action_delete">Delete</string>
+    <string name="date_created">Created: %1$s</string>
+    <string name="date_modified">Modified: %1$s</string>
 </resources>

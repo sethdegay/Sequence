@@ -2,6 +2,7 @@ package dev.sethdegay.sequence.feature.sequence.editor.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -15,6 +16,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -31,6 +33,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
+import dev.sethdegay.sequence.core.common.toDateTimeString
 import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
@@ -44,6 +47,7 @@ import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
 import dev.sethdegay.sequence.feature.segment.editor.api.SegmentEditorNav
 import dev.sethdegay.sequence.feature.sequence.editor.impl.R.string
+import kotlin.time.Instant
 
 @Composable
 fun SequenceEditorScreen(
@@ -121,6 +125,8 @@ fun SequenceEditorScreen(
                             navigateToSegmentEditor(key)
                         },
                         onRoundsChanged = viewModel::setRounds,
+                        dateCreated = uiState.dateCreated,
+                        dateModified = uiState.dateModified,
                     )
                 }
             }
@@ -148,6 +154,8 @@ private fun SequenceEditorScreen(
     onSegmentOrderChanged: (List<Segment>) -> Unit,
     onSegmentClick: (Segment) -> Unit,
     onRoundsChanged: (Int) -> Unit,
+    dateCreated: Instant,
+    dateModified: Instant,
 ) {
     ReorderableCardGroup(
         modifier = Modifier
@@ -157,6 +165,24 @@ private fun SequenceEditorScreen(
         segments = segments,
         onSegmentOrderChanged = onSegmentOrderChanged,
         onSegmentClick = onSegmentClick,
+        footerContent = {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Text(
+                    text = stringResource(
+                        string.date_created,
+                        dateCreated.toDateTimeString(),
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                Text(
+                    text = stringResource(
+                        string.date_modified,
+                        dateModified.toDateTimeString(),
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        },
     ) {
         Spacer(Modifier.size(16.dp))
         CardGroup {

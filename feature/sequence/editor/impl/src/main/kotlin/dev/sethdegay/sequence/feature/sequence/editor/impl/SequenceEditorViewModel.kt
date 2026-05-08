@@ -105,6 +105,8 @@ class SequenceEditorViewModel @AssistedInject constructor(
             totalDuration = totalDuration,
             rounds = rounds,
             repeatedDuration = repeatedDuration,
+            dateCreated = dateCreated,
+            dateModified = dateModified,
         )
     }.stateIn(
         scope = viewModelScope,

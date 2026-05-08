@@ -37,6 +37,7 @@ fun ReorderableCardGroup(
     segments: List<Segment>,
     onSegmentOrderChanged: (List<Segment>) -> Unit,
     onSegmentClick: (Segment) -> Unit,
+    footerContent: (@Composable LazyItemScope.() -> Unit)? = null,
     headerContent: @Composable LazyItemScope.() -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
@@ -59,6 +60,7 @@ fun ReorderableCardGroup(
                 ReorderableCardGroupItem(segment, onSegmentClick)
             }
         }
+        footerContent?.let { item(content = it) }
     }
 }
 
