@@ -3,6 +3,7 @@ package dev.sethdegay.sequence.feature.settings.impl
 import android.content.pm.PackageManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.dropUnlessResumed
@@ -108,6 +111,12 @@ private fun SettingsScreen(
     ) {
         item {}
         item {
+            SectionTitle(
+                title = stringResource(string.settings_ui_section_title),
+                topPadding = 0.dp,
+            )
+        }
+        item {
             CardGroup {
                 item {
                     TogglePreference(
@@ -148,6 +157,7 @@ private fun SettingsScreen(
                 }
             }
         }
+        item { SectionTitle(title = stringResource(string.settings_audio_section_title)) }
         item {
             CardGroup {
                 item {
@@ -192,6 +202,7 @@ private fun SettingsScreen(
                 }
             }
         }
+        item { SectionTitle(title = stringResource(string.settings_about_section_title)) }
         item {
             CardGroup {
                 item {
@@ -235,3 +246,13 @@ private val versionName: String
         }
         return packageInfo?.versionName ?: stringResource(string.settings_version_not_available)
     }
+
+@Composable
+private fun SectionTitle(title: String, topPadding: Dp = 8.dp) {
+    Box(modifier = Modifier.padding(start = 16.dp + 12.dp, top = topPadding)) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall,
+        )
+    }
+}
