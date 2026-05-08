@@ -27,7 +27,8 @@ data class ContextAction(
     val label: String,
     val icon: ImageVector,
     val onClick: () -> Unit,
-    val contentDescription: String? = null
+    val contentDescription: String? = null,
+    val isDangerous: Boolean = false,
 )
 
 @Composable
@@ -51,6 +52,14 @@ fun ContextActionsRow(
                     modifier = Modifier.heightIn(size),
                     shapes = ButtonDefaults.shapes(),
                     onClick = action.onClick,
+                    colors = if (action.isDangerous) {
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                        )
+                    } else {
+                        ButtonDefaults.buttonColors()
+                    }
                 ) {
                     Icon(
                         modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
@@ -87,6 +96,12 @@ private fun ContextActionsRowPreview() {
             label = "Pick",
             icon = SequenceIcons.Pick,
             onClick = {},
+        ),
+        ContextAction(
+            label = "Delete",
+            icon = SequenceIcons.Delete,
+            onClick = {},
+            isDangerous = true,
         ),
     )
     SequenceTheme {

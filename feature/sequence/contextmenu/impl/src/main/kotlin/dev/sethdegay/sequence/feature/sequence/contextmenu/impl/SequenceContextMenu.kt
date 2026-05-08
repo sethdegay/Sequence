@@ -54,6 +54,7 @@ fun SequenceContextMenu(
                     label = stringResource(id = R.string.context_action_delete),
                     icon = SequenceIcons.Delete,
                     onClick = viewModel::delete,
+                    isDangerous = true,
                 ),
             ),
         )
