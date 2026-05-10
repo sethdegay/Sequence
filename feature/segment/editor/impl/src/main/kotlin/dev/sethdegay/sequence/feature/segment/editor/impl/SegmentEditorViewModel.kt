@@ -67,6 +67,14 @@ class SegmentEditorViewModel @AssistedInject constructor(
         }
     }
 
+    fun deleteSegment(segment: Segment) {
+        viewModelScope.launch {
+            _segment.value = null
+            segmentRepository.deleteSegment(segment, sequenceId)
+            _effects.send(SegmentEditorEffect.Finished)
+        }
+    }
+
     fun onInputMethodChange(inputMethod: SegmentInputMethod) {
         viewModelScope.launch { userPreferencesRepository.setActiveSegmentIm(inputMethod) }
     }

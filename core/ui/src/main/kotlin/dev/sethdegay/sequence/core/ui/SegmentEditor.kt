@@ -5,10 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -18,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -25,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
 import dev.sethdegay.sequence.core.designsystem.component.ExpressiveButton
+import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.SegmentInputMethod
 import dev.sethdegay.sequence.core.ui.R.string
@@ -37,6 +44,7 @@ import kotlin.time.Duration.Companion.seconds
 fun SegmentEditor(
     segment: Segment,
     onSegmentUpdate: (Segment) -> Unit,
+    onSegmentDelete: (Segment) -> Unit,
     inputMethod: SegmentInputMethod,
     onInputMethodChange: (SegmentInputMethod) -> Unit,
 ) {
@@ -79,34 +87,64 @@ fun SegmentEditor(
             typeState = typeState,
             durationTextFieldIsError = typeTextFieldIsError,
         )
-        ExpressiveButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            onClick = {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            fun construct(): Segment? {
                 val newTitle = titleState.text.toString()
-                when (inputMethod) {
-                    SegmentInputMethod.PICK -> onSegmentUpdate(
-                        segment.copy(title = newTitle, duration = pickerState.toDuration()),
+                return when (inputMethod) {
+                    SegmentInputMethod.PICK -> segment.copy(
+                        title = newTitle,
+                        duration = pickerState.toDuration()
                     )
 
                     SegmentInputMethod.TYPE -> {
                         val newDuration = typeState.parseDuration()
                         if (newDuration == null) {
                             typeTextFieldIsError = true
+                            null
                         } else {
                             typeTextFieldIsError = false
-                            onSegmentUpdate(segment.copy(title = newTitle, duration = newDuration))
+                            segment.copy(
+                                title = newTitle,
+                                duration = newDuration
+                            )
                         }
                     }
                 }
-            },
-            size = ButtonDefaults.MediumContainerHeight,
-        ) {
-            Text(
-                text = stringResource(android.R.string.ok),
-                style = ButtonDefaults.textStyleFor(ButtonDefaults.MediumContainerHeight),
-            )
+            }
+
+            Button(
+                modifier = Modifier
+                    .heightIn(ButtonDefaults.MediumContainerHeight)
+                    .weight(1f),
+                shapes = ButtonDefaults.shapes(),
+                onClick = { construct()?.let { onSegmentDelete(it) } },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                ),
+            ) {
+                Icon(
+                    modifier = Modifier.size(ButtonDefaults.iconSizeFor(ButtonDefaults.MediumContainerHeight)),
+                    imageVector = SequenceIcons.Delete,
+                    contentDescription = null,
+                )
+            }
+            ExpressiveButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(4f),
+                onClick = { construct()?.let { onSegmentUpdate(it) } },
+                size = ButtonDefaults.MediumContainerHeight,
+            ) {
+                Text(
+                    text = stringResource(android.R.string.ok),
+                    style = ButtonDefaults.textStyleFor(ButtonDefaults.MediumContainerHeight),
+                )
+            }
         }
     }
 }
@@ -139,6 +177,7 @@ private fun SegmentEditorPreview() {
         SegmentEditor(
             segment = segment,
             onSegmentUpdate = onSegmentUpdate,
+            onSegmentDelete = {},
             inputMethod = inputMethod,
             onInputMethodChange = onInputMethodChange,
         )

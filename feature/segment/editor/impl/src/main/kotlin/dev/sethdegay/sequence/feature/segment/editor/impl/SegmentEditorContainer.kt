@@ -15,6 +15,7 @@ fun SegmentEditorContainer(viewModel: SegmentEditorViewModel, navigateUp: () -> 
             segment != null -> SegmentEditor(
                 segment = segment,
                 onSegmentUpdate = viewModel::saveSegment,
+                onSegmentDelete = viewModel::deleteSegment,
                 inputMethod = uiState.inputMethod,
                 onInputMethodChange = viewModel::onInputMethodChange,
             )
