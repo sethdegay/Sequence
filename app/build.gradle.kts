@@ -26,6 +26,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+        create("staging") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            applicationIdSuffix = ".staging"
+//            resValue("string", "app_name", "Sequence Staging")
+            matchingFallbacks += listOf("release")
+        }
     }
 }
 
