@@ -117,9 +117,11 @@ private fun TimerScreen(
             expanded = expandProgressIndicator,
             amplitudeLevel = uiState.amplitudeLevel,
         )
-        Column(modifier = Modifier
-            .align(Alignment.Center)
-            .scale(1.4f)) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .scale(1.4f),
+        ) {
             Text(text = uiState.currentSegment.title)
             CountdownDisplay(duration = uiState.remainingTime)
         }
