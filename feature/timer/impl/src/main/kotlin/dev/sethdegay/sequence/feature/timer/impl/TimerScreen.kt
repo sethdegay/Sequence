@@ -78,22 +78,15 @@ fun TimerScreen(
             )
         }
     ) { padding ->
-        if (uiState.showLoadingScreen()) {
-            LoadingScreen(modifier = Modifier.padding(padding))
+        if (uiState is TimerUiState.Success) {
+            TimerScreen(
+                scaffoldPadding = padding,
+                uiState = uiState as TimerUiState.Success,
+                expandProgressIndicator = isTopAppBarExpanded,
+                actions = viewModel,
+            )
         } else {
-            when (uiState) {
-                is TimerUiState.Success -> TimerScreen(
-                    scaffoldPadding = padding,
-                    uiState = uiState as TimerUiState.Success,
-                    expandProgressIndicator = isTopAppBarExpanded,
-                    actions = viewModel,
-                )
-
-                else -> Text(
-                    modifier = Modifier.padding(padding),
-                    text = uiState.toString(),
-                )
-            }
+            LoadingScreen(modifier = Modifier.padding(padding))
         }
     }
 }
