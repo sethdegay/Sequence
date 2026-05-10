@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -116,7 +117,9 @@ private fun TimerScreen(
             expanded = expandProgressIndicator,
             amplitudeLevel = uiState.amplitudeLevel,
         )
-        Column(modifier = Modifier.align(Alignment.Center)) {
+        Column(modifier = Modifier
+            .align(Alignment.Center)
+            .scale(1.4f)) {
             Text(text = uiState.currentSegment.title)
             CountdownDisplay(duration = uiState.remainingTime)
         }
