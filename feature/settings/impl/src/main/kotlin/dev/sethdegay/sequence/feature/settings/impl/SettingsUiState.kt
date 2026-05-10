@@ -16,6 +16,7 @@ sealed interface SettingsUiState {
         override val tickSound: Boolean = settings.tickSound
         override val completionSound: Boolean = settings.completionSound
         override val speakTitle: Boolean = settings.speakTitle
+        override val speakNextTitle: Boolean = settings.speakNextTitle
     }
 
     fun showLoadingScreen(): Boolean = this is Loading
@@ -36,6 +37,9 @@ sealed interface SettingsUiState {
         get() = true
 
     val speakTitle: Boolean
+        get() = true
+
+    val speakNextTitle: Boolean
         get() = true
 
     val hasTtsEngineInstalled: Boolean

@@ -14,6 +14,7 @@ data class Settings(
     val tickSound: Boolean,
     val completionSound: Boolean,
     val speakTitle: Boolean,
+    val speakNextTitle: Boolean,
 )
 
 data class UiState(

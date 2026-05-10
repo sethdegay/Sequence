@@ -16,6 +16,7 @@ class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferenc
             tickSound = true
             completionSound = true
             speakTitle = true
+            speakNextTitle = true
         }
     }
 

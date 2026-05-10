@@ -75,6 +75,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setSpeakNextTitle(speakNextTitle: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setSpeakNextTitle(speakNextTitle)
+        }
+    }
+
     fun updateHasTtsEngineInstalled() {
         _hasTtsEngineInstalled.update { TtsManager.hasTtsEngineInstalled(context) }
     }

@@ -57,6 +57,12 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
+    suspend fun setSpeakNextTitle(speakNextTitle: Boolean) {
+        _userPreferences.updateData { current ->
+            current.copy { settings = settings.copy { this.speakNextTitle = speakNextTitle } }
+        }
+    }
+
     suspend fun setActiveLibraryId(activeLibraryId: Uuid?) {
         _userPreferences.updateData { current ->
             current.copy {
@@ -108,6 +114,7 @@ private fun UserPreferences.asExternalModel(): ExtUserPreferences {
             tickSound = settings.tickSound,
             completionSound = settings.completionSound,
             speakTitle = settings.speakTitle,
+            speakNextTitle = settings.speakNextTitle,
         ),
         uiState = UiState(
             activeLibraryId = uiState.activeLibraryId.toUuidOrNull(),

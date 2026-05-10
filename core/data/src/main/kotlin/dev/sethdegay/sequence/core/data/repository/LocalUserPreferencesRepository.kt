@@ -46,6 +46,10 @@ class LocalUserPreferencesRepository @Inject constructor(
         dataSource.setSpeakTitle(speakTitle)
     }
 
+    override suspend fun setSpeakNextTitle(speakNextTitle: Boolean) {
+        dataSource.setSpeakNextTitle(speakNextTitle)
+    }
+
     override suspend fun setActiveLibraryId(activeLibraryId: Uuid?) {
         dataSource.setActiveLibraryId(activeLibraryId)
     }

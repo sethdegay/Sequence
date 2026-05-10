@@ -12,4 +12,5 @@ message Settings {
   bool tick_sound = 4;
   bool completion_sound = 5;
   bool speak_title = 6;
+  bool speak_next_title = 7;
 }

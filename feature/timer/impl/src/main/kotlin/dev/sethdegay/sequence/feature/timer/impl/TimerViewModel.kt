@@ -1,11 +1,14 @@
 package dev.sethdegay.sequence.feature.timer.impl
 
+import android.content.Context
+import android.speech.tts.TextToSpeech
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.sethdegay.sequence.core.audio.SfxManager
 import dev.sethdegay.sequence.core.audio.TtsManager
 import dev.sethdegay.sequence.core.data.repository.CalendarEventRepository
@@ -19,8 +22,10 @@ import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.Settings
 import dev.sethdegay.sequence.core.timer.SequentialTimer
 import dev.sethdegay.sequence.core.timer.SequentialTimerState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -47,6 +52,7 @@ class TimerViewModel @AssistedInject constructor(
     private val sequenceRepository: SequenceRepository,
     private val calendarEventRepository: CalendarEventRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    @param:ApplicationContext private val context: Context,
 ) : ViewModel(), TimerControlsActions {
     @AssistedFactory
     interface Factory {
@@ -63,7 +69,7 @@ class TimerViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
-            val (tickSound, completionSound, speakTitle) = userPreferencesRepository
+            val (tickSound, completionSound, speakTitle, speakNextTitle) = userPreferencesRepository
                 .settings
                 .first()
                 .asAudioSettings()
@@ -71,6 +77,12 @@ class TimerViewModel @AssistedInject constructor(
                 _uiState.update {
                     state.asTimerUiState(
                         speakTitle = { if (speakTitle) ttsManager.speak(it) },
+                        speakNextTitle = {
+                            if (speakNextTitle) ttsManager.speak(
+                                context.getString(R.string.up_next, it),
+                                queueMode = TextToSpeech.QUEUE_ADD,
+                            )
+                        },
                         playOddTickSound = { if (tickSound) sfxManager.playTickOdd() },
                         playEvenTickSound = { if (tickSound) sfxManager.playTickEven() },
                         playCompletionSound = { if (completionSound) sfxManager.playBell() },
@@ -108,6 +120,7 @@ class TimerViewModel @AssistedInject constructor(
 
     private fun SequentialTimerState.asTimerUiState(
         speakTitle: (String) -> Unit,
+        speakNextTitle: (String) -> Unit,
         playOddTickSound: () -> Unit,
         playEvenTickSound: () -> Unit,
         playCompletionSound: () -> Unit,
@@ -135,6 +148,15 @@ class TimerViewModel @AssistedInject constructor(
         if (isTimerRunning) {
             if (currentSegment.duration == timeLeft) {
                 speakTitle(currentSegment.title)
+                viewModelScope.launch {
+                    delay(3.seconds)
+                    if (currentItemIndex != items.lastIndex) {
+                        val nextItem = items[currentItemIndex + 1] as Segment
+                        launch(Dispatchers.Main) {
+                            speakNextTitle(nextItem.title)
+                        }
+                    }
+                }
             }
             when (timeLeft) {
                 5.seconds, 3.seconds, 1.seconds -> playOddTickSound()
@@ -198,10 +220,12 @@ private data class AudioSettings(
     val tickSound: Boolean,
     val completionSound: Boolean,
     val speakTitle: Boolean,
+    val speakNextTitle: Boolean,
 )
 
 private fun Settings.asAudioSettings() = AudioSettings(
     tickSound = !muteAll && tickSound,
     completionSound = !muteAll && completionSound,
     speakTitle = !muteAll && speakTitle,
+    speakNextTitle = !muteAll && speakNextTitle,
 )

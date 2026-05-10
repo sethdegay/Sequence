@@ -24,6 +24,8 @@ interface UserPreferencesRepository {
 
     suspend fun setSpeakTitle(speakTitle: Boolean)
 
+    suspend fun setSpeakNextTitle(speakNextTitle: Boolean)
+
     suspend fun setActiveLibraryId(activeLibraryId: Uuid?)
 
     suspend fun setActiveSequenceId(activeSequenceId: Uuid?)

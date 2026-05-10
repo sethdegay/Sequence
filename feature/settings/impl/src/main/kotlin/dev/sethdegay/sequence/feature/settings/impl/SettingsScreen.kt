@@ -85,6 +85,7 @@ fun SettingsScreen(
                 setTickSound = viewModel::setTickSound,
                 setCompletionSound = viewModel::setCompletionSound,
                 setSpeakTitle = viewModel::setSpeakTitle,
+                setSpeakNextTitle = viewModel::setSpeakNextTitle,
             )
         }
     }
@@ -101,6 +102,7 @@ private fun SettingsScreen(
     setTickSound: (Boolean) -> Unit,
     setCompletionSound: (Boolean) -> Unit,
     setSpeakTitle: (Boolean) -> Unit,
+    setSpeakNextTitle: (Boolean) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -192,6 +194,20 @@ private fun SettingsScreen(
                         description = stringResource(string.settings_speak_title_description),
                         checked = uiState.speakTitle && uiState.hasTtsEngineInstalled,
                         onCheckedChange = setSpeakTitle,
+                        isEnabled = !uiState.muteAll && uiState.hasTtsEngineInstalled,
+                        preferenceError = if (!uiState.hasTtsEngineInstalled) {
+                            PreferenceError(message = stringResource(string.settings_no_tts_engine_found_error_message))
+                        } else {
+                            null
+                        },
+                    )
+                }
+                item {
+                    BooleanPreference(
+                        title = stringResource(string.settings_speak_next_title_title),
+                        description = stringResource(string.settings_speak_next_title_description),
+                        checked = uiState.speakNextTitle && uiState.hasTtsEngineInstalled,
+                        onCheckedChange = setSpeakNextTitle,
                         isEnabled = !uiState.muteAll && uiState.hasTtsEngineInstalled,
                         preferenceError = if (!uiState.hasTtsEngineInstalled) {
                             PreferenceError(message = stringResource(string.settings_no_tts_engine_found_error_message))
