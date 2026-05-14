@@ -40,6 +40,28 @@ segments is called a **sequence**.
 Use the latest stable Android Studio. If using a custom JDK, ensure it is version 17+ and configured
 in [build.gradle.kts](build.gradle.kts).
 
+## Design System
+
+The app UI follows a minimalist philosophy and is structured around a set of design patterns and
+components:
+
+* **Card-Based Layouts:** Information is primarily presented by card containers. These are used to
+  encapsulate individual list entries and content blocks where necessary.
+* **Accordions:** Sequences are presented via card styled accordions. This approach keeps secondary
+  information tucked away while maintaining the overall minimalist layout.
+* **Material 3 Expressive Components:** The system incorporates Material 3 animations to provide
+  visual feedback. This includes:
+  * Dynamic progress and loading indicators.
+  * Animated button shape transformations triggered by long-press actions.
+  * Large top app bars and FAB
+
+### Color and Personalization
+
+The default visual identity is a Monochrome theme, emphasizing contrast and simplicity. To provide a
+personalized experience, the app includes a Dynamic Color setting. When enabled, the
+application consumes system-level color tokens (such as Android’s Material You wallpaper-based
+colors) to seamlessly integrate the interface with the user's personal device theme.
+
 ## Architecture
 
 This project employs a multi-module, feature-based structure to ensure separation of concerns and
@@ -63,10 +85,15 @@ graph LR
     C --> D[UI State]
     D --> E[Compose UI]
     E --> F[User Events] --> C
+    C --> B
+    B --> X
+    B --> Y
 ```
 
-To avoid further over-engineering, the UseCase layer was omitted. ViewModels consume Repositories
-directly as the single source of truth and expose state via a single UI-specific StateFlow.
+The repository acts as an aggregator for relational data and key-value pairs. State flows down from
+the repository, consumed by the ViewModel, and exposed as a single UI state for the Compose UI.
+Afterward, user events trigger a flow upwards which modify this state and changes flow back down
+again to show UI state updates. The UseCase layer was omitted to avoid further over-engineering.
 
 ### Modularization
 
@@ -86,7 +113,16 @@ followed:
 | `:feature:[model]:[name]:impl` | Model-specific implementation details for sub-features                      |
 | `:core:[name]`                 | Reusable foundation modules (e.g., navigation, database, or design system). |
 
-#### App Module Overview
+#### Gradle Configuration
+
+Common configuration for dependencies such as Jetpack Compose and Hilt are encapsulated into Gradle
+convention plugins. This enables modular reuse by plugin ID, eliminating boilerplate across the
+project `build.gradle.kts` files.
+
+#### App Module Dependency Graph
+
+The app module serves as the project's central orchestrator. It uses Hilt to inject feature
+implementations for navigation and manages access to the design system theme and user preferences.
 
 ```mermaid
 %%{
@@ -119,7 +155,10 @@ graph LR
   :feature:calendarevent:list:api --> :core:navigation
 ```
 
-#### Feature Modules
+#### Feature Modules Dependency Graph
+
+This graph maps the boundaries between feature implementations and their public APIs, showing how
+features navigate to or reference each other exclusively through `:api` modules.
 
 ```mermaid
 %%{
@@ -147,10 +186,10 @@ graph LR
   :feature:sequence:contextmenu:impl --> :feature:sequence:editor:api
 ```
 
-This graph maps the boundaries between feature implementations and their public APIs, showing how
-features navigate to or reference each other exclusively through `:api` modules.
+#### Core Modules Dependency Graph
 
-#### Core Modules
+This graph details the internal dependency tree of the foundational, non-feature modules responsible
+for data persistence, business models, and shared UI styling.
 
 ```mermaid
 %%{
@@ -171,9 +210,6 @@ graph LR
   :core:datastore --> :core:datastore-proto
   :core:datastore --> :core:model
 ```
-
-This graph details the internal dependency tree of the foundational, non-feature modules responsible
-for data persistence, business models, and shared UI styling.
 
 ## License
 
