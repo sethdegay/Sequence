@@ -1,22 +1,33 @@
 # Sequence
 
+<table>
+  <tr>
+    <td>
+      <img src="screenshots/sc1.webp" alt="Home Screen" width="200">
+    </td>
+    <td>
+      <img src="screenshots/sc2.webp" alt="Timer Screen" width="200">
+    </td>
+    <td>
+      <img src="screenshots/sc3.webp" alt="Settings screen" width="200">
+    </td>
+    <td>
+      <img src="screenshots/sc4.webp" alt="Settings screen" width="200">
+    </td>
+  </tr>
+</table>
+
 Sequence (stylized as SΞQUΞNCΞ) is a sequential timer for structured task execution.
+
+In this app, individual **tasks** are configured as **segments**, and an organized group of these
+segments is called a **sequence**.
 
 ## Features
 
-- Configurable segment duration.
+- Configurable segment duration (days to seconds).
 - Audio cues for completion and time depletion.
 - Text-to-speech announcements for segment titles.
 - Heatmap visualizing completion times.
-- Auto/light/dark themes and dynamic color.
-- Fully offline.
-
-## Example Use Cases
-
-- Interval training
-- Study sessions
-- Meal preparation
-- Morning/evening routines
 
 ## Quick Start
 
