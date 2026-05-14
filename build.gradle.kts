@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlinx.serialization) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.modulegraph)
     alias(libs.plugins.room) apply false
 }
 
@@ -12,4 +13,31 @@ tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
     languageVersion = JavaLanguageVersion.of(21)
     vendor = JvmVendorSpec.JETBRAINS
     toolchainDownloadUrls.empty()
+}
+
+moduleGraphConfig {
+    graph(
+        readmePath = "${rootDir}/README.md",
+        heading = "#### Composition Root"
+    ) {
+        showFullPath = true
+        rootModulesRegex = ":app|:core:.*|:feature:.*:api"
+        excludedModulesRegex = ":feature:.*:impl"
+    }
+    graph(
+        readmePath = "${rootDir}/README.md",
+        heading = "#### Feature Modules"
+    ) {
+        showFullPath = true
+        rootModulesRegex = ".*:feature:.*"
+        excludedModulesRegex = ".*:core:.*"
+    }
+    graph(
+        readmePath = "${rootDir}/README.md",
+        heading = "#### Core Modules"
+    ) {
+        showFullPath = true
+        rootModulesRegex = ".*:core:.*"
+        includeIsolatedModules = true
+    }
 }
