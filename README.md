@@ -119,7 +119,7 @@ Common configuration for dependencies such as Jetpack Compose and Hilt are encap
 convention plugins. This enables modular reuse by plugin ID, eliminating boilerplate across the
 project `build.gradle.kts` files.
 
-#### App Module Dependency Graph
+#### App Dependency Graph
 
 The app module serves as the project's central orchestrator. It uses Hilt to inject feature
 implementations for navigation and manages access to the design system theme and user preferences.
@@ -155,7 +155,7 @@ graph LR
   :feature:calendarevent:list:api --> :core:navigation
 ```
 
-#### Feature Modules Dependency Graph
+#### Feature Dependency Graph
 
 This graph maps the boundaries between feature implementations and their public APIs, showing how
 features navigate to or reference each other exclusively through `:api` modules.
@@ -186,7 +186,7 @@ graph LR
   :feature:sequence:contextmenu:impl --> :feature:sequence:editor:api
 ```
 
-#### Core Modules Dependency Graph
+#### Core Dependency Graph
 
 This graph details the internal dependency tree of the foundational, non-feature modules responsible
 for data persistence, business models, and shared UI styling.

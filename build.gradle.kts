@@ -18,7 +18,7 @@ tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
 moduleGraphConfig {
     graph(
         readmePath = "${rootDir}/README.md",
-        heading = "#### Composition Root"
+        heading = "#### App Dependency Graph"
     ) {
         showFullPath = true
         rootModulesRegex = ":app|:core:.*|:feature:.*:api"
@@ -26,18 +26,18 @@ moduleGraphConfig {
     }
     graph(
         readmePath = "${rootDir}/README.md",
-        heading = "#### Feature Modules"
+        heading = "#### Feature Dependency Graph"
     ) {
         showFullPath = true
         rootModulesRegex = ".*:feature:.*"
-        excludedModulesRegex = ".*:core:.*"
+        excludedModulesRegex = ":core:.*"
     }
     graph(
         readmePath = "${rootDir}/README.md",
-        heading = "#### Core Modules"
+        heading = "#### Core Dependency Graph"
     ) {
         showFullPath = true
-        rootModulesRegex = ".*:core:.*"
+        rootModulesRegex = ":core:.*"
         includeIsolatedModules = true
     }
 }
