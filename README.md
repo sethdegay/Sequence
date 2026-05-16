@@ -78,6 +78,12 @@ decoupled code.
 ### **Data Flow and State**
 
 ```mermaid
+%%{
+  init: {
+    'theme': 'neutral'
+  }
+}%%
+
 graph LR
     X[Room] --> B[Repository]
     Y[Proto-DataStore] --> B
@@ -119,42 +125,6 @@ Common configuration for dependencies such as Jetpack Compose and Hilt are encap
 convention plugins. This enables modular reuse by plugin ID, eliminating boilerplate across the
 project `build.gradle.kts` files.
 
-#### App Dependency Graph
-
-The app module serves as the project's central orchestrator. It uses Hilt to inject feature
-implementations for navigation and manages access to the design system theme and user preferences.
-
-```mermaid
-%%{
-  init: {
-    'theme': 'neutral'
-  }
-}%%
-
-graph LR
-  :feature:sequence:contextmenu:api --> :core:navigation
-  :feature:settings:api --> :core:navigation
-  :core:database --> :core:common
-  :core:database --> :core:model
-  :feature:segment:editor:api --> :core:navigation
-  :app --> :core:data
-  :app --> :core:model
-  :app --> :feature:home:api
-  :feature:sequence:editor:api --> :core:navigation
-  :core:data --> :core:database
-  :core:data --> :core:datastore
-  :feature:home:api --> :core:navigation
-  :core:timer --> :core:model
-  :core:ui --> :core:common
-  :core:ui --> :core:designsystem
-  :core:ui --> :core:model
-  :feature:timer:api --> :core:navigation
-  :core:datastore --> :core:datastore-proto
-  :core:datastore --> :core:model
-  :feature:license:api --> :core:navigation
-  :feature:calendarevent:list:api --> :core:navigation
-```
-
 #### Feature Dependency Graph
 
 This graph maps the boundaries between feature implementations and their public APIs, showing how
@@ -184,31 +154,6 @@ graph LR
   :feature:timer:impl --> :feature:timer:api
   :feature:sequence:contextmenu:impl --> :feature:sequence:contextmenu:api
   :feature:sequence:contextmenu:impl --> :feature:sequence:editor:api
-```
-
-#### Core Dependency Graph
-
-This graph details the internal dependency tree of the foundational, non-feature modules responsible
-for data persistence, business models, and shared UI styling.
-
-```mermaid
-%%{
-  init: {
-    'theme': 'neutral'
-  }
-}%%
-
-graph LR
-  :core:data --> :core:database
-  :core:data --> :core:datastore
-  :core:database --> :core:common
-  :core:database --> :core:model
-  :core:timer --> :core:model
-  :core:ui --> :core:common
-  :core:ui --> :core:designsystem
-  :core:ui --> :core:model
-  :core:datastore --> :core:datastore-proto
-  :core:datastore --> :core:model
 ```
 
 ## License
