@@ -42,25 +42,14 @@ in [build.gradle.kts](build.gradle.kts).
 
 ## Design System
 
-The app UI follows a minimalist philosophy and is structured around a set of design patterns and
-components:
+The UI blends a minimalist, monochrome aesthetic with fluid, interactive elements.
 
-* **Card-Based Layouts:** Information is primarily presented by card containers. These are used to
-  encapsulate individual list entries and content blocks where necessary.
-* **Accordions:** Sequences are presented via card styled accordions. This approach keeps secondary
-  information tucked away while maintaining the overall minimalist layout.
-* **Material 3 Expressive Components:** The system incorporates Material 3 animations to provide
-  visual feedback. This includes:
-  * Dynamic progress and loading indicators.
-  * Animated button shape transformations triggered by long-press actions.
-  * Large top app bars and FAB
-
-### Color and Personalization
-
-The default visual identity is a Monochrome theme, emphasizing contrast and simplicity. To provide a
-personalized experience, the app includes a Dynamic Color setting. When enabled, the
-application consumes system-level color tokens (such as Android’s Material You wallpaper-based
-colors) to seamlessly integrate the interface with the user's personal device theme.
+* **Card-Based & Accordion Layouts:** Encapsulates content into clean containers, using accordions
+  to hide secondary information and reduce visual clutter.
+* **Material 3 Expressive Motion:** Uses dynamic animations for tactile visual feedback, including
+  loading indicators, long-press button transformations, and reactive FABs/Top App Bars.
+* **Dynamic Theme Personalization:** Features a default monochrome theme with support for
+  system-level color tokens (like Android's Material You) for a native, personalized look.
 
 ## Architecture
 
