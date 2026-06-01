@@ -1,38 +1,47 @@
 package dev.sethdegay.sequence.core.timer
 
+import android.os.SystemClock
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class SequentialTimer<T>(
     private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val durationProvider: (T) -> Duration,
+    private val timeProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) {
     companion object {
-        internal fun countdownFlow(
+        internal suspend fun startCountdown(
             duration: Duration,
             dispatcher: CoroutineDispatcher,
-        ): Flow<Duration> = flow {
-            (duration.inWholeSeconds * 1_000L downTo 1_000L step 1_000L).forEach {
-                emit(it.milliseconds)
-                delay(1_000L)
+            timeProvider: () -> Long,
+            output: (Duration) -> Unit,
+        ) = withContext(dispatcher) {
+            val start = timeProvider()
+            val total = duration.inWholeSeconds
+
+            for (i in total downTo 1) {
+                output(i.seconds)
+                val elapsed = timeProvider() - start
+                val nextDelay = (total - i + 1) * 1_000L
+                val actualDelay = nextDelay - elapsed
+                if (actualDelay > 0) {
+                    delay(actualDelay)
+                }
             }
-            emit(0.seconds)
-        }.flowOn(dispatcher)
+            output(0.seconds)
+        }
     }
 
     private val _state = MutableStateFlow<SequentialTimerState>(SequentialTimerState.Idle)
@@ -81,10 +90,11 @@ class SequentialTimer<T>(
 
                         val currentItemDuration = activeTimeLeft ?: providedDuration
 
-                        countdownFlow(
+                        startCountdown(
                             duration = currentItemDuration,
                             dispatcher = dispatcher,
-                        ).collect { timeLeft ->
+                            timeProvider = timeProvider,
+                        ) { timeLeft ->
                             val currentProgress =
                                 activeAccumulatedDuration + (providedDuration - timeLeft)
                             _state.value = SequentialTimerState.Running(
