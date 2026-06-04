@@ -37,7 +37,7 @@ segments is called a **sequence**.
 
 ## Development Environment
 
-Use the latest stable Android Studio. If using a custom JDK, ensure it is version 17+ and configured
+Use the latest stable Android Studio. If using a custom JDK, ensure it is version 21 and configured
 in [build.gradle.kts](build.gradle.kts).
 
 ## Design System
@@ -143,6 +143,33 @@ graph LR
   :feature:timer:impl --> :feature:timer:api
   :feature:sequence:contextmenu:impl --> :feature:sequence:contextmenu:api
   :feature:sequence:contextmenu:impl --> :feature:sequence:editor:api
+```
+
+## Performance
+
+The following Gradle properties have been configured to utilize the build speed advantages of a
+multi-module design:
+
+```
+org.gradle.parallel=true
+org.gradle.caching=true
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache.parallel=true
+org.gradle.configureondemand=false
+```
+
+### Benchmarking
+
+#### Prerequisites
+
+JDK 21 and [gradle-profiler](https://github.com/gradle/gradle-profiler)
+
+#### Scenario
+
+To measure build performance, run:
+
+```bash
+gradle-profiler --benchmark --scenario-file performance.scenarios
 ```
 
 ## License
