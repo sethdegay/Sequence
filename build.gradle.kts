@@ -1,3 +1,6 @@
+import org.gradle.platform.Architecture
+import org.gradle.platform.OperatingSystem
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -11,8 +14,14 @@ plugins {
 
 tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
     languageVersion = JavaLanguageVersion.of(21)
-    vendor = JvmVendorSpec.JETBRAINS
-    toolchainDownloadUrls.empty()
+    vendor = JvmVendorSpec.ADOPTIUM
+    @Suppress("UnstableApiUsage")
+    toolchainPlatforms = setOf(
+        BuildPlatformFactory.of(Architecture.X86_64, OperatingSystem.LINUX),
+        BuildPlatformFactory.of(Architecture.X86_64, OperatingSystem.MAC_OS),
+        BuildPlatformFactory.of(Architecture.AARCH64, OperatingSystem.MAC_OS),
+        BuildPlatformFactory.of(Architecture.X86_64, OperatingSystem.WINDOWS),
+    )
 }
 
 moduleGraphConfig {

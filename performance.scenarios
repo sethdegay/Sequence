@@ -1,0 +1,13 @@
+baseline {
+    title = "Gradle Optimizations Off (Clean Build)"
+    tasks = [":app:assembleDebug"]
+    cleanup-tasks = ["clean"]
+    gradle-args = ["--no-build-cache", "--no-configuration-cache"]
+}
+
+optimized {
+    title = "Gradle Optimizations On (Clean Build)"
+    tasks = [":app:assembleDebug"]
+    cleanup-tasks = ["clean"]
+    gradle-args = ["--configuration-cache", "--build-cache"]
+}
