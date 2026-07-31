@@ -19,6 +19,8 @@ import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.m3.LicenseDialogBody
 import com.mikepenz.aboutlibraries.ui.compose.m3.libraryColors
+import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
+import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryDetailMode
 import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.IconButton
@@ -51,11 +53,13 @@ fun LicenseScreen(navigateUp: () -> Unit) {
                 .fillMaxSize(),
             contentPadding = scaffoldPadding,
             libraries = licenses,
-            showAuthor = false,
-            showDescription = false,
-            showVersion = false,
-            showLicenseBadges = false,
-            showFundingBadges = false,
+            badges = LibraryBadges(
+                version = false,
+                author = false,
+                description = false,
+                license = false,
+                funding = false,
+            ),
             licenseDialogBody = { library, modifier ->
                 LicenseDialogBody(
                     library = library,
@@ -64,6 +68,7 @@ fun LicenseScreen(navigateUp: () -> Unit) {
                 )
             },
             licenseDialogConfirmText = stringResource(string.license_dialog_confirm_text),
+            detailMode = LibraryDetailMode.Dialog,
         )
     }
 }

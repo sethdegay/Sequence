@@ -44,15 +44,6 @@ fun BooleanPreference(
                 indication = LocalIndication.current,
             )
             .alpha(if (isEnabled) 1f else 0.38f),
-        headlineContent = { Text(title) },
-        supportingContent = {
-            Column {
-                description?.let { Text(it) }
-                AnimatedVisibility(preferenceError != null) {
-                    preferenceError?.let { PreferenceError(it) }
-                }
-            }
-        },
         leadingContent = icon,
         trailingContent = {
             Switch(
@@ -62,11 +53,20 @@ fun BooleanPreference(
                 interactionSource = interactionSource,
             )
         },
+        supportingContent = {
+            Column {
+                description?.let { Text(it) }
+                AnimatedVisibility(preferenceError != null) {
+                    preferenceError?.let { PreferenceError(it) }
+                }
+            }
+        },
         colors = ListItemDefaults.colors(
             containerColor = CardDefaults.cardColors().containerColor,
             headlineColor = CardDefaults.cardColors().contentColor,
             supportingColor = CardDefaults.cardColors().contentColor,
         ),
+        content = { Text(title) },
     )
 }
 

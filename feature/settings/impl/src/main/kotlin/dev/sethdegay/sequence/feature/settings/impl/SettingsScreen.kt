@@ -223,7 +223,7 @@ private fun SettingsScreen(
             CardGroup {
                 item {
                     ListItem(
-                        headlineContent = { Text(stringResource(string.settings_version_title)) },
+                        content = { Text(stringResource(string.settings_version_title)) },
                         supportingContent = { Text(versionName) },
                         colors = ListItemDefaults.colors(
                             containerColor = CardDefaults.cardColors().containerColor,
@@ -235,7 +235,7 @@ private fun SettingsScreen(
                 item {
                     ListItem(
                         modifier = Modifier.clickable(onClick = navigateToLicense),
-                        headlineContent = { Text(stringResource(string.settings_open_source_licenses_title)) },
+                        content = { Text(stringResource(string.settings_open_source_licenses_title)) },
                         colors = ListItemDefaults.colors(
                             containerColor = CardDefaults.cardColors().containerColor,
                             headlineColor = CardDefaults.cardColors().contentColor,
