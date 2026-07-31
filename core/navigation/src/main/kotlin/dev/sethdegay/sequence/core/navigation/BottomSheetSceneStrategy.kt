@@ -55,7 +55,10 @@ internal class BottomSheetScene<T : Any>(
             onDismissRequest = onDismiss,
             properties = properties,
             content = { entry.Content() },
-            sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
+            sheetState = rememberBottomSheetState(
+                initialValue = SheetValue.Hidden,
+                enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+            ),
         )
     }
 }
