@@ -92,12 +92,15 @@ class SequenceEditorViewModel @AssistedInject constructor(
         initialValue = Duration.ZERO,
     )
 
+    private val _showDeleteConfirmationDialog = MutableStateFlow(false)
+
     val uiState: StateFlow<SequenceEditorUiState> = combine(
         currentSegments,
         currentDuration,
         rounds,
         repeatedDuration,
-    ) { segments, totalDuration, rounds, repeatedDuration ->
+        _showDeleteConfirmationDialog,
+    ) { segments, totalDuration, rounds, repeatedDuration, showDeleteConfirmationDialog ->
         SequenceEditorUiState.Success(
             title = title,
             description = description,
@@ -107,6 +110,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
             repeatedDuration = repeatedDuration,
             dateCreated = dateCreated,
             dateModified = dateModified,
+            showDeleteConfirmationDialog = showDeleteConfirmationDialog,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -135,6 +139,10 @@ class SequenceEditorViewModel @AssistedInject constructor(
 
     fun setRounds(rounds: Int) {
         this.rounds.value = rounds
+    }
+
+    fun setShowDeleteConfirmationDialog(showDeleteConfirmationDialog: Boolean) {
+        _showDeleteConfirmationDialog.value = showDeleteConfirmationDialog
     }
 
     fun requestExit(forceDelete: Boolean = false) {

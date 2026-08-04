@@ -9,6 +9,7 @@ sealed interface SequenceContextMenuUiState {
         override val title: String,
         override val dateCreated: Instant,
         override val dateModified: Instant,
+        override val showDeleteConfirmationDialog: Boolean,
     ) : SequenceContextMenuUiState
 
     val title: String? get() = null
@@ -16,4 +17,6 @@ sealed interface SequenceContextMenuUiState {
     val dateCreated: Instant? get() = null
 
     val dateModified: Instant? get() = null
+
+    val showDeleteConfirmationDialog: Boolean get() = false
 }

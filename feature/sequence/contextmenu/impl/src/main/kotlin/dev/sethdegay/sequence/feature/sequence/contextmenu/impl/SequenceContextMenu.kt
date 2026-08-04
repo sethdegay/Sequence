@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.common.toDateTimeString
 import dev.sethdegay.sequence.core.designsystem.component.ContextAction
 import dev.sethdegay.sequence.core.designsystem.component.ContextActionsRow
+import dev.sethdegay.sequence.core.designsystem.component.DeleteConfirmationDialog
 import dev.sethdegay.sequence.core.designsystem.component.LoadingSection
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import kotlin.time.Instant
@@ -33,32 +34,41 @@ fun SequenceContextMenu(
 
     when (val uiState = uiState) {
         is SequenceContextMenuUiState.Loading -> LoadingSection()
-        is SequenceContextMenuUiState.Success -> SequenceContextMenu(
-            title = uiState.title,
-            dateCreated = uiState.dateCreated,
-            dateModified = uiState.dateModified,
-            actions = listOf(
-                ContextAction(
-                    label = stringResource(id = R.string.context_action_edit),
-                    icon = SequenceIcons.Edit,
-                    onClick = {
-                        val (sequenceId, libraryId) = viewModel.getIds()
-                        editSequence(sequenceId, libraryId)
-                    },
+        is SequenceContextMenuUiState.Success -> {
+            SequenceContextMenu(
+                title = uiState.title,
+                dateCreated = uiState.dateCreated,
+                dateModified = uiState.dateModified,
+                actions = listOf(
+                    ContextAction(
+                        label = stringResource(id = R.string.context_action_edit),
+                        icon = SequenceIcons.Edit,
+                        onClick = {
+                            val (sequenceId, libraryId) = viewModel.getIds()
+                            editSequence(sequenceId, libraryId)
+                        },
+                    ),
+                    ContextAction(
+                        label = stringResource(id = R.string.context_action_duplicate),
+                        icon = SequenceIcons.Duplicate,
+                        onClick = viewModel::duplicate,
+                    ),
+                    ContextAction(
+                        label = stringResource(id = R.string.context_action_delete),
+                        icon = SequenceIcons.Delete,
+                        onClick = { viewModel.setShowDeleteConfirmationDialog(true) },
+                        isDangerous = true,
+                    ),
                 ),
-                ContextAction(
-                    label = stringResource(id = R.string.context_action_duplicate),
-                    icon = SequenceIcons.Duplicate,
-                    onClick = viewModel::duplicate,
-                ),
-                ContextAction(
-                    label = stringResource(id = R.string.context_action_delete),
-                    icon = SequenceIcons.Delete,
-                    onClick = viewModel::delete,
-                    isDangerous = true,
-                ),
-            ),
-        )
+            )
+            if (uiState.showDeleteConfirmationDialog) {
+                DeleteConfirmationDialog(
+                    itemName = uiState.title,
+                    onConfirm = viewModel::delete,
+                    onDismiss = { viewModel.setShowDeleteConfirmationDialog(false) },
+                )
+            }
+        }
     }
 
     LaunchedEffect(viewModel.effects) {

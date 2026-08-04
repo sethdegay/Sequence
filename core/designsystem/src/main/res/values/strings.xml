@@ -8,4 +8,10 @@
     <!-- Timer controller -->
     <string name="timer_pause_button_text">Pause</string>
     <string name="timer_start_button_text">Start</string>
+
+    <!-- Delete confirmation dialog -->
+    <string name="delete_dialog_title">Delete %1$s?</string>
+    <string name="delete_dialog_message">Are you sure you want to delete %1$s? This action cannot be undone.</string>
+    <string name="delete_dialog_delete_action">Delete</string>
+    <string name="delete_dialog_cancel_action">Cancel</string>
 </resources>

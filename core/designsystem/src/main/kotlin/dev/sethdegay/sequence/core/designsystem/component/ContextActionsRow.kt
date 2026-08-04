@@ -54,8 +54,8 @@ fun ContextActionsRow(
                     onClick = action.onClick,
                     colors = if (action.isDangerous) {
                         ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
                         )
                     } else {
                         ButtonDefaults.buttonColors()

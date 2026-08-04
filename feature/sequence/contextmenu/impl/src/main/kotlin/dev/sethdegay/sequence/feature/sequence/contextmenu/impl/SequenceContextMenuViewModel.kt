@@ -16,8 +16,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.getAndUpdate
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -46,20 +46,27 @@ class SequenceContextMenuViewModel @AssistedInject constructor(
         ): SequenceContextMenuViewModel
     }
 
+    private val _showDeleteConfirmationDialog = MutableStateFlow(false)
     private val _sequence: MutableStateFlow<Sequence?> = MutableStateFlow(null)
-    val uiState: StateFlow<SequenceContextMenuUiState> = _sequence.map {
-        it?.let { sequence ->
+    val uiState: StateFlow<SequenceContextMenuUiState> =
+        combine(
+            _sequence,
+            _showDeleteConfirmationDialog,
+        ) { sequence, showDeleteConfirmationDialog ->
+            if (sequence == null) {
+                return@combine SequenceContextMenuUiState.Loading
+            }
             SequenceContextMenuUiState.Success(
                 title = sequence.title,
                 dateCreated = sequence.dateCreated,
                 dateModified = sequence.dateModified,
+                showDeleteConfirmationDialog = showDeleteConfirmationDialog,
             )
-        } ?: SequenceContextMenuUiState.Loading
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = SequenceContextMenuUiState.Loading,
-    )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = SequenceContextMenuUiState.Loading,
+        )
 
     private val _effects = Channel<SequenceContextMenuEffect>(Channel.BUFFERED)
     val effects = _effects.receiveAsFlow()
@@ -84,6 +91,10 @@ class SequenceContextMenuViewModel @AssistedInject constructor(
             createDuplicateSequence(sequence)
             _effects.send(SequenceContextMenuEffect.Finished)
         }
+    }
+
+    fun setShowDeleteConfirmationDialog(showDeleteConfirmationDialog: Boolean) {
+        _showDeleteConfirmationDialog.value = showDeleteConfirmationDialog
     }
 
     private suspend fun createDuplicateSequence(sequence: Sequence) {

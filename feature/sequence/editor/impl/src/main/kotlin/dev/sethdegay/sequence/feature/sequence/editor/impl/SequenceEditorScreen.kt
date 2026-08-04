@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import dev.sethdegay.sequence.core.common.toDateTimeString
 import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
 import dev.sethdegay.sequence.core.designsystem.component.CardGroup
+import dev.sethdegay.sequence.core.designsystem.component.DeleteConfirmationDialog
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.component.NumericStepper
@@ -82,8 +83,9 @@ fun SequenceEditorScreen(
                 scrollBehavior = scrollBehavior,
                 actions = {
                     SequenceIcons.Delete.IconButton(
-                        onClick = { viewModel.requestExit(forceDelete = true) },
+                        onClick = { viewModel.setShowDeleteConfirmationDialog(true) },
                         contentDescription = stringResource(string.action_delete),
+                        tint = MaterialTheme.colorScheme.error,
                     )
                 }
             )
@@ -128,6 +130,13 @@ fun SequenceEditorScreen(
                         dateCreated = uiState.dateCreated,
                         dateModified = uiState.dateModified,
                     )
+                    if (uiState.showDeleteConfirmationDialog) {
+                        DeleteConfirmationDialog(
+                            itemName = uiState.title.text.toString(),
+                            onConfirm = { viewModel.requestExit(forceDelete = true) },
+                            onDismiss = { viewModel.setShowDeleteConfirmationDialog(false) },
+                        )
+                    }
                 }
             }
         }
