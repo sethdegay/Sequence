@@ -22,7 +22,7 @@ fun <T> TogglePreference(
 ) {
     Column(modifier = modifier) {
         ListItem(
-            headlineContent = { Text(title) },
+            content = { Text(title) },
             supportingContent = description?.let { { Text(it) } },
             colors = ListItemDefaults.colors(
                 containerColor = CardDefaults.cardColors().containerColor,

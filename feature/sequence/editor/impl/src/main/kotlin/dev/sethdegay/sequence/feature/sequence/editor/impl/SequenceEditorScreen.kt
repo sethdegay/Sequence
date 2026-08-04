@@ -231,7 +231,7 @@ private fun SequenceEditorScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text(stringResource(string.sequence_editor_rounds_label)) },
+                    content = { Text(stringResource(string.sequence_editor_rounds_label)) },
                     supportingContent = {
                         NumericStepper(
                             modifier = Modifier

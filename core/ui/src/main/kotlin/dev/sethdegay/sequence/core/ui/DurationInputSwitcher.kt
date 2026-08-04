@@ -29,7 +29,7 @@ fun DurationInputSwitcher(
     CardGroup {
         item {
             ListItem(
-                headlineContent = { Text(stringResource(string.duration_input_switcher_title)) },
+                content = { Text(stringResource(string.duration_input_switcher_title)) },
                 trailingContent = {
                     when (inputMethod) {
                         SegmentInputMethod.PICK -> SequenceIcons.Keyboard.IconButton(
