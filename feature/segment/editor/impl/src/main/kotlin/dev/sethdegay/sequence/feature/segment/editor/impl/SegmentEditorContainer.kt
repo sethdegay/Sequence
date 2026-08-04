@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import dev.sethdegay.sequence.core.designsystem.component.DeleteConfirmationDialog
 import dev.sethdegay.sequence.core.designsystem.component.LoadingSection
 import dev.sethdegay.sequence.core.ui.SegmentEditor
 
@@ -12,13 +13,22 @@ fun SegmentEditorContainer(viewModel: SegmentEditorViewModel, navigateUp: () -> 
     val uiState by viewModel.uiState.collectAsState()
     uiState.segment.let { segment ->
         when {
-            segment != null -> SegmentEditor(
-                segment = segment,
-                onSegmentUpdate = viewModel::saveSegment,
-                onSegmentDelete = viewModel::deleteSegment,
-                inputMethod = uiState.inputMethod,
-                onInputMethodChange = viewModel::onInputMethodChange,
-            )
+            segment != null -> {
+                SegmentEditor(
+                    segment = segment,
+                    onSegmentUpdate = viewModel::saveSegment,
+                    onSegmentDelete = { viewModel.setShowDeleteConfirmationDialog(true) },
+                    inputMethod = uiState.inputMethod,
+                    onInputMethodChange = viewModel::onInputMethodChange,
+                )
+                if (uiState.showDeleteConfirmationDialog) {
+                    DeleteConfirmationDialog(
+                        itemName = segment.title,
+                        onConfirm = { viewModel.deleteSegment(segment) },
+                        onDismiss = { viewModel.setShowDeleteConfirmationDialog(false) },
+                    )
+                }
+            }
 
             else -> LoadingSection()
         }

@@ -9,6 +9,7 @@ sealed interface SegmentEditorUiState {
     data class Success(
         override val segment: Segment,
         override val inputMethod: SegmentInputMethod,
+        override val showDeleteConfirmationDialog: Boolean,
     ) : SegmentEditorUiState
 
     val segment: Segment?
@@ -16,4 +17,6 @@ sealed interface SegmentEditorUiState {
 
     val inputMethod: SegmentInputMethod
         get() = SegmentInputMethod.PICK
+
+    val showDeleteConfirmationDialog: Boolean get() = false
 }

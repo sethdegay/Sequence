@@ -46,11 +46,21 @@ class SegmentEditorViewModel @AssistedInject constructor(
     private val _segment = MutableStateFlow<Segment?>(null)
     private val _inputMethod = userPreferencesRepository.uiState.map { it.activeSegmentIm }
 
+    private val _showDeleteConfirmationDialog = MutableStateFlow(false)
+
     val uiState: StateFlow<SegmentEditorUiState> =
-        combine(_segment, _inputMethod) { segment, inputMethod ->
+        combine(
+            _segment,
+            _inputMethod,
+            _showDeleteConfirmationDialog,
+        ) { segment, inputMethod, showDeleteConfirmationDialog ->
             when (segment) {
                 null -> SegmentEditorUiState.Loading
-                else -> SegmentEditorUiState.Success(segment, inputMethod)
+                else -> SegmentEditorUiState.Success(
+                    segment = segment,
+                    inputMethod = inputMethod,
+                    showDeleteConfirmationDialog = showDeleteConfirmationDialog,
+                )
             }
         }
             .stateIn(
@@ -77,6 +87,10 @@ class SegmentEditorViewModel @AssistedInject constructor(
 
     fun onInputMethodChange(inputMethod: SegmentInputMethod) {
         viewModelScope.launch { userPreferencesRepository.setActiveSegmentIm(inputMethod) }
+    }
+
+    fun setShowDeleteConfirmationDialog(showDeleteConfirmationDialog: Boolean) {
+        _showDeleteConfirmationDialog.value = showDeleteConfirmationDialog
     }
 
     init {
