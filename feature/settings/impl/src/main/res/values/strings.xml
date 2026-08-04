@@ -14,15 +14,15 @@
 
     <!-- Global audio settings -->
     <string name="settings_audio_section_title">Audio</string>
-    <string name="settings_mute_all_title">Mute all</string>
-    <string name="settings_tick_sound_title">Tick sound</string>
-    <string name="settings_tick_sound_description">Enable audio cues during the final 5 seconds of the countdown.</string>
+    <string name="settings_mute_all_title">Mute all sounds</string>
+    <string name="settings_tick_sound_title">Countdown cues</string>
+    <string name="settings_tick_sound_description">Play audio ticks during the final 5 seconds of a countdown.</string>
     <string name="settings_completion_sound_title">Completion sound</string>
     <string name="settings_completion_sound_description">Play a bell sound when the countdown finishes.</string>
-    <string name="settings_speak_title_title">Speak title</string>
-    <string name="settings_speak_title_description">Announce segment title using text-to-speech.</string>
-    <string name="settings_speak_next_title_title">Speak next title</string>
-    <string name="settings_speak_next_title_description">Announce next segment title using text-to-speech.</string>
+    <string name="settings_speak_title_title">Read current title</string>
+    <string name="settings_speak_title_description">Announce the current segment title using text-to-speech.</string>
+    <string name="settings_speak_next_title_title">Read next title</string>
+    <string name="settings_speak_next_title_description">Announce the upcoming segment title before it starts.</string>
     <string name="settings_no_tts_engine_found_error_message">No TTS engine found.</string>
     <string name="settings_download_from_play_store_error_link_text">Download from Play Store</string>
 
