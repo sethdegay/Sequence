@@ -129,6 +129,7 @@ fun SequenceEditorScreen(
                         onRoundsChanged = viewModel::setRounds,
                         dateCreated = uiState.dateCreated,
                         dateModified = uiState.dateModified,
+                        isNew = uiState.isNew,
                     )
                     if (uiState.showDeleteConfirmationDialog) {
                         DeleteConfirmationDialog(
@@ -165,6 +166,7 @@ private fun SequenceEditorScreen(
     onRoundsChanged: (Int) -> Unit,
     dateCreated: Instant,
     dateModified: Instant,
+    isNew: Boolean,
 ) {
     ReorderableCardGroup(
         modifier = Modifier
@@ -183,13 +185,15 @@ private fun SequenceEditorScreen(
                     ),
                     style = MaterialTheme.typography.bodySmall,
                 )
-                Text(
-                    text = stringResource(
-                        string.date_modified,
-                        dateModified.toDateTimeString(),
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                if (!isNew) {
+                    Text(
+                        text = stringResource(
+                            string.date_modified,
+                            dateModified.toDateTimeString(),
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         },
     ) {

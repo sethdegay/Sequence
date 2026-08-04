@@ -18,6 +18,7 @@ sealed interface SequenceEditorUiState {
         override val dateCreated: Instant,
         override val dateModified: Instant,
         override val showDeleteConfirmationDialog: Boolean,
+        override val isNew: Boolean,
     ) : SequenceEditorUiState
 
     val title: TextFieldState? get() = null
@@ -35,6 +36,8 @@ sealed interface SequenceEditorUiState {
     val dateCreated: Instant? get() = null
 
     val dateModified: Instant? get() = null
+
+    val isNew: Boolean get() = true
 
     val showDeleteConfirmationDialog: Boolean get() = false
 }

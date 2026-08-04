@@ -111,6 +111,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
             dateCreated = dateCreated,
             dateModified = dateModified,
             showDeleteConfirmationDialog = showDeleteConfirmationDialog,
+            isNew = sequenceId == null,
         )
     }.stateIn(
         scope = viewModelScope,
