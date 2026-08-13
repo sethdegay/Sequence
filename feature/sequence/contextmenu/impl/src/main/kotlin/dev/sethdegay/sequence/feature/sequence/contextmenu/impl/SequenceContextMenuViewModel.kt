@@ -81,6 +81,7 @@ class SequenceContextMenuViewModel @AssistedInject constructor(
         val sequence = _sequence.getAndUpdate { null } ?: return
         viewModelScope.launch {
             sequenceRepository.delete(sequence, libraryId)
+            userPreferencesRepository.clearActiveSequenceIdIfMatches(sequence.id)
             _effects.send(SequenceContextMenuEffect.Finished)
         }
     }

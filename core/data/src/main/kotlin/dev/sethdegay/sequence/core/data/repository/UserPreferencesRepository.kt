@@ -30,5 +30,7 @@ interface UserPreferencesRepository {
 
     suspend fun setActiveSequenceId(activeSequenceId: Uuid?)
 
+    suspend fun clearActiveSequenceIdIfMatches(sequenceId: Uuid)
+
     suspend fun setActiveSegmentIm(activeSegmentIm: SegmentInputMethod)
 }

@@ -7,6 +7,7 @@ import dev.sethdegay.sequence.core.model.ThemeConfig
 import dev.sethdegay.sequence.core.model.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import kotlin.uuid.Uuid
@@ -56,6 +57,13 @@ class LocalUserPreferencesRepository @Inject constructor(
 
     override suspend fun setActiveSequenceId(activeSequenceId: Uuid?) {
         dataSource.setActiveSequenceId(activeSequenceId)
+    }
+
+    override suspend fun clearActiveSequenceIdIfMatches(sequenceId: Uuid) {
+        val activeSequenceId = uiState.first().activeSequenceId
+        if (activeSequenceId == sequenceId) {
+            setActiveSequenceId(null)
+        }
     }
 
     override suspend fun setActiveSegmentIm(activeSegmentIm: SegmentInputMethod) {

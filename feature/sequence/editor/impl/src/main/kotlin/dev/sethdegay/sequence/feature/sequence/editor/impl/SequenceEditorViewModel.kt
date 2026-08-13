@@ -11,6 +11,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sethdegay.sequence.core.data.repository.SegmentRepository
 import dev.sethdegay.sequence.core.data.repository.SequenceRepository
+import dev.sethdegay.sequence.core.data.repository.UserPreferencesRepository
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.Sequence
 import dev.sethdegay.sequence.core.model.calculateTotalDuration
@@ -38,6 +39,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
     @Assisted("libraryId") private val libraryId: Uuid,
     private val sequenceRepository: SequenceRepository,
     private val segmentRepository: SegmentRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -152,6 +154,7 @@ class SequenceEditorViewModel @AssistedInject constructor(
         viewModelScope.launch {
             if (sequence.isEmpty() || forceDelete) {
                 sequenceRepository.delete(sequence, libraryId)
+                userPreferencesRepository.clearActiveSequenceIdIfMatches(sequence.id)
             }
             _effects.send(SequenceEditorEffect.Finished)
         }
