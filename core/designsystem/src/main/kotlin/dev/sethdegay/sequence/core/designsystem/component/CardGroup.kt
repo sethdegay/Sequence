@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -116,7 +117,7 @@ fun CardGroupItem(content: @Composable (PaddingValues) -> Unit) {
 fun CardGroup(content: CardGroupScope.() -> Unit) {
     val scope = remember(content) { CardGroupScope().apply(content) }
     Column(
-        verticalArrangement = Arrangement.spacedBy(1.5.dp),
+        verticalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
     ) {
         if (scope.items.size == 1) {
             CardGroupSingleItem(scope.items.first())
