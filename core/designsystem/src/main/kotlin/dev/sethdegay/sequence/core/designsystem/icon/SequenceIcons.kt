@@ -14,6 +14,7 @@ object SequenceIcons {
     val Duplicate @Composable get() = ImageVector.vectorResource(drawable.copy_all_24px)
     val Edit @Composable get() = ImageVector.vectorResource(drawable.edit_24px)
     val Keyboard @Composable get() = ImageVector.vectorResource(drawable.keyboard_24px)
+    val KeyboardArrowDown @Composable get() = ImageVector.vectorResource(drawable.keyboard_arrow_down_24px)
     val LightModeChecked @Composable get() = ImageVector.vectorResource(drawable.light_mode_checked_24px)
     val LightModeUnchecked @Composable get() = ImageVector.vectorResource(drawable.light_mode_unchecked_24px)
     val NavigateUp @Composable get() = ImageVector.vectorResource(drawable.arrow_back_24px)

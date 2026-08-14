@@ -75,6 +75,14 @@ class HomeViewModel @Inject constructor(
             initialValue = null,
         )
 
+    private val libraryTitle: StateFlow<String> = libraryId.flatMapLatest { libraryId ->
+        libraryId?.let { libraryRepository.getLibraryTitle(it) } ?: flowOf("")
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = "",
+    )
+
     val uiState: StateFlow<HomeUiState> = libraryId.filterNotNull().flatMapLatest { libraryId ->
         combine(
             sequenceRepository.getSequences(libraryId),
@@ -84,13 +92,15 @@ class HomeViewModel @Inject constructor(
                 end = endOfCurrentDay,
             ).map { it.toJavaHeatMapData() }
                 .distinctUntilChanged(),
-        ) { sequences, uiState, heatMapData ->
+            libraryTitle,
+        ) { sequences, uiState, heatMapData, libraryTitle ->
             HomeUiState.Success(
                 sequences = sequences,
                 activeSequenceId = uiState.activeSequenceId,
                 heatMapData = heatMapData,
                 heatMapCalendarStart = heatMapCalendarStart,
                 heatMapCalendarEnd = heatMapCalendarEnd,
+                libraryTitle = libraryTitle,
             )
         }
     }.stateIn(

@@ -23,6 +23,9 @@ interface LibraryDao {
     @Query("SELECT * FROM library WHERE id = :id")
     suspend fun getLibrary(id: Uuid): LibraryWithSequences
 
+    @Query("SELECT title FROM library WHERE id = :id")
+    fun getLibraryTitle(id: Uuid): Flow<String>
+
     @Insert
     suspend fun insert(libraryEntity: LibraryEntity)
 

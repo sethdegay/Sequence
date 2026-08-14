@@ -6,10 +6,13 @@ import dev.sethdegay.sequence.core.model.Library
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.uuid.Uuid
 
 class LocalLibraryRepository @Inject constructor(
     private val libraryDao: LibraryDao,
 ) : LibraryRepository {
     override fun getOldestLibrary(): Flow<Library?> =
         libraryDao.getOldestLibrary().map { it?.asExternalModel(emptyList()) }
+
+    override fun getLibraryTitle(id: Uuid): Flow<String> = libraryDao.getLibraryTitle(id)
 }

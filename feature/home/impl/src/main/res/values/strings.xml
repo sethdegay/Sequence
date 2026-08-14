@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="top_app_bar_title">SΞQUΞNCΞ</string>
     <string name="home_navigate_to_settings_content_description">Settings</string>
     <string name="home_add_sequence_button_text">Create</string>
 </resources>

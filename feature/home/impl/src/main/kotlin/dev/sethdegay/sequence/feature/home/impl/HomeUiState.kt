@@ -14,6 +14,7 @@ sealed interface HomeUiState {
         override val heatMapData: Map<LocalDate, HeatMapLevel>,
         override val heatMapCalendarStart: LocalDate,
         override val heatMapCalendarEnd: LocalDate,
+        override val libraryTitle: String,
     ) : HomeUiState
 
     fun showLoadingScreen(): Boolean = this is Loading
@@ -27,4 +28,6 @@ sealed interface HomeUiState {
     val heatMapCalendarStart: LocalDate get() = LocalDate.now()
 
     val heatMapCalendarEnd: LocalDate get() = LocalDate.now()
+
+    val libraryTitle: String get() = ""
 }

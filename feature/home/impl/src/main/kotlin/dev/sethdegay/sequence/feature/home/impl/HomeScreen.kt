@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.designsystem.component.Accordion
+import dev.sethdegay.sequence.core.designsystem.component.DropdownButton
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.component.LoadingScreen
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
@@ -61,7 +62,11 @@ fun HomeScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(string.top_app_bar_title))
+                    DropdownButton(
+                        text = uiState.libraryTitle,
+                        onClick = {},
+                        style = MaterialTheme.typography.titleMedium,
+                    )
                 },
                 actions = {
                     SequenceIcons.Settings.IconButton(
