@@ -18,6 +18,6 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.feature.segment.editor.api)
+    implementation(projects.feature.segmentEditor.api)
     implementation(projects.feature.sequence.editor.api)
 }

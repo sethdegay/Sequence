@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.segment.editor.impl.di
+package dev.sethdegay.sequence.feature.segmenteditor.impl.di
 
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dagger.Module
@@ -9,9 +9,9 @@ import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.BottomSheetSceneStrategy
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
-import dev.sethdegay.sequence.feature.segment.editor.api.SegmentEditorNav
-import dev.sethdegay.sequence.feature.segment.editor.impl.SegmentEditorContainer
-import dev.sethdegay.sequence.feature.segment.editor.impl.SegmentEditorViewModel
+import dev.sethdegay.sequence.feature.segmenteditor.api.SegmentEditorNav
+import dev.sethdegay.sequence.feature.segmenteditor.impl.SegmentEditorContainer
+import dev.sethdegay.sequence.feature.segmenteditor.impl.SegmentEditorViewModel
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)

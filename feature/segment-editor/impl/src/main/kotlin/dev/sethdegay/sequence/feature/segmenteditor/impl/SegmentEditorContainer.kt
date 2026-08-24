@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.segment.editor.impl
+package dev.sethdegay.sequence.feature.segmenteditor.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

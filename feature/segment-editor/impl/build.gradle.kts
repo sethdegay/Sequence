@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.sethdegay.sequence.feature.segment.editor.impl"
+    namespace = "dev.sethdegay.sequence.feature.segmenteditor.impl"
 }
 
 kotlin {
@@ -17,5 +17,5 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.feature.segment.editor.api)
+    implementation(projects.feature.segmentEditor.api)
 }

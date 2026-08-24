@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.sethdegay.sequence.feature.segment.editor.api"
+    namespace = "dev.sethdegay.sequence.feature.segmenteditor.api"
 }
 
 kotlin {

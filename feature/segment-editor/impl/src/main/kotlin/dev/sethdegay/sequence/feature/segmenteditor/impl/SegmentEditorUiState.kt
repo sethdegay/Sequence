@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.segment.editor.impl
+package dev.sethdegay.sequence.feature.segmenteditor.impl
 
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.model.SegmentInputMethod

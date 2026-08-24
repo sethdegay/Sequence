@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.segment.editor.api
+package dev.sethdegay.sequence.feature.segmenteditor.api
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

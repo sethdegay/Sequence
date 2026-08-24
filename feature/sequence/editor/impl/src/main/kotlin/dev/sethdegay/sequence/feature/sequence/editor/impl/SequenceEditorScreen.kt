@@ -46,7 +46,7 @@ import dev.sethdegay.sequence.core.designsystem.util.Icon
 import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.Segment
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
-import dev.sethdegay.sequence.feature.segment.editor.api.SegmentEditorNav
+import dev.sethdegay.sequence.feature.segmenteditor.api.SegmentEditorNav
 import dev.sethdegay.sequence.feature.sequence.editor.impl.R.string
 import kotlin.time.Instant
 

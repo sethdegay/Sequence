@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.segment.editor.impl
+package dev.sethdegay.sequence.feature.segmenteditor.impl
 
 sealed interface SegmentEditorEffect {
     data object Finished : SegmentEditorEffect
