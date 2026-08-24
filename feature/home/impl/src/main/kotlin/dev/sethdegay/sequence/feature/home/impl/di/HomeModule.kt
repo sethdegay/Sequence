@@ -8,7 +8,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
 import dev.sethdegay.sequence.core.navigation.SequenceNavigator
-import dev.sethdegay.sequence.feature.calendarevent.list.api.EventListNav
+import dev.sethdegay.sequence.feature.calendarlogs.api.CalendarLogsNav
 import dev.sethdegay.sequence.feature.home.api.HomeNav
 import dev.sethdegay.sequence.feature.home.impl.HomeScreen
 import dev.sethdegay.sequence.feature.sequence.contextmenu.api.SequenceContextMenuNav
@@ -25,7 +25,7 @@ object HomeModule {
         entry<HomeNav> {
             HomeScreen(
                 viewModel = hiltViewModel(),
-                navigateToEventList = { navigator.navigate(EventListNav(it)) },
+                navigateToEventList = { navigator.navigate(CalendarLogsNav(it)) },
                 createSequence = { libraryId ->
                     navigator.navigate(SequenceEditorNav.Create(libraryId))
                 },

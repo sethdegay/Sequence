@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.calendarevent.list.impl
+package dev.sethdegay.sequence.feature.calendarlogs.impl
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,22 +13,22 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlin.time.Instant
 
-@HiltViewModel(assistedFactory = EventListViewModel.Factory::class)
-class EventListViewModel @AssistedInject constructor(
+@HiltViewModel(assistedFactory = CalendarLogsViewModel.Factory::class)
+class CalendarLogsViewModel @AssistedInject constructor(
     @Assisted range: ClosedRange<Instant>,
     calendarEventRepository: CalendarEventRepository,
 ) : ViewModel() {
     @AssistedFactory
     interface Factory {
-        fun create(range: ClosedRange<Instant>): EventListViewModel
+        fun create(range: ClosedRange<Instant>): CalendarLogsViewModel
     }
 
-    val uiState: StateFlow<EventListUiState> =
+    val uiState: StateFlow<CalendarLogsUiState> =
         calendarEventRepository.getCalendarEvents(start = range.start, end = range.endInclusive)
-            .map { EventListUiState.Success(it) }
+            .map { CalendarLogsUiState.Success(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = EventListUiState.Loading,
+                initialValue = CalendarLogsUiState.Loading,
             )
 }

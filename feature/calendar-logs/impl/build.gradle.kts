@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.sethdegay.sequence.feature.calendarevent.list.impl"
+    namespace = "dev.sethdegay.sequence.feature.calendarlogs.impl"
 }
 
 kotlin {
@@ -11,5 +11,5 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.feature.calendarevent.list.api)
+    implementation(projects.feature.calendarLogs.api)
 }

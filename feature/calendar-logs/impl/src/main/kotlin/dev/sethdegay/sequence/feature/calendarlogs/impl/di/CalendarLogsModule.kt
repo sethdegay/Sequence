@@ -1,4 +1,4 @@
-package dev.sethdegay.sequence.feature.calendarevent.list.impl.di
+package dev.sethdegay.sequence.feature.calendarlogs.impl.di
 
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dagger.Module
@@ -8,19 +8,19 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
 import dev.sethdegay.sequence.core.navigation.BottomSheetSceneStrategy
 import dev.sethdegay.sequence.core.navigation.NavKeyInstaller
-import dev.sethdegay.sequence.feature.calendarevent.list.api.EventListNav
-import dev.sethdegay.sequence.feature.calendarevent.list.impl.EventListContainer
-import dev.sethdegay.sequence.feature.calendarevent.list.impl.EventListViewModel
+import dev.sethdegay.sequence.feature.calendarlogs.api.CalendarLogsNav
+import dev.sethdegay.sequence.feature.calendarlogs.impl.CalendarLogsContainer
+import dev.sethdegay.sequence.feature.calendarlogs.impl.CalendarLogsViewModel
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object CalendarEventModule {
+object CalendarLogsModule {
     @IntoSet
     @Provides
     fun provideNavKeyInstaller(): NavKeyInstaller = {
-        entry<EventListNav>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) {
-            EventListContainer(
-                viewModel = hiltViewModel<EventListViewModel, EventListViewModel.Factory>(
+        entry<CalendarLogsNav>(metadata = BottomSheetSceneStrategy.bottomSheetMetadata()) {
+            CalendarLogsContainer(
+                viewModel = hiltViewModel<CalendarLogsViewModel, CalendarLogsViewModel.Factory>(
                     creationCallback = { factory -> factory.create(it.range) },
                 ),
             )

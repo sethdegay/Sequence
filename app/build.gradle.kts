@@ -40,7 +40,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.model)
 
-    implementation(projects.feature.calendarevent.list.impl)
+    implementation(projects.feature.calendarLogs.impl)
     implementation(projects.feature.home.api)
     implementation(projects.feature.home.impl)
     implementation(projects.feature.license.impl)
