@@ -11,8 +11,8 @@ import dev.sethdegay.sequence.core.navigation.SequenceNavigator
 import dev.sethdegay.sequence.feature.calendarlogs.api.CalendarLogsNav
 import dev.sethdegay.sequence.feature.home.api.HomeNav
 import dev.sethdegay.sequence.feature.home.impl.HomeScreen
-import dev.sethdegay.sequence.feature.sequence.contextmenu.api.SequenceContextMenuNav
-import dev.sethdegay.sequence.feature.sequence.editor.api.SequenceEditorNav
+import dev.sethdegay.sequence.feature.sequencecontextmenu.api.SequenceContextMenuNav
+import dev.sethdegay.sequence.feature.sequenceeditor.api.SequenceEditorNav
 import dev.sethdegay.sequence.feature.settings.api.SettingsNav
 import dev.sethdegay.sequence.feature.timer.api.TimerNav
 

@@ -1,0 +1,22 @@
+package dev.sethdegay.sequence.feature.sequencecontextmenu.impl
+
+import kotlin.time.Instant
+
+sealed interface SequenceContextMenuUiState {
+    data object Loading : SequenceContextMenuUiState
+
+    data class Success(
+        override val title: String,
+        override val dateCreated: Instant,
+        override val dateModified: Instant,
+        override val showDeleteConfirmationDialog: Boolean,
+    ) : SequenceContextMenuUiState
+
+    val title: String? get() = null
+
+    val dateCreated: Instant? get() = null
+
+    val dateModified: Instant? get() = null
+
+    val showDeleteConfirmationDialog: Boolean get() = false
+}

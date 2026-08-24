@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.sethdegay.sequence.feature.home.impl"
+    namespace = "dev.sethdegay.sequence.feature.sequenceeditor.impl"
 }
 
 kotlin {
@@ -11,17 +11,13 @@ kotlin {
         optIn.addAll(
             "androidx.compose.material3.ExperimentalMaterial3Api",
             "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
-            "kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "kotlinx.coroutines.FlowPreview",
             "kotlin.uuid.ExperimentalUuidApi",
         )
     }
 }
 
 dependencies {
-    implementation(projects.feature.calendarLogs.api)
-    implementation(projects.feature.home.api)
-    implementation(projects.feature.sequenceContextmenu.api)
+    implementation(projects.feature.segmentEditor.api)
     implementation(projects.feature.sequenceEditor.api)
-    implementation(projects.feature.settings.api)
-    implementation(projects.feature.timer.api)
 }
