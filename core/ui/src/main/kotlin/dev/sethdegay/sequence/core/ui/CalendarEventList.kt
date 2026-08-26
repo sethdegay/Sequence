@@ -1,7 +1,6 @@
 package dev.sethdegay.sequence.core.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -23,13 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import dev.sethdegay.sequence.core.common.toTimeString
-import dev.sethdegay.sequence.core.designsystem.R.string
+import dev.sethdegay.sequence.core.designsystem.component.DotSeparatedContent
 import dev.sethdegay.sequence.core.designsystem.component.DurationDisplay
 import dev.sethdegay.sequence.core.designsystem.theme.SequenceTheme
 import dev.sethdegay.sequence.core.model.CalendarEvent
@@ -78,21 +76,21 @@ private fun CalendarEventRow(event: CalendarEvent) {
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Text(
-                text = timeRange,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Text(stringResource(string.dot_separator), style = MaterialTheme.typography.bodySmall)
-            DurationDisplay(
-                duration = event.duration,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-            )
+        DotSeparatedContent(color = MaterialTheme.colorScheme.onSurfaceVariant) {
+            item {
+                Text(
+                    text = timeRange,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            item {
+                DurationDisplay(
+                    duration = event.duration,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }
