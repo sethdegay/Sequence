@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -19,6 +20,8 @@ import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.m3.LicenseDialogBody
 import com.mikepenz.aboutlibraries.ui.compose.m3.libraryColors
+import com.mikepenz.aboutlibraries.ui.compose.m3.style.m3VariantTextStyles
+import com.mikepenz.aboutlibraries.ui.compose.variant.LibrariesVariant
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryDetailMode
 import dev.sethdegay.sequence.core.designsystem.R.string.navigate_up_content_description
@@ -69,6 +72,10 @@ fun LicenseScreen(navigateUp: () -> Unit) {
             },
             licenseDialogConfirmText = stringResource(string.license_dialog_confirm_text),
             detailMode = LibraryDetailMode.Dialog,
+            variant = LibrariesVariant.Traditional,
+            variantTextStyles = LibraryDefaults.m3VariantTextStyles(
+                nameTextStyle = MaterialTheme.typography.bodyLarge,
+            ),
         )
     }
 }
