@@ -36,4 +36,9 @@
            Segment editor
          ===================== -->
     <string name="segment_editor_title_label">Title</string>
+
+    <!-- =====================
+           Timestamp summary
+         ===================== -->
+    <string name="timestamp_summary_updated">Updated %1$s</string>
 </resources>

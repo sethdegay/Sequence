@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import dev.sethdegay.sequence.core.common.toDateTimeString
 import dev.sethdegay.sequence.core.designsystem.component.ContextAction
 import dev.sethdegay.sequence.core.designsystem.component.ContextActionsRow
 import dev.sethdegay.sequence.core.designsystem.component.DeleteConfirmationDialog
 import dev.sethdegay.sequence.core.designsystem.component.LoadingSection
 import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
+import dev.sethdegay.sequence.core.ui.TimestampSummary
 import kotlin.time.Instant
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -97,20 +97,7 @@ private fun SequenceContextMenu(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Text(
-                    text = stringResource(
-                        R.string.date_created,
-                        dateCreated.toDateTimeString(),
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                )
-                Text(
-                    text = stringResource(
-                        R.string.date_modified,
-                        dateModified.toDateTimeString(),
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                TimestampSummary(dateCreated, dateModified)
             }
         }
         item {

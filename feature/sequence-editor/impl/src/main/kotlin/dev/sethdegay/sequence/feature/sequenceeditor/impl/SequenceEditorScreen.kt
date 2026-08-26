@@ -45,7 +45,9 @@ import dev.sethdegay.sequence.core.designsystem.icon.SequenceIcons
 import dev.sethdegay.sequence.core.designsystem.util.Icon
 import dev.sethdegay.sequence.core.designsystem.util.IconButton
 import dev.sethdegay.sequence.core.model.Segment
+import dev.sethdegay.sequence.core.ui.R.string.timestamp_summary_updated
 import dev.sethdegay.sequence.core.ui.ReorderableCardGroup
+import dev.sethdegay.sequence.core.ui.TimestampSummary
 import dev.sethdegay.sequence.feature.segmenteditor.api.SegmentEditorNav
 import dev.sethdegay.sequence.feature.sequenceeditor.impl.R.string
 import kotlin.time.Instant
@@ -177,22 +179,18 @@ private fun SequenceEditorScreen(
         onSegmentOrderChanged = onSegmentOrderChanged,
         onSegmentClick = onSegmentClick,
         footerContent = {
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                Text(
-                    text = stringResource(
-                        string.date_created,
-                        dateCreated.toDateTimeString(),
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                )
-                if (!isNew) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                if (isNew) {
                     Text(
                         text = stringResource(
-                            string.date_modified,
+                            timestamp_summary_updated,
                             dateModified.toDateTimeString(),
                         ),
                         style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
+                } else {
+                    TimestampSummary(dateCreated, dateModified)
                 }
             }
         },
