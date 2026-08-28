@@ -179,7 +179,7 @@ private fun SequenceEditorScreen(
         onSegmentOrderChanged = onSegmentOrderChanged,
         onSegmentClick = onSegmentClick,
         footerContent = {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 if (isNew) {
                     Text(
                         text = stringResource(
